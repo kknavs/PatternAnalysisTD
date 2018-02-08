@@ -204,3 +204,8 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+
+# big data files (over 100MB)
+*.csv
+*.xlsx
