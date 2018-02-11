@@ -1,27 +1,34 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 from sqlalchemy import Column, Integer, Unicode, UnicodeText, String, MetaData, Table
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import mapper
 
+
 Base = declarative_base()
-ConnString = 'sqlite:///data/PatternAnalysisTD2.sqlite'
+# folder = 'data/161020' #London
+folder = 'data/161124'
+ConnString = 'sqlite:///'+folder+'/PatternAnalysisTD_'+folder.replace('data/', '')+'.sqlite'
 # https://stackoverflow.com/questions/2047814/is-it-possible-to-store-python-class-objects-in-sqlite
 # http://docs.sqlalchemy.org/en/latest/orm/mapping_styles.html#classical-mappings
 
 # TODO: add destination table
+# TODO: add FID
 
 
 class Record(Base):
     __tablename__ = 'records'
     id = Column(Integer, primary_key=True)
-    user_id = Column(String(50))
+    user_id = Column(UnicodeText(50))
     destination = Column(UnicodeText)
+    user_url = Column(UnicodeText, nullable=True)
 
-    def __init__(self, record_id, user_id, destination):
+    def __init__(self, record_id, user_id, destination, user_url=None):
         self.id = record_id
         self.user_id = user_id
-        self.destination = unicode(destination)
+        self.destination = destination
+        self.user_url = user_url
 
     def __repr__(self):
         return "<Record(id='%s', user_id='%s', destination='%s')>" % (
@@ -36,9 +43,9 @@ class Pair(Base):
     destination2 = Column(UnicodeText)
 
     def __init__(self, user_id, destination1, destination2):
-        self.user_id = user_id
-        self.destination1 = destination1
-        self.destination2 = destination2
+        self.user_id = unicode(user_id)
+        self.destination1 = unicode(destination1)
+        self.destination2 = unicode(destination2)
 
     def __repr__(self):
         return "<Pair(id='%s', user_id='%s', destination1='%s' - destination2='%s')>" % (

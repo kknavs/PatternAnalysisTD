@@ -2,7 +2,7 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 from Database import Link, fetchall_links, fetchall_links_with_weight_threshold, get_destinations, get_max_weight, \
-    get_avg_weight_nonzero
+    get_avg_weight_nonzero, folder
 import Community
 
 links = fetchall_links_with_weight_threshold(1)
@@ -13,6 +13,7 @@ print maxWeight
 avg = get_avg_weight_nonzero()
 print avg
 
+outputFolder = folder + "/graphs"
 
 def draw_graph1(save):
     G = nx.Graph() # Graph, or DiGraph, MultiGraph, MultiDiGraph, etc
@@ -26,7 +27,7 @@ def draw_graph1(save):
     figManager = plt.get_current_fig_manager()
     figManager.window.state('zoomed')
     if save:
-        plt.savefig("data/graph1_minW="+str(minW)+".png")  # save as png
+        plt.savefig(outputFolder + "/graph1_minW="+str(minW)+".png")  # save as png
     plt.show()  # display
 
 
@@ -60,15 +61,15 @@ def draw_graph2(save):
     figManager = plt.get_current_fig_manager()
     figManager.window.state('zoomed')
     if save:
-        plt.savefig("data/graph2_minW="+str(minW)+"_midW="+str(mid)+"_maxW="+str(maxW)+".png")
+        plt.savefig(outputFolder + "/graph2_minW="+str(minW)+"_midW="+str(mid)+"_maxW="+str(maxW)+".png")
     plt.show()
 
 
 def draw_graph3(save):
     G = nx.Graph()
 
-    minW = 10
-    maxW = 400
+    minW = 5
+    maxW = 50
 
     for l in links:
         if minW < l.weight < maxW:
@@ -77,7 +78,7 @@ def draw_graph3(save):
     # use one of the edge properties to control line thickness
     edgewidth = [ d['weight']/float(maxWeight/avg) for (u,v,d) in G.edges(data=True)]
     emedium=[(u,v) for (u,v,d) in G.edges(data=True) if d['weight'] >minW and d['weight'] <maxW]
-    pos=nx.shell_layout(G) # spring, shell, circular positions for all nodes
+    pos=nx.spring_layout(G) # spring, shell, circular positions for all nodes
     # labels
     nx.draw_networkx_labels(G,pos,font_size=15,font_family='sans-serif')
     nx.draw_networkx_nodes(G,pos,node_size=500)
@@ -86,7 +87,7 @@ def draw_graph3(save):
     #labels = nx.get_edge_attributes(G,'weight')
     #nx.draw_networkx_edge_labels(G,pos,edge_labels=labels)
 
-    print G.neighbors("Ljubljana")
+    #print G.neighbors("Ljubljana")
     print nx.is_connected(G)
     print nx.number_connected_components(G)
     #? print G.degree("Ljubljana", weighted=False)
@@ -114,8 +115,8 @@ def draw_graph3(save):
     figManager = plt.get_current_fig_manager()
     figManager.window.state('zoomed')
     if save:
-        plt.savefig("data/graph3_minW="+str(minW)+"_maxW="+str(maxW)+".png")
+        plt.savefig(outputFolder + "/graph3_minW="+str(minW)+"_maxW="+str(maxW)+".png")
     plt.show() # display
 
 draw_graph1(False)
-#draw_graph3(True)
+#draw_graph3(False)
