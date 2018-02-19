@@ -97,54 +97,65 @@ def read_lines_london(n_lines=None):  # for now required fields are user_usernam
 
 
 # destinations = read_destinations()
+prepareCsv = True
+reloadRecords = True
+reloadFids = True
 reloadData = True
-prepareCsv = False
-slo = True  # different column fieldnames. TODO: rename
-import datetime
-print datetime.datetime.now()
+
+# slo and eng - different column fieldnames. TODO: rename
+print pydatetime.datetime.now()
+
+if prepareCsv:
+    prepare_csv('161124_slovenija_v10 harvesine.xlsm')
+    #exit()
+
 # Filtered Transactional Data
-if reloadData:
-    if prepareCsv:
-        prepare_csv('161124_slovenija_v10 harvesine.xlsm')
-        exit()
+if reloadRecords:
     delete_all_tables()
     records = read_lines_london() #20000
     # add_records(records) we insert all rows at once
-for user in fetchall_records():
-    print user.user_id, user.destination
+
+if reloadFids:
+    generate_fids()
+
+for r in fetchall_records():
+    print r
 
 if reloadData:
+    delete_links()
+    delete_pairs()
     # Order – Item Data (transposed)
     # get all different user_id's with all destinations visited
-    for user_t in fetchall_records_users():
+    all_records_users = fetchall_records_users()
+    for count, user_t in enumerate(all_records_users):
         user_id = user_t[0]
-        destinations = get_destinations_of_user(user_id)
-        #for dest in destinations:
-        #    print dest
-        for pair in list(itertools.combinations(destinations, 2)):
-            # item pair data
-            p = Pair(user_id, pair[0][0], pair[1][0])
-            add_row(p)
+        fid = 1
+        while True:
+            destinations = get_destinations_of_user(user_id, fid)
+            if not destinations:
+                break
+            #for dest in destinations:
+            #    print dest
+            for pair in list(itertools.combinations(destinations, 2)):
+                # item pair data
+                p = Pair(user_id, pair[0][0], pair[1][0])
+                add_pair_and_update_link(p)
+                #add_row(p)
+            print "Done Pairs: " + str(float(count)/all_records_users.count()*100)
+            fid += 1
 
     #for p in fetchall_pairs():
     #    print p
 
     # co-occurence data
-    all_destinations = get_destinations()
-    for d1 in all_destinations:
-        for d2 in all_destinations[::-1]:
-            if d1 == d2:
-                break
-            link = Link(d1[0], d2[0], get_count_for_destinations(d1[0], d2[0]))
-            #print link
-            add_row(link)
+    # generate_links()  # now link is updated when pair is created!
 
 
 for l in fetchall_links():
     print l
 testCount = get_count_for_destinations(u"Bled", u"Ljubljana")
 print testCount
-print datetime.datetime.now()
+print pydatetime.datetime.now()
 # https://stackoverflow.com/questions/14509269/best-method-of-saving-data
 # http://zetcode.com/db/sqlitepythontutorial/
 # https://docs.python.org/2/library/sqlite3.html
