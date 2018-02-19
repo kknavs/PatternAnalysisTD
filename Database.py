@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from databaseEntities import Base, Record, Pair, Link, ConnString, folder, slo
+from databaseEntities import Base, Record, Pair, Link, Destination, ConnString, folder, slo
 from sqlalchemy import create_engine, distinct, func, MetaData, Table, inspect
 from sqlalchemy.orm import sessionmaker
 from contextlib import contextmanager
@@ -53,6 +53,7 @@ def add_row(row_object):
     with session_scope() as session:
         session.add(row_object)
 
+
 # 2018-02-11 04:14:30.260000 slo ca.4h
 def add_records_from_csv(csvreader, n_lines, slo):
     records = []
@@ -87,6 +88,31 @@ def add_records_from_csv(csvreader, n_lines, slo):
     return records
 
 
+def add_destinations_from_csv(csvreader, slo):
+    records = []
+    countErrors = 0
+    with session_scope() as session:
+        while True:
+            row = next(csvreader, None)
+            if row is None:
+                break
+            try:
+                if slo:
+                    destination = Destination(row['mesto2'].decode('utf-8'),
+                                              float(row['Lat'.encode('utf-8')].decode('utf-8').replace(',', '.')),
+                                              float(row['Long'.encode('utf-8')].decode('utf-8').replace(',', '.')))
+                else:
+                    destination = Destination(row['mesto2'].decode('utf-8'),
+                                              float(row['Lat'.encode('utf-8')].decode('utf-8').replace(',', '.')),
+                                              float(row['Long'.encode('utf-8')].decode('utf-8').replace(',', '.')))
+                if destination.destination:
+                    session.add(destination)
+                    records.append(destination)
+            except Exception, ex:
+                logging.error("Missing field: " + ex.message)
+                countErrors += 1
+    return records
+
 def delete_records():
     with session_scope() as session:
         session.query(Record).delete()
@@ -100,6 +126,11 @@ def delete_pairs():
 def delete_links():
     with session_scope() as session:
         session.query(Link).delete()
+
+
+def delete_destinations():
+    with session_scope() as session:
+        session.query(Destination).delete()
 
 
 def delete_all_tables():
@@ -140,7 +171,7 @@ def fetchall_records_users():
 
 
 def get_destinations(session=DBSession(bind=connection)):
-    return session.query(distinct(Record.destination)).order_by(Record.destination.asc())
+    return session.query(Destination).order_by(Destination.destination.asc())
 
 
 def get_different_destinations_of_user(user_id):

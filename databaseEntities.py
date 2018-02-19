@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from sqlalchemy import Column, Integer, Unicode, UnicodeText, String, MetaData, Table, DateTime
+from sqlalchemy import Column, Integer, Unicode, UnicodeText, Float, String, MetaData, Table, DateTime
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import mapper
@@ -18,8 +18,6 @@ ConnString = 'postgresql+psycopg2://postgres:postgres123@127.0.0.1:5432/PatternA
 # ConnString = 'sqlite:///'+folder+'/PatternAnalysisTD_'+folder.replace('data/', '')+'.sqlite'
 # https://stackoverflow.com/questionss/2047814/is-it-possible-to-store-python-class-objects-in-sqlite
 # http://docs.sqlalchemy.org/en/latest/orm/mapping_styles.html#classical-mappings
-
-# TODO: add destination table
 
 
 class Record(Base):
@@ -76,6 +74,23 @@ class Link(Base):
     def __repr__(self):
         return "<Link(id='%s',destination1='%s' - destination2='%s': weight='%s' )>" % (
             self.id, self.destination1, self.destination2, self.weight)
+
+
+class Destination(Base): # todokk
+    __tablename__ = 'destinations'
+    id = Column(Integer, primary_key=True)
+    destination = Column(UnicodeText)
+    latitude = Column(Float)
+    longitude = Column(Float)
+
+    def __init__(self, destination, latitude, longitude):
+        self.destination = destination
+        self.latitude = latitude
+        self.longitude = longitude
+
+    def __repr__(self):
+        return "<Destination(id='%s',destination1='%s' - lat='%f': long='%f' )>" % (
+            self.id, self.destination, self.latitude, self.longitude)
 
 # sqlalchemy_example.db file.
 #mapper(Record, record)

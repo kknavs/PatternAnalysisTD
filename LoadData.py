@@ -10,12 +10,12 @@ import xlrd, logging
 
 
 def read_destinations():
-    with open("data/161124/lat_long.csv") as data:
+    with open("data/161124/lat_long_transpose_v10.csv") as data:
         dialect = csv.Sniffer().sniff(data.read(1024))
         data.seek(0)
         csvreader = csv.DictReader(data, dialect=dialect)
-        print("fieldnames: " + str(len(csvreader.fieldnames)) + " " + ",".join(csvreader.fieldnames))
-        return csvreader.fieldnames
+        dest = add_destinations_from_csv(csvreader, slo)
+        return dest
 
 
 def read_lines(n_lines):  # for now required fields are user_id, Dodeljena občina
@@ -101,6 +101,7 @@ prepareCsv = True
 reloadRecords = True
 reloadFids = True
 reloadData = True
+reloadDestinations = False
 
 # slo and eng - different column fieldnames. TODO: rename
 print pydatetime.datetime.now()
@@ -141,7 +142,7 @@ if reloadData:
                 p = Pair(user_id, pair[0][0], pair[1][0])
                 add_pair_and_update_link(p)
                 #add_row(p)
-            print "Done Pairs: " + str(float(count)/all_records_users.count()*100)
+            #print "Done Pairs: " + str(float(count)/all_records_users.count()*100)
             fid += 1
 
     #for p in fetchall_pairs():
@@ -155,6 +156,14 @@ for l in fetchall_links():
     print l
 testCount = get_count_for_destinations(u"Bled", u"Ljubljana")
 print testCount
+
+if reloadDestinations:
+    delete_destinations()
+    read_destinations()
+
+    for d in get_destinations():
+        print d
+
 print pydatetime.datetime.now()
 # https://stackoverflow.com/questions/14509269/best-method-of-saving-data
 # http://zetcode.com/db/sqlitepythontutorial/
