@@ -73,11 +73,12 @@ def add_records_from_csv(csvreader, n_lines, slo):
                 else: #decode preveri
                     record = Record(csvreader.line_num, row['user_username'].decode('utf-8'),
                                     row['subject_title'].decode('utf-8'),
-                                    pydatetime.datetime.strptime(row['review_date'].decode('utf-8'), '%B %d, %Y'),
+                                    pydatetime.datetime.strptime(row['review_date'], '%B %d, %Y'),
                                     row['user_profile_url'].decode('utf-8'))
                                     #  ali user_profile_url? najbolje, da kar oboje pobereš
                 if record.user_id:
                     session.add(record)
+                    session.commit()
                     records.append(record)
             except Exception, ex:
                 logging.error(str(countErrors)+". Missing field: " + ex.message)
@@ -102,12 +103,18 @@ def add_destinations_from_csv(csvreader, slo):
                                               float(row['Lat'.encode('utf-8')].decode('utf-8').replace(',', '.')),
                                               float(row['Long'.encode('utf-8')].decode('utf-8').replace(',', '.')))
                 else:
-                    destination = Destination(row['mesto2'].decode('utf-8'),
-                                              float(row['Lat'.encode('utf-8')].decode('utf-8').replace(',', '.')),
-                                              float(row['Long'.encode('utf-8')].decode('utf-8').replace(',', '.')))
+                    lat = float(row['subject_lat'.encode('utf-8')].decode('utf-8').replace(',', '.'))
+                    if lat < 10:  # errors in data
+                        lat *= 10
+                    while lat > 500:
+                        lat /= 10
+                    destination = Destination(row['subject_title'].decode('utf-8'),
+                                              lat,
+                                              float(row['subject_lng'.encode('utf-8')].decode('utf-8').replace(',', '.')))
                 if destination.destination:
-                    session.add(destination)
-                    records.append(destination)
+                    if slo or destination.destination not in records:
+                        session.add(destination)
+                        records.append(destination.destination)
             except Exception, ex:
                 logging.error("Missing field: " + ex.message)
                 countErrors += 1
@@ -201,6 +208,7 @@ def generate_fids(weeks=1):
                     record.flow_id = lastRecord.flow_id + 1
             else:
                 record.flow_id = 1
+                session.commit()
             lastRecord = record
 
 

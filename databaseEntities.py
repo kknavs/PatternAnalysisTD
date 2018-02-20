@@ -38,8 +38,9 @@ class Record(Base):
         self.flow_id = flow_id
 
     def __repr__(self):
-        return "<Record(id='%s', user_id='%s', destination='%s', review_date='%s', flow_id='%s')>" % (
-                                 self.id, self.user_id, self.destination, str(self.review_date), str(self.flow_id))
+        return ("<Record(id='%s', user_id='%s', destination='%s', review_date='%s', flow_id='%s')>" % (
+                                 self.id, self.user_id, self.destination,
+                                 self.review_date, self.flow_id)).encode('utf-8')
 
 
 class Pair(Base):
@@ -55,8 +56,8 @@ class Pair(Base):
         self.destination2 = unicode(destination2)
 
     def __repr__(self):
-        return "<Pair(id='%s', user_id='%s', destination1='%s' - destination2='%s')>" % (
-            self.id, self.user_id, self.destination1, self.destination2)
+        return ("<Pair(id='%s', user_id='%s', destination1='%s' - destination2='%s')>" % (
+            self.id, self.user_id, self.destination1, self.destination2)).encode('utf-8')
 
 
 class Link(Base):
@@ -72,8 +73,8 @@ class Link(Base):
         self.weight = weight
 
     def __repr__(self):
-        return "<Link(id='%s',destination1='%s' - destination2='%s': weight='%s' )>" % (
-            self.id, self.destination1, self.destination2, self.weight)
+        return ("<Link(id='%s',destination1='%s' - destination2='%s': weight='%s' )>" % (
+            self.id, self.destination1, self.destination2, self.weight)).encode('utf-8')
 
 
 class Destination(Base): # todokk
@@ -89,8 +90,8 @@ class Destination(Base): # todokk
         self.longitude = longitude
 
     def __repr__(self):
-        return "<Destination(id='%s',destination1='%s' - lat='%f': long='%f' )>" % (
-            self.id, self.destination, self.latitude, self.longitude)
+        return ("<Destination(id='%s',destination1='%s' - lat='%f': long='%f' )>" % (
+            self.id, self.destination, self.latitude, self.longitude)).encode('utf-8')
 
 # sqlalchemy_example.db file.
 #mapper(Record, record)

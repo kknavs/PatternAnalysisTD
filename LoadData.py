@@ -10,12 +10,29 @@ import xlrd, logging
 
 
 def read_destinations():
-    with open("data/161124/lat_long_transpose_v10.csv") as data:
-        dialect = csv.Sniffer().sniff(data.read(1024))
-        data.seek(0)
-        csvreader = csv.DictReader(data, dialect=dialect)
-        dest = add_destinations_from_csv(csvreader, slo)
-        return dest
+    if slo:
+        with open("data/161124/lat_long_transpose_v10.csv") as data:
+            dialect = csv.Sniffer().sniff(data.read(1024))
+            data.seek(0)
+            csvreader = csv.DictReader(data, dialect=dialect)
+            dest = add_destinations_from_csv(csvreader, slo)
+            return dest
+    else:
+        with open(folder+"/data.csv", "rb") as data:
+            dialect = None
+            try:
+                dialect = csv.Sniffer().sniff(data.read(1024))
+            except:
+                csvreader = csv.DictReader(data, delimiter=str(';'))
+            finally:
+                data.seek(0)
+                if dialect:
+                    if dialect.delimiter not in ["\t", ";", ":", ","]:
+                        logging.warning('Found delimiter: '+dialect.delimiter)
+                        dialect.delimiter = str(";")
+                    csvreader = csv.DictReader(data, dialect=dialect)  # extrasaction - raise ali ignore
+            dest = add_destinations_from_csv(csvreader, slo)
+            return dest
 
 
 def read_lines(n_lines):  # for now required fields are user_id, Dodeljena občina
@@ -97,17 +114,17 @@ def read_lines_london(n_lines=None):  # for now required fields are user_usernam
 
 
 # destinations = read_destinations()
-prepareCsv = True
-reloadRecords = True
+prepareCsv = False
+reloadRecords = False
 reloadFids = True
-reloadData = True
+reloadData = False
 reloadDestinations = False
 
 # slo and eng - different column fieldnames. TODO: rename
 print pydatetime.datetime.now()
 
 if prepareCsv:
-    prepare_csv('161124_slovenija_v10 harvesine.xlsm')
+    prepare_csv('sc_London_161020.xlsx')  # '161124_slovenija_v10 harvesine.xlsm')
     #exit()
 
 # Filtered Transactional Data
