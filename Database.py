@@ -7,6 +7,7 @@ from contextlib import contextmanager
 import logging
 import datetime as pydatetime
 import locale
+import itertools
 
 engine = create_engine(ConnString) #, echo=True)
 
@@ -71,17 +72,24 @@ def add_records_from_csv(csvreader, n_lines, slo):
                                     row['Dodeljena občina'.encode('utf-8')].decode('utf-8'),
                                     pydatetime.datetime.strptime(row['review_date'], '%B %d, %Y'))
                 else: #decode preveri
-                    record = Record(csvreader.line_num, row['user_username'].decode('utf-8'),
+                    record = Record(csvreader.line_num, row['user_profile_url'].decode('utf-8'),
                                     row['subject_title'].decode('utf-8'),
-                                    pydatetime.datetime.strptime(row['review_date'], '%B %d, %Y'),
-                                    row['user_profile_url'].decode('utf-8'))
-                                    #  ali user_profile_url? najbolje, da kar oboje pobereš
+                                    pydatetime.datetime.strptime(row['review_date'], '%B %d, %Y'))
+                    #record = Record(csvreader.line_num, row['user_username'].decode('utf-8'),
+                    #                row['subject_title'].decode('utf-8'),
+                    #                pydatetime.datetime.strptime(row['review_date'], '%B %d, %Y'),
+                    #                row['user_profile_url'].decode('utf-8'))
+                    #                #  ali user_profile_url? najbolje, da kar oboje pobereš
                 if record.user_id:
                     session.add(record)
-                    session.commit()
+                    session.flush()
+                    #session.commit()
                     records.append(record)
+                    # bulk_save_objects
+                    # https://stackoverflow.com/questions/4201455/sqlalchemy-whats-the-difference-between-flush-and-commit
             except Exception, ex:
-                logging.error(str(countErrors)+". Missing field: " + ex.message)
+                logging.error(str(countErrors)+". Missing field - error: " + ex.message)
+                print row
                 #if countErrors > 10:
                 #    logging.error("Terminated!")
                 #    break
@@ -103,7 +111,7 @@ def add_destinations_from_csv(csvreader, slo):
                                               float(row['Lat'.encode('utf-8')].decode('utf-8').replace(',', '.')),
                                               float(row['Long'.encode('utf-8')].decode('utf-8').replace(',', '.')))
                 else:
-                    lat = float(row['subject_lat'.encode('utf-8')].decode('utf-8').replace(',', '.'))
+                    lat = float(row['subject_lat'.encode('utf-8')].decode('utf-8').replace('.', ''))
                     if lat < 10:  # errors in data
                         lat *= 10
                     while lat > 500:
@@ -116,7 +124,8 @@ def add_destinations_from_csv(csvreader, slo):
                         session.add(destination)
                         records.append(destination.destination)
             except Exception, ex:
-                logging.error("Missing field: " + ex.message)
+                logging.error(str(countErrors)+". Missing field - error: " + ex.message)
+                print row
                 countErrors += 1
     return records
 
@@ -141,6 +150,7 @@ def delete_destinations():
 
 
 def delete_all_tables():
+    delete_records()
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
 
@@ -169,11 +179,10 @@ def fetchall_links():
 
 def fetchall_links_with_weight_threshold(weight):
     session = DBSession(bind=connection)
-    return session.query(Link).filter(Link.weight >= weight)
+    return session.query(Link).filter(Link.weight >= weight).order_by(Link.weight.desc()).all()
 
 
-def fetchall_records_users():
-    session = DBSession(bind=connection)
+def fetchall_records_users(session=DBSession(bind=connection)):
     return session.query(distinct(Record.user_id))
 
 
@@ -186,8 +195,7 @@ def get_different_destinations_of_user(user_id):
     return session.query(distinct(Record.destination)).filter(Record.user_id == user_id).order_by(Record.destination.asc())
 
 
-def get_destinations_of_user(user_id, fid):
-    session = DBSession(bind=connection)
+def get_destinations_of_user(user_id, fid, session=DBSession(bind=connection)):
     return session.query(distinct(Record.destination)).filter(Record.user_id == user_id, Record.flow_id == fid)\
         .order_by(Record.destination.asc()).all()
     #return session.query(Record.user_id, Record.destination).group_by(Record.user_id).all()
@@ -208,25 +216,58 @@ def generate_fids(weeks=1):
                     record.flow_id = lastRecord.flow_id + 1
             else:
                 record.flow_id = 1
-                session.commit()
+                session.flush()
             lastRecord = record
+
+
+def reload_data():
+    delete_links()
+    delete_pairs()
+    with session_scope() as session:
+        # Order – Item Data (transposed)
+        # get all different user_id's with all destinations visited
+        all_records_users = fetchall_records_users(session)
+        allCount = all_records_users.count() # important
+        for count, user_t in enumerate(all_records_users):
+            user_id = user_t[0]
+            fid = 1
+            while True:
+                destinations = get_destinations_of_user(user_id, fid, session)
+                if not destinations:
+                    break
+                #for dest in destinations:
+                #    print dest
+                for pair in list(itertools.combinations(destinations, 2)):
+                    # item pair data
+                    p = Pair(user_id, pair[0][0], pair[1][0])
+                    add_pair_and_update_link(p, session)
+                    #add_row(p)
+                print "Done Pairs: " + str(float(count)/allCount*100)
+                fid += 1
+
+
+        #for p in fetchall_pairs():
+        #    print p
+
+        # co-occurence data
+        # generate_links()  # now link is updated when pair is created!
 
 
 def get_count_for_destinations(destination1, destination2, session=DBSession(bind=connection)):
     return session.query(Pair).filter(Pair.destination1 == destination1, Pair.destination2 == destination2).count()
 
 
-def add_pair_and_update_link(pair):
-    with session_scope() as session:
-        session.add(pair)
-        link = session.query(Link).filter(Link.destination1 == pair.destination1, Link.destination2 == pair.destination2).first()
-        if not link:
-            session.add(Link(pair.destination1, pair.destination2, 1))
-        else:
-            link.weight = link.weight + 1
-        # if you don't include the column and just write m.counter += 1, then the new value would be calculated in
-        # Python (and race conditions are likely to happen)
-        # statement with += would result in SET counter=4 instead of SET counter=counter+1
+def add_pair_and_update_link(pair, session):
+    session.add(pair)
+    link = session.query(Link).filter(Link.destination1 == pair.destination1, Link.destination2 == pair.destination2).first()
+    if not link:
+        session.add(Link(pair.destination1, pair.destination2, 1))
+    else:
+        link.weight = link.weight + 1
+    session.flush()
+    # if you don't include the column and just write m.counter += 1, then the new value would be calculated in
+    # Python (and race conditions are likely to happen)
+    # statement with += would result in SET counter=4 instead of SET counter=counter+1
 
 
 def generate_links():
@@ -244,7 +285,16 @@ def generate_links():
 
 def get_max_weight():
     session = DBSession(bind=connection)
+    return session.query(func.count(Link)).scalar()
+
+def get_max_weight():
+    session = DBSession(bind=connection)
     return session.query(func.max(Link.weight)).scalar()
+
+
+def get_max_link_weight(n=10):
+    session = DBSession(bind=connection)
+    return session.query(Link).order_by(Link.weight.desc()).limit(n).all()
 
 
 def get_avg_weight_nonzero():

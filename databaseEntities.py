@@ -7,11 +7,13 @@ from sqlalchemy.orm import mapper
 
 
 Base = declarative_base()
-folder = 'data/161020' #London PatternAnalysisTD_161020 17.15  term. 15:02
-#folder = 'data/161124' # PatternAnalysisTD_161124 from 4.5h to 1h (2018-02-17 12:56:11.098000)
+#folder = 'data/161020' #London PatternAnalysisTD_161020 17.15  term. 15:02
+# 2018-02-24 20:27:01.528000 2018-02-25 22:02:47.971000
+folder = 'data/161124' # PatternAnalysisTD_161124 from 4.5h to 1h (2018-02-17 12:56:11.098000)
 # with add_pair_and_update_link: 2018-02-18 22:37:33.578000 2018-02-18 23:30:09.372000
-slo = False
+slo = True
 
+#ConnString = 'postgresql+psycopg2://postgres:postgres123@127.0.0.1:5432/PatternAnalysisTD_'+folder.replace('data/', '') TODO
 ConnString = 'postgresql+psycopg2://postgres:postgres123@127.0.0.1:5432/PatternAnalysisTD_'+folder.replace('data/', '')+'_fid'
 # postgresql+psycopg2://user:password@host:port/dbname[?key=value&key=value...]
 # sqlite
@@ -23,11 +25,11 @@ ConnString = 'postgresql+psycopg2://postgres:postgres123@127.0.0.1:5432/PatternA
 class Record(Base):
     __tablename__ = 'records'
     id = Column(Integer, primary_key=True)
-    user_id = Column(UnicodeText)
-    destination = Column(UnicodeText)
-    user_url = Column(UnicodeText, nullable=True)
+    user_id = Column(Unicode)
+    destination = Column(Unicode)
+    user_url = Column(Unicode, nullable=True)
     review_date = Column(DateTime)
-    flow_id = Column(Integer, default=0)
+    flow_id = Column(Integer, default=0)  # todokk preveri unicode
 
     def __init__(self, record_id, user_id, destination, review_date, user_url=None, flow_id=0):
         self.id = record_id
@@ -38,8 +40,8 @@ class Record(Base):
         self.flow_id = flow_id
 
     def __repr__(self):
-        return ("<Record(id='%s', user_id='%s', destination='%s', review_date='%s', flow_id='%s')>" % (
-                                 self.id, self.user_id, self.destination,
+        return ("<Record(id='%s', user_id='%s', user_url='%s' destination='%s', review_date='%s', flow_id='%s')>" % (
+                                 self.id, self.user_id, self.user_url, self.destination,
                                  self.review_date, self.flow_id)).encode('utf-8')
 
 
