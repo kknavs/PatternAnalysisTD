@@ -9,12 +9,12 @@ import xlrd, logging
 
 
 def read_destinations():
-    if slo:
+    if selectedData == DataType.SLO:
         with open(folder + "/lat_long_transpose_v11.csv") as data:
             dialect = csv.Sniffer().sniff(data.read(1024))
             data.seek(0)
             csvreader = csv.DictReader(data, dialect=dialect)
-            dest = add_destinations_from_csv(csvreader, slo)
+            dest = add_destinations_from_csv(csvreader, selectedData)
             return dest
     else:
         with open(folder+"/data.csv", "rb") as data:
@@ -22,7 +22,10 @@ def read_destinations():
             try:
                 dialect = csv.Sniffer().sniff(data.read(1024))
             except:
-                csvreader = csv.DictReader(data, delimiter=str(';'))
+                if selectedData == DataType.VIENNA:
+                    csvreader = csv.DictReader(data, delimiter=str(','))
+                else:
+                    csvreader = csv.DictReader(data, delimiter=str(';'))
             finally:
                 data.seek(0)
                 if dialect:
@@ -30,7 +33,7 @@ def read_destinations():
                         logging.warning('Found delimiter: '+dialect.delimiter)
                         dialect.delimiter = str(";")
                     csvreader = csv.DictReader(data, dialect=dialect)  # extrasaction - raise ali ignore
-            dest = add_destinations_from_csv(csvreader, slo)
+            dest = add_destinations_from_csv(csvreader, selectedData)
             return dest
 
 
@@ -64,9 +67,9 @@ def read_lines(n_lines):  # for now required fields are user_id, Dodeljena obči
 # pip install xlrd
 # https://pypi.python.org/pypi/xlrd#downloads
 # http://mattoc.com/read-xlsx-with-xlrd.html
-def prepare_csv(filename=None):
+def prepare_csv(filename=None):  # vienna already in csv
     if not filename:
-        if slo:
+        if selectedData == DataType.SLO:
             filename = '161124_slovenija_v11 harvesine.xlsm'
         else:
             filename = 'sc_London_161020.xlsx'
@@ -91,15 +94,22 @@ def prepare_csv(filename=None):
             spamwriter.writerow(r)
 
 
-def read_lines_london(n_lines=None):  # for now required fields are user_username, subject_title, lat and long
-    with open(folder+"/data.csv", "rb") as data:
+def read_lines_csv(n_lines=None):
+    mode = "rb"
+    if selectedData == DataType.VIENNA:
+        mode = "r"
+    with open(folder+"/data.csv", mode) as data:
     #with open(folder+"/ms_sc_London_161020_utf.csv", "rb") as data:
         # line = data.readline().strip()
         dialect = None
         try:
             dialect = csv.Sniffer().sniff(data.read(1024))
+            logging.warning('Found delimiter: '+dialect.delimiter)
         except:
-            csvreader = csv.DictReader(data, delimiter=str(';'))
+            if selectedData == DataType.VIENNA:
+                csvreader = csv.DictReader(data, delimiter=str(','))
+            else:
+                csvreader = csv.DictReader(data, delimiter=str(';'))
         finally:
             data.seek(0)
             if dialect:
@@ -112,20 +122,24 @@ def read_lines_london(n_lines=None):  # for now required fields are user_usernam
         #    data.seek(0)
         #csvreader = csv.DictReader(data, dialect=dialect) # reset count num of csvreader
         #print("fieldnames: " + str(len(csvreader.fieldnames)) + " " + ",".join(csvreader.fieldnames))
-        records = add_records_from_csv(csvreader, n_lines, slo)
+        records = add_records_from_csv(csvreader, n_lines, selectedData)
         return records
 
 
 # destinations = read_destinations()
 prepareCsv = False
-reloadRecords = False
-reloadFids = False
-reloadData = False
-reloadDestinations = False
+reloadRecords = True
+reloadFids = True
+reloadData = True
+reloadDestinations = True
+
+print folder
 
 # slo and eng - dif
 # 2018-02-22 23:45:06.222000
 #2018-02-23 01:24:38.106000ferent column fieldnames. TODO: rename
+
+# vienna (10000) 2018-03-17 19:49:01.662970 2018-03-17 19:50:03.459556
 
 # SAWarning: An exception has occurred during handling of a previous exception.  The previous exception is:
 # <class 'sqlalchemy.exc.StatementError'> (exceptions.MemoryError)
@@ -141,29 +155,23 @@ start = pydatetime.datetime.now()
 if reloadRecords:
     print "***Reload records***"
     delete_all_tables()
-    records = read_lines_london() #20000
+    records = read_lines_csv(10000) #20000
     # add_records(records) we insert all rows at once
 
 if reloadFids:
     print "***Reload fids***"
     generate_fids()
 
-#for i,r in enumerate(fetchall_records()):
-#    print r
+for i,r in enumerate(fetchall_records()):
+    print r
 print len(fetchall_records())
-print fetchall_records_users().count()  # 2184 empty - only in csv, not in db
-"""for user in fetchall_records_users():
-    dest = get_different_destinations_of_user(user)
-    if dest.count() != 1:
-        print user
-        print dest.all()"""
-
+print fetchall_records_users().count()
 
 if reloadData:
     print "***Reload data***"
     reload_data()
-for l in fetchall_links():
-    print l
+for d in get_max_link_weight():
+    print d
 
 testCount = get_count_for_destinations(u"Bled", u"Ljubljana")
 print testCount
@@ -173,8 +181,8 @@ if reloadDestinations:
     delete_destinations()
     read_destinations()
 
-    for d in get_destinations():
-        print d
+    #for d in get_destinations():
+    #    print d
 
 print start
 print pydatetime.datetime.now()

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from databaseEntities import Base, Record, Pair, Link, Destination, ConnString, folder, slo
+from databaseEntities import Base, Record, Pair, Link, Destination, ConnString, folder, DataType, selectedData
 from sqlalchemy import create_engine, distinct, func, MetaData, Table, inspect
 from sqlalchemy.orm import sessionmaker
 from contextlib import contextmanager
@@ -56,10 +56,11 @@ def add_row(row_object):
 
 
 # 2018-02-11 04:14:30.260000 slo ca.4h
-def add_records_from_csv(csvreader, n_lines, slo):
+def add_records_from_csv(csvreader, n_lines, selectedData):
     records = []
     countErrors =0
-    locale.setlocale(locale.LC_ALL, 'eng_gbr')  # January 15, 2015
+    #locale.setlocale(locale.LC_ALL, 'eng_gbr')  # January 15, 2015
+    # ValueError:  # not on windows
     with session_scope() as session:
         while not n_lines or csvreader.line_num < n_lines:  # performance?
             row = next(csvreader, None)
@@ -67,11 +68,11 @@ def add_records_from_csv(csvreader, n_lines, slo):
                 break
             #print row
             try:
-                if slo:
+                if selectedData == DataType.SLO:
                     record = Record(csvreader.line_num, row['user_id'].decode('utf-8'),
                                     row['Dodeljena občina'.encode('utf-8')].decode('utf-8'),
                                     pydatetime.datetime.strptime(row['review_date'], '%B %d, %Y'))
-                else: #decode preveri
+                elif selectedData == DataType.LONDON: #decode preveri
                     record = Record(csvreader.line_num, row['user_profile_url'].decode('utf-8'),
                                     row['subject_title'].decode('utf-8'),
                                     pydatetime.datetime.strptime(row['review_date'], '%B %d, %Y'))
@@ -80,6 +81,12 @@ def add_records_from_csv(csvreader, n_lines, slo):
                     #                pydatetime.datetime.strptime(row['review_date'], '%B %d, %Y'),
                     #                row['user_profile_url'].decode('utf-8'))
                     #                #  ali user_profile_url? najbolje, da kar oboje pobereš
+                else: # check problem with whitespaces
+                    record = Record(csvreader.line_num, row[' uid'].decode('utf-8').lstrip(),
+                                    row['place_name'].decode('utf-8').lstrip(),
+                                    pydatetime.datetime.strptime(row[' review_date'].lstrip(), '%Y%M%d'),
+                                    row[' username'].decode('utf-8').lstrip())
+
                 if record.user_id:
                     session.add(record)
                     session.flush()
@@ -97,7 +104,7 @@ def add_records_from_csv(csvreader, n_lines, slo):
     return records
 
 
-def add_destinations_from_csv(csvreader, slo):
+def add_destinations_from_csv(csvreader, selectedData):
     records = []
     countErrors = 0
     with session_scope() as session:
@@ -106,11 +113,11 @@ def add_destinations_from_csv(csvreader, slo):
             if row is None:
                 break
             try:
-                if slo:
+                if selectedData == DataType.SLO:
                     destination = Destination(row['mesto2'].decode('utf-8'),
                                               float(row['Lat'.encode('utf-8')].decode('utf-8').replace(',', '.')),
                                               float(row['Long'.encode('utf-8')].decode('utf-8').replace(',', '.')))
-                else:
+                elif selectedData == DataType.LONDON:
                     lat = float(row['subject_lat'.encode('utf-8')].decode('utf-8').replace('.', ''))
                     if lat < 10:  # errors in data
                         lat *= 10
@@ -119,8 +126,13 @@ def add_destinations_from_csv(csvreader, slo):
                     destination = Destination(row['subject_title'].decode('utf-8'),
                                               lat,
                                               float(row['subject_lng'.encode('utf-8')].decode('utf-8').replace(',', '.')))
+                else:
+                    destination = Destination(row['place_name'].decode('utf-8').strip(),
+                                              float(row[' lat'.encode('utf-8')].decode('utf-8').strip()),
+                                              float(row[' lng'.encode('utf-8')].decode('utf-8').strip()))
+
                 if destination.destination:
-                    if slo or destination.destination not in records:
+                    if destination.destination not in records:
                         session.add(destination)
                         records.append(destination.destination)
             except Exception, ex:
@@ -128,6 +140,7 @@ def add_destinations_from_csv(csvreader, slo):
                 print row
                 countErrors += 1
     return records
+
 
 def delete_records():
     with session_scope() as session:
@@ -286,6 +299,7 @@ def generate_links():
 def get_max_weight():
     session = DBSession(bind=connection)
     return session.query(func.count(Link)).scalar()
+
 
 def get_max_weight():
     session = DBSession(bind=connection)

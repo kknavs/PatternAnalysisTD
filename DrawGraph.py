@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 import networkx as nx
 import matplotlib.pyplot as plt
 from Database import Link, fetchall_links, fetchall_links_with_weight_threshold, get_destinations, get_max_weight, \
-    get_avg_weight_nonzero, folder, get_count_for_destinations, get_max_link_weight, slo
+    get_avg_weight_nonzero, folder, get_count_for_destinations, get_max_link_weight, DataType, selectedData
 import Community
 import numpy as np
 from networkx.algorithms import community as community_nx
@@ -42,7 +42,7 @@ def draw_graph1(save, consider_locations=True):
     G = nx.Graph()  # Graph, or DiGraph, MultiGraph, MultiDiGraph, etc
     #G.add_nodes_from(destinations)
     minW_array = [10, 30, 60, 100, 150, 200, 300, 400, 500, 600, 700, 900, 1300, 1600]
-    if not slo:
+    if selectedData != DataType.SLO:
         minW_array.append(1650)
     minW = 200
     minW_array = [i * multi for i in minW_array]
@@ -74,7 +74,7 @@ def draw_graph2(save, consider_locations=True):
     midW_array = [i * multi for i in [100, 150, 200]]
     maxW_array = [i * multi for i in [250, 400, 550, 700, 850]]
     if not save:
-        if slo:
+        if selectedData == DataType.SLO:
             minW_array = [i * multi for i in [60]]
         else:
             minW_array = [i * multi for i in [100]]
@@ -117,7 +117,7 @@ def draw_graph2(save, consider_locations=True):
 
 def draw_graph3(save, consider_locations=True):
     G = nx.Graph()
-    if slo:
+    if selectedData == DataType.SLO:
         minW_array = [i * multi for i in [0, 10, 20, 40, 60, 100, 120, 150]]
     else:
         minW_array = [i * multi for i in [ 800]] #100, 120, 150, 200, 400]]
@@ -186,7 +186,7 @@ def draw_graph4(save, consider_locations=True):
     G = nx.Graph()
     N_groups = 3
     colors = ['b', 'y', 'g', 'w', 'r', 'c']
-    if slo:
+    if selectedData == DataType.SLO:
         minW_array = [i * multi for i in [0, 10, 20, 40, 60, 100, 120, 150]]
     else:
         minW_array = [i * multi for i in [ 800]] #100, 120, 150, 200, 400]]
@@ -239,7 +239,7 @@ def draw_graph5(save, consider_locations=True):
     G = nx.Graph()
     N_groups = 4
     colors = ['b', 'y', 'g', 'w', 'r', 'c']
-    if slo:
+    if selectedData == DataType.SLO:
         minW_array = [i * multi for i in [0, 10, 20, 40, 60, 100, 120, 150]]
     else:
         minW_array = [i * multi for i in [ 800]] #100, 120, 150, 200, 400]]
@@ -315,7 +315,7 @@ def draw_graph6(save, consider_locations=True):
     colors = ['b', 'y', 'g', 'w', 'r', 'c']
     #G = nx.barbell_graph(5, 1)
     minW_array = [10, 30, 60, 100, 150, 200, 300, 400, 500, 600, 700, 900, 1300, 1600]
-    if not slo:
+    if selectedData != DataType.SLO:
         minW_array.append(1650)
     minW = 200
     minW_array = [i * multi for i in minW_array]
@@ -373,10 +373,11 @@ def draw_graph6(save, consider_locations=True):
             # https://stackoverflow.com/questions/20063927/overlapping-community-detection-with-igraph-or-other-libaries
     plt.show()
 
+
 print get_count_for_destinations(u"Bled", u"Ljubljana")
 print get_count_for_destinations(u"Bled", u"Skofljica")
 # 175 mW
-print get_count_for_destinations(u"British Museum", u"London Underground")  # 13  325 (no fids?, username)
-print get_count_for_destinations(u"British Museum", u"The London Eye")  # 10  386 (no fids?, username)
+#print get_count_for_destinations(u"British Museum", u"London Underground")  # 13  325 (no fids?, username)
+#print get_count_for_destinations(u"British Museum", u"The London Eye")  # 10  386 (no fids?, username)
 #draw_graph1(True)
 draw_graph3(True)
