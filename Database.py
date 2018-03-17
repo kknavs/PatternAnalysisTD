@@ -72,25 +72,22 @@ def add_records_from_csv(csvreader, n_lines, selectedData):
                     record = Record(csvreader.line_num, row['user_id'].decode('utf-8'),
                                     row['Dodeljena občina'.encode('utf-8')].decode('utf-8'),
                                     pydatetime.datetime.strptime(row['review_date'], '%B %d, %Y'))
-                elif selectedData == DataType.LONDON: #decode preveri
+                elif selectedData == DataType.LONDON:
                     record = Record(csvreader.line_num, row['user_profile_url'].decode('utf-8'),
                                     row['subject_title'].decode('utf-8'),
                                     pydatetime.datetime.strptime(row['review_date'], '%B %d, %Y'))
-                    #record = Record(csvreader.line_num, row['user_username'].decode('utf-8'),
-                    #                row['subject_title'].decode('utf-8'),
-                    #                pydatetime.datetime.strptime(row['review_date'], '%B %d, %Y'),
                     #                row['user_profile_url'].decode('utf-8'))
                     #                #  ali user_profile_url? najbolje, da kar oboje pobereš
                 else: # check problem with whitespaces
                     record = Record(csvreader.line_num, row[' uid'].decode('utf-8').lstrip(),
                                     row['place_name'].decode('utf-8').lstrip(),
-                                    pydatetime.datetime.strptime(row[' review_date'].lstrip(), '%Y%M%d'),
+                                    pydatetime.datetime.strptime(row[' review_date'].lstrip(), '%Y%m%d'),
                                     row[' username'].decode('utf-8').lstrip())
 
                 if record.user_id:
                     session.add(record)
                     session.flush()
-                    #session.commit()
+                    #session.commit()  # počasno
                     records.append(record)
                     # bulk_save_objects
                     # https://stackoverflow.com/questions/4201455/sqlalchemy-whats-the-difference-between-flush-and-commit

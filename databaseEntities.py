@@ -25,8 +25,7 @@ selectedData = DataType.VIENNA
 folders = ['161124', '161020', 'vienna']
 folder = 'data/' + folders[selectedData-1]
 
-
-#ConnString = 'postgresql+psycopg2://postgres:postgres123@127.0.0.1:5432/PatternAnalysisTD_'+folder.replace('data/', '') TODO
+# postgres
 #ConnString = 'postgresql+psycopg2://postgres:postgres123@127.0.0.1:5432/PatternAnalysisTD_'+folder.replace('data/', '')+'_fid'
 # postgresql+psycopg2://user:password@host:port/dbname[?key=value&key=value...]
 # sqlite
@@ -42,7 +41,7 @@ class Record(Base):
     destination = Column(Unicode)
     user_url = Column(Unicode, nullable=True)
     review_date = Column(DateTime)
-    flow_id = Column(Integer, default=0)  # todokk preveri unicode
+    flow_id = Column(Integer, default=0)
 
     def __init__(self, record_id, user_id, destination, review_date, user_url=None, flow_id=0):
         self.id = record_id
