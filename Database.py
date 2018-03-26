@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from databaseEntities import Base, Record, Pair, Link, Destination, ConnString, folder, DataType, selectedData
-from sqlalchemy import create_engine, distinct, func, MetaData, Table, inspect
+from sqlalchemy import create_engine, distinct, func, inspect
 from sqlalchemy.orm import sessionmaker
 from contextlib import contextmanager
 import logging
@@ -59,7 +59,7 @@ def add_row(row_object):
 def add_records_from_csv(csvreader, n_lines, selectedData):
     records = []
     countErrors =0
-    #locale.setlocale(locale.LC_ALL, 'eng_gbr')  # January 15, 2015
+    locale.setlocale(locale.LC_ALL, 'eng_gbr')  # January 15, 2015
     # ValueError:  # not on windows
     with session_scope() as session:
         while not n_lines or csvreader.line_num < n_lines:  # performance?
@@ -291,11 +291,6 @@ def generate_links():
                 #print link
                 session.add(link)
             print "Done Links: " + str(float(count)/all_destinations.count()*100)
-
-
-def get_max_weight():
-    session = DBSession(bind=connection)
-    return session.query(func.count(Link)).scalar()
 
 
 def get_max_weight():

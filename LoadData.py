@@ -37,33 +37,6 @@ def read_destinations():
             return dest
 
 
-def read_lines(n_lines):  # for now required fields are user_id, Dodeljena občina
-    with open("data/161124/data.csv", 'b', encoding='utf8') as data:
-        # line = data.readline().strip()
-        # csvreader = csv.reader(data, delimiter=";")
-        dialect = csv.Sniffer().sniff(data.read(1024))
-        data.seek(0)
-        csvreader = csv.DictReader(data, dialect=dialect) # extrasaction - raise ali ignore
-        print("fieldnames: " + str(len(csvreader.fieldnames)) + " " + ",".join(csvreader.fieldnames))
-        records = []
-        while csvreader.line_num < n_lines:
-            row = next(csvreader, None)
-            if row is None:
-                break
-            #print ("csvreader: "+str(csvreader.line_num) +'  !! '.join(csvreader.next()))
-            print (row['user_id'], row['Dodeljena občina'])
-            record = Record(csvreader.line_num, row['user_id'], row['Dodeljena občina'])
-            if record.user_id:
-                records.append(record)
-            # we take line_num as id of record
-            #print (row)
-            #print(row['user_id'], row['Dodeljena občina'])
-            # s = line[i: i+ len(t)]
-            # if s == t:
-            #     myfile.write(str(i+1)+" ")
-        return records
-
-
 # pip install xlrd
 # https://pypi.python.org/pypi/xlrd#downloads
 # http://mattoc.com/read-xlsx-with-xlrd.html
@@ -128,10 +101,10 @@ def read_lines_csv(n_lines=None):
 
 # destinations = read_destinations()
 prepareCsv = False
-reloadRecords = True
-reloadFids = True
-reloadData = True
-reloadDestinations = True
+reloadRecords = False
+reloadFids = False
+reloadData = False
+reloadDestinations = False
 
 print folder
 
@@ -155,7 +128,7 @@ start = pydatetime.datetime.now()
 if reloadRecords:
     print "***Reload records***"
     delete_all_tables()
-    records = read_lines_csv(10000) #20000
+    records = read_lines_csv() #20000
     # add_records(records) we insert all rows at once
 
 if reloadFids:
@@ -174,6 +147,7 @@ for d in get_max_link_weight():
     print d
 
 testCount = get_count_for_destinations(u"Bled", u"Ljubljana")
+testCount = get_count_for_destinations(u"Schonbrunn Palace", u"St. Stephen's Cathedral")
 print testCount
 
 if reloadDestinations:

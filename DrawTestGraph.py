@@ -4,24 +4,26 @@ import networkx as nx
 import matplotlib.pyplot as plt
 from Database import Link, fetchall_links, fetchall_links_with_weight_threshold, get_destinations, get_max_weight, \
     get_avg_weight_nonzero, folder, get_count_for_destinations, get_max_link_weight, DataType, selectedData
-import Community
+import community_louvain as Community
 import numpy as np
 from networkx.algorithms import community as community_nx
+import itertools
+from operator import itemgetter
+# https://github.com/taynaud/python-louvain/tree/networkx2
+# pip install -U git+https://github.com/taynaud/python-louvain.git@networkx2
 
 links = fetchall_links_with_weight_threshold(1)
 destinations_dict = dict()
 for d in get_destinations():
     print d
-    if d.destination not in destinations_dict: # tempfix todokk delete
-        #if d.latitude > 50000:
-        #    print (float(d.latitude)/(float(d.latitude)/5150.4433))/100.0
-        #    destinations_dict[d.destination] = np.array([d.longitude, (d.latitude/(d.latitude/5150.4433))/100.0])
+    if d.destination not in destinations_dict:
         destinations_dict[d.destination] = np.array([d.longitude, d.latitude])
 print len(destinations_dict)
 
 
 maxWeight = get_max_weight()
 multi = maxWeight/1700.0
+multi *= 1.1
 for d in get_max_link_weight():
     print d
 print maxWeight
@@ -29,6 +31,7 @@ print maxWeight
 print "Multi:"+unicode(multi)
 avg = get_avg_weight_nonzero()
 print avg
+colors = ['b', 'y', 'g', 'w', 'r', 'c']
 
 outputFolder = folder + "/graphs"
 
@@ -125,7 +128,7 @@ def draw_graph3(save, consider_locations=True):
     maxW_array.append(maxWeight)
     if not save:
         minW_array = [100]
-        maxW_array = [1000]
+        maxW_array = [maxWeight+100]
     for minW in minW_array:
         for maxW in maxW_array:
             if minW >= maxW:
@@ -134,16 +137,17 @@ def draw_graph3(save, consider_locations=True):
             G.clear()
             for l in links:
                 if minW < l.weight < maxW:
-                    G.add_edge(l.destination1, l.destination2, weight=l.weight)
+                    G.add_edge(l.destination1, l.destination2, weight=l.weight) #obr?
 
             # use one of the edge properties to control line thickness
             edgewidth = [d['weight']/float(maxWeight/avg) for (u,v,d) in G.edges(data=True)]
-            emedium = [(u, v) for (u, v, d) in G.edges(data=True) if minW < d['weight'] < maxW]
+            #edgewidth = [d['weight']/float(avg) for (u,v,d) in G.edges(data=True)]
+            emedium = [(u, v) for (u, v, d) in G.edges(data=True)]
             pos=nx.spring_layout(G)  # spring, shell, circular positions for all nodes
             if consider_locations:
                 change_nodes_position(pos)
             # labels
-            nx.draw_networkx_labels(G, pos, font_size=14, font_family='sans-serif', alpha=0.8)
+            nx.draw_networkx_labels(G, pos, font_size=13, font_family='sans-serif', alpha=0.8)
             #nx.draw_networkx_nodes(G,pos,alpha=0.6,node_size=400)
             nx.draw_networkx_edges(G, pos, edgelist=emedium,
                                    width=edgewidth, alpha=0.7)
@@ -156,13 +160,14 @@ def draw_graph3(save, consider_locations=True):
             #? print G.degree("Ljubljana", weighted=False)
             #če digraph: print G.in_degree(with_labels=True)
             comps = nx.connected_component_subgraphs(G)
+            print "Comps"
             for c in comps:
                 print c
             ccs = nx.clustering(G)
             print ccs
             #print sum(ccs)/len(ccs)
-            partition = Community.best_partition(G)
-            colors = ['b', 'y', 'g', 'w', 'r', 'c']
+            # print nx.__version__  is 2.1
+            partition = Community.best_partition(G, None, 'weight')
             for count,i in enumerate(set(partition.values())):
                 print "Community", i
                 members = list_nodes = [nodes for nodes in partition.keys() if partition[nodes] == i]
@@ -171,7 +176,7 @@ def draw_graph3(save, consider_locations=True):
                 nx.draw_networkx_nodes(G,pos,
                                        nodelist=members,
                                        node_color=colors[count],
-                                       node_size=400,
+                                       node_size=350,
                                        alpha=0.75)
             # poglej še: https://networkx.github.io/documentation/stable/reference/algorithms/community.html
             plt.axis('off')
@@ -214,7 +219,7 @@ def draw_graph4(save, consider_locations=True):
             sliding = float(len(pos))/N_groups
             print sliding
             # labels
-            nx.draw_networkx_labels(G, pos, font_size=14, font_family='sans-serif', alpha=0.8)
+            nx.draw_networkx_labels(G, pos, font_size=13, font_family='sans-serif', alpha=0.8)
             #nx.draw_networkx_nodes(G,pos,alpha=0.6,node_size=400)
             nx.draw_networkx_edges(G, pos, edgelist=emedium,
                                    width=edgewidth, alpha=0.7)
@@ -225,7 +230,7 @@ def draw_graph4(save, consider_locations=True):
                 nx.draw_networkx_nodes(G,pos,
                                        nodelist=members,
                                        node_color=colors[count],
-                                       node_size=400,
+                                       node_size=350,
                                        alpha=0.75)
             plt.axis('off')
             figManager = plt.get_current_fig_manager()
@@ -312,7 +317,6 @@ def draw_graph6(save, consider_locations=True):
     # https://networkx.github.io/documentation/stable/reference/algorithms/community.html
     # networkx community test
     G = nx.Graph()
-    colors = ['b', 'y', 'g', 'w', 'r', 'c']
     #G = nx.barbell_graph(5, 1)
     minW_array = [10, 30, 60, 100, 150, 200, 300, 400, 500, 600, 700, 900, 1300, 1600]
     if selectedData != DataType.SLO:
@@ -338,7 +342,7 @@ def draw_graph6(save, consider_locations=True):
                 change_nodes_position(pos)
             # labels
             #nx.draw_networkx_labels(G, pos, font_size=15, font_family='sans-serif')
-            nx.draw_networkx(G, pos, node_color='b', node_size=500)
+            nx.draw_networkx(G, pos, node_color='b', node_size=350)
             #nx.draw(G)
             # print nx.__version__  is 2.1
             communities_generator = community_nx.asyn_fluidc(G, count) #girvan_newman(G)
@@ -356,7 +360,7 @@ def draw_graph6(save, consider_locations=True):
                 nx.draw_networkx_nodes(G,pos,
                                        nodelist= next_level_communities,
                                        node_color=colors[c],
-                                       node_size=400,
+                                       node_size=350,
                                        alpha=0.9)
                 print next_level_communities
                 sorted(map(sorted, next_level_communities))
@@ -374,10 +378,250 @@ def draw_graph6(save, consider_locations=True):
     plt.show()
 
 
-print get_count_for_destinations(u"Bled", u"Ljubljana")
-print get_count_for_destinations(u"Bled", u"Skofljica")
+def draw_graph_asyn_lpa(save, consider_locations=True):  # looks very random
+    G = nx.Graph()
+    if selectedData == DataType.SLO:
+        minW_array = [i * multi for i in [0, 10, 20, 40, 60, 100, 120, 150]]
+    else:
+        minW_array = [i * multi for i in [ 800]] #100, 120, 150, 200, 400]]
+    maxW_array = [i * multi for i in [100, 200, 400, 600, 1000, 1300, 1500]]
+    maxW_array.append(maxWeight)
+    if not save:
+        minW_array = [10]
+        maxW_array = [maxWeight+100]
+    for minW in minW_array:
+        for maxW in maxW_array:
+            if minW >= maxW:
+                continue
+            plt.clf()
+            G.clear()
+            for l in links:
+                if minW < l.weight < maxW:
+                    G.add_edge(l.destination1, l.destination2, weight=l.weight)
+
+            # use one of the edge properties to control line thickness
+            edgewidth = [d['weight']/float(maxWeight)*10 for (u,v,d) in G.edges(data=True)]
+            emedium = [(u, v) for (u, v, d) in G.edges(data=True)]
+            pos=nx.spring_layout(G)  # spring, shell, circular positions for all nodes
+            if consider_locations:
+                change_nodes_position(pos)
+            nx.draw_networkx(G, pos, node_color='b', node_size=300)
+            communities_generator = community_nx.asyn_lpa_communities(G, 'weight')
+            c = 0
+            dict_groups = {}
+            while True:
+                #top_level_communities = next(communities_generator)
+                #print top_level_communities
+                #members = set([nodes for c, nodes in enumerate(pos) if count*sliding <= c < (count+1)*sliding])
+                #print members
+                next_level_communities = next(communities_generator, None)
+                if not next_level_communities:
+                    break
+                for n in next_level_communities:
+                    dict_groups[n] = c
+                print unicode(next_level_communities)
+                c += 1
+            values = [dict_groups.get(node, 0.25) for node in G.nodes()]
+            nx.draw_networkx_nodes(G,pos,
+                                   node_color=values,
+                                   cmap=plt.cm.Set1,
+                                   node_size=350,
+                                   alpha=0.9)
+            plt.axis('off')
+            figManager = plt.get_current_fig_manager()
+            figManager.window.state('zoomed')
+            if save:
+                plt.savefig(outputFolder + "/graph_asyn_lpa_minW="+str(minW)+"_maxW="+str(maxW)+".png")
+    plt.show()
+
+
+def heaviest(G):
+    u, v, w = max(G.edges(data='weight'), key=itemgetter(2))
+    return (u, v)
+
+
+def draw_graph_girvan_newman(save, consider_locations=True):
+    G = nx.Graph()
+    if selectedData == DataType.SLO:
+        minW_array = [i * multi for i in [0, 10, 20, 40, 60, 100, 120, 150]]
+    else:
+        minW_array = [i * multi for i in [ 800]] #100, 120, 150, 200, 400]]
+    maxW_array = [i * multi for i in [100, 200, 400, 600, 1000, 1300, 1500]]
+    maxW_array.append(maxWeight)
+    if not save:
+        minW_array = [100]
+        maxW_array = [maxWeight+100]
+    for minW in minW_array:
+        for maxW in maxW_array:
+            if minW >= maxW:
+                continue
+            plt.clf()
+            G.clear()
+            for l in links:
+                if minW < l.weight < maxW:
+                    G.add_edge(l.destination1, l.destination2, weight=l.weight)
+
+            print "Heaviest:"+str(heaviest(G))
+            # use one of the edge properties to control line thickness
+            edgewidth = [d['weight']/float(maxWeight/avg) for (u,v,d) in G.edges(data=True)]
+            emedium = [(u, v) for (u, v, d) in G.edges(data=True)]
+            pos=nx.spring_layout(G)  # spring, shell, circular positions for all nodes
+            if consider_locations:
+                change_nodes_position(pos)
+            k = 10
+            comp = community_nx.girvan_newman(G, most_valuable_edge=heaviest)
+            limited = itertools.takewhile(lambda c: len(c) <= k, comp)
+            # To stop getting tuples of communities once the number of communities
+            # is greater than *k*, use :func:`itertools.takewhile`::
+            """>>> import itertools
+            >>> G = nx.path_graph(8)
+            >>> k = 4
+            >>> comp = girvan_newman(G)
+            >>> limited = itertools.takewhile(lambda c: len(c) <= k, comp)
+            >>> for communities in limited:
+            ...     print(tuple(sorted(c) for c in communities)) # doctest: +SKIP"""
+            nx.draw_networkx_labels(G, pos, font_size=13, font_family='sans-serif', alpha=0.8)
+            nx.draw_networkx_edges(G, pos, width=edgewidth, egdelist=G.edges, alpha=0.6)
+            for communities in limited:
+                dict_groups = {}
+                c = 0
+                print communities
+                for com in (tuple(sorted(cm) for cm in communities)):
+                    for n in com:
+                        dict_groups[n] = c
+                    print unicode(com)
+                    c += 1
+                values = [dict_groups.get(node, 0.25) for node in G.nodes()]
+                nx.draw_networkx_nodes(G,pos,
+                                       node_color=values,
+                                       cmap=plt.cm.Set1,  # Blues modra shema
+                                       node_size=350,
+                                       alpha=0.9)
+            plt.axis('off')
+            figManager = plt.get_current_fig_manager()
+            figManager.window.state('zoomed')
+            if save:
+                plt.savefig(outputFolder + "/graph_girvan_newman_minW="+str(minW)+"_maxW="+str(maxW)+".png")
+    plt.show()
+
+
+def draw_graph_k_clique(save, consider_locations=True):
+    G = nx.Graph()
+    if selectedData == DataType.SLO:
+        minW_array = [i * multi for i in [0, 10, 20, 40, 60, 100, 120, 150]]
+    else:
+        minW_array = [i * multi for i in [ 800]] #100, 120, 150, 200, 400]]
+    maxW_array = [i * multi for i in [100, 200, 400, 600, 1000, 1300, 1500]]
+    maxW_array.append(maxWeight)
+    if not save:
+        minW_array = [10]
+        maxW_array = [maxWeight+100]
+    for minW in minW_array:
+        for maxW in maxW_array:
+            if minW >= maxW:
+                continue
+            plt.clf()
+            G.clear()
+            for l in links:
+                if minW < l.weight < maxW:
+                    G.add_edge(l.destination1, l.destination2, weight=l.weight)
+
+            # use one of the edge properties to control line thickness
+            edgewidth = [d['weight']/float(maxWeight)*10 for (u,v,d) in G.edges(data=True)]
+            emedium = [(u, v) for (u, v, d) in G.edges(data=True)]
+            pos=nx.spring_layout(G)  # spring, shell, circular positions for all nodes
+            if consider_locations:
+                change_nodes_position(pos)
+            # some are in no generated communities
+            nx.draw_networkx_edges(G, pos, width=edgewidth, egdelist=G.edges, alpha=0.6)
+            nx.draw_networkx_nodes(G,  pos, with_lables=False, node_color=(1,1,1),alpha=0.2, node_size=300)
+            nx.draw_networkx_labels(G, pos, font_size=13, font_family='sans-serif', alpha=0.8)
+
+            #K5 = nx.convert_node_labels_to_integers(G,first_label=2)
+            #G.add_edges_from(K5.edges())
+            communities_generator = community_nx.k_clique_communities(G, 3, cliques=nx.find_cliques(G))
+            c = 0
+            dict_groups = {}
+            while True:
+                #top_level_communities = next(communities_generator)
+                #print top_level_communities
+                next_level_communities = next(communities_generator, None)
+                if not next_level_communities:
+                    break
+                print unicode(next_level_communities)
+                for n in next_level_communities:
+                    dict_groups[n] = c
+                c += 1
+            values = [dict_groups.get(node, 0.25) for node in dict_groups.keys()]
+            nx.draw_networkx_nodes(G,pos,
+                                   nodelist=dict_groups.keys(),
+                                   node_color=values,
+                                   cmap=plt.cm.Set1,
+                                   node_size=350,
+                                   alpha=0.9)
+            plt.axis('off')
+            figManager = plt.get_current_fig_manager()
+            figManager.window.state('zoomed')
+            if save:
+                plt.savefig(outputFolder + "/graph_k_clique_minW="+str(minW)+"_maxW="+str(maxW)+".png")
+    plt.show()
+
+
+def draw_kernighan_lin_bisection(save, consider_locations=True):
+    G = nx.Graph()
+    if selectedData == DataType.SLO:
+        minW_array = [i * multi for i in [0, 10, 20, 40, 60, 100, 120, 150]]
+    else:
+        minW_array = [i * multi for i in [ 800]] #100, 120, 150, 200, 400]]
+    maxW_array = [i * multi for i in [100, 200, 400, 600, 1000, 1300, 1500]]
+    maxW_array.append(maxWeight)
+    if not save:
+        minW_array = [10]
+        maxW_array = [maxWeight+100]
+    for minW in minW_array:
+        for maxW in maxW_array:
+            if minW >= maxW:
+                continue
+            plt.clf()
+            G.clear()
+            for l in links:
+                if minW < l.weight < maxW:
+                    G.add_edge(l.destination1, l.destination2, weight=l.weight)
+            # use one of the edge properties to control line thickness
+            edgewidth = [d['weight']/float(maxWeight/avg) for (u,v,d) in G.edges(data=True)]
+            emedium = [(u, v) for (u, v, d) in G.edges(data=True)]
+            pos=nx.spring_layout(G)  # spring, shell, circular positions for all nodes
+            if consider_locations:
+                change_nodes_position(pos)
+            nx.draw_networkx(G, pos, node_color='b', node_size=300)
+            # kernighan_lin_bisection(G, partition=None, max_iter=10, weight='weight'):
+            a,b = community_nx.kernighan_lin_bisection(G, weight='weight')
+            nx.draw_networkx_nodes(G,pos,
+                                   nodelist= a,
+                                   node_color='r',
+                                   node_size=350,
+                                   alpha=0.9)
+            nx.draw_networkx_nodes(G,pos,
+                                   nodelist= b,
+                                   node_color='b',
+                                   node_size=350,
+                                   alpha=0.9)
+            plt.axis('off')
+            figManager = plt.get_current_fig_manager()
+            figManager.window.state('zoomed')
+            if save:
+                plt.savefig(outputFolder + "/graph_kernighan_lin_minW="+str(minW)+"_maxW="+str(maxW)+".png")
+    plt.show()
+
+if selectedData == DataType.SLO:
+    print get_count_for_destinations(u"Bled", u"Ljubljana")
+    print get_count_for_destinations(u"Bled", u"Skofljica")
 # 175 mW
 #print get_count_for_destinations(u"British Museum", u"London Underground")  # 13  325 (no fids?, username)
 #print get_count_for_destinations(u"British Museum", u"The London Eye")  # 10  386 (no fids?, username)
-#draw_graph1(True)
-draw_graph3(True)
+#draw_graph3(False)
+draw_graph_asyn_lpa(False)
+#draw_graph_girvan_newman(False)
+#draw_graph_k_clique(False)
+#draw_kernighan_lin_bisection(False)
+
