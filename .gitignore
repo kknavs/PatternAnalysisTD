@@ -7,8 +7,9 @@ __pycache__/
 *.so
 
 # snap library
-!snap/*.so
-!snap/*.pyd
+!*/mac/*.so
+!*/win/*.pyd
+!*/win/*.so
 
 # Distribution / packaging
 .Python

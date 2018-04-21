@@ -24,9 +24,12 @@ selectedData = DataType.SLO
 
 folders = ['161124', '161020', 'vienna']
 folder = 'data/' + folders[selectedData-1]
+undirected = True
 
 # postgres
 ConnString = 'postgresql+psycopg2://postgres:postgres123@127.0.0.1:5432/PatternAnalysisTD_'+folder.replace('data/', '')+'_fid'
+if not undirected:
+    ConnString += '_directed'
 # postgresql+psycopg2://user:password@host:port/dbname[?key=value&key=value...]
 # sqlite
 #ConnString = 'sqlite:///'+folder+'/PatternAnalysisTD_'+folder.replace('data/', '')+'.sqlite'
