@@ -6,6 +6,10 @@ __pycache__/
 # C extensions
 *.so
 
+# snap library
+!snap/*.so
+!snap/*.pyd
+
 # Distribution / packaging
 .Python
 env/
