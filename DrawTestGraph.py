@@ -24,6 +24,8 @@ print len(destinations_dict)
 maxWeight = get_max_weight()
 multi = maxWeight/1700.0
 multi *= 1.1
+if selectedData == DataType.VIENNA:
+    multi = (maxWeight*10)/1700
 for d in get_max_link_weight():
     print d
 print maxWeight
@@ -123,11 +125,11 @@ def draw_graph3(save, consider_locations=True):
     if selectedData == DataType.SLO:
         minW_array = [i * multi for i in [0, 10, 20, 40, 60, 100, 120, 150]]
     else:
-        minW_array = [i * multi for i in [ 800]] #100, 120, 150, 200, 400]]
+        minW_array = [100, 120, 150, 200, 400, 800, 1000]
     maxW_array = [i * multi for i in [100, 200, 400, 600, 1000, 1300, 1500]]
     maxW_array.append(maxWeight)
     if not save:
-        minW_array = [100]
+        minW_array = [100 * multi]
         maxW_array = [maxWeight+100]
     for minW in minW_array:
         for maxW in maxW_array:
@@ -183,7 +185,7 @@ def draw_graph3(save, consider_locations=True):
             figManager = plt.get_current_fig_manager()
             figManager.window.state('zoomed')
             if save:
-                plt.savefig(outputFolder + "/graph3_minW="+str(minW)+"_maxW="+str(maxW)+".png")
+                plt.savefig(outputFolder + "/louvain/graph3_minW="+str(minW)+"_maxW="+str(maxW)+".png")
     plt.show()
 
 
@@ -619,8 +621,8 @@ if selectedData == DataType.SLO:
 # 175 mW
 #print get_count_for_destinations(u"British Museum", u"London Underground")  # 13  325 (no fids?, username)
 #print get_count_for_destinations(u"British Museum", u"The London Eye")  # 10  386 (no fids?, username)
-#draw_graph3(False)
-draw_graph_asyn_lpa(False)
+draw_graph3(False)
+#draw_graph_asyn_lpa(False)
 #draw_graph_girvan_newman(False)
 #draw_graph_k_clique(False)
 #draw_kernighan_lin_bisection(False)

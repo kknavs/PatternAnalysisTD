@@ -192,12 +192,21 @@ def fetchall_links_with_weight_threshold(weight):
     return session.query(Link).filter(Link.weight >= weight).order_by(Link.weight.desc()).all()
 
 
+def fetchall_links_id_asc_with_weight_threshold(weight):
+    session = DBSession(bind=connection)
+    return session.query(Link).filter(Link.weight >= weight).order_by(Link.id.asc()).all()
+
+
 def fetchall_records_users(session=DBSession(bind=connection)):
     return session.query(distinct(Record.user_id))
 
 
 def get_destinations(session=DBSession(bind=connection)):
     return session.query(Destination).order_by(Destination.destination.asc())
+
+
+def get_destinations_id_asc(session=DBSession(bind=connection)):
+    return session.query(Destination).order_by(Destination.id.asc())
 
 
 def get_different_destinations_of_user(user_id):
