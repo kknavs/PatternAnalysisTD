@@ -17,7 +17,7 @@ def read_destinations():
             dest = add_destinations_from_csv(csvreader, selectedData)
             return dest
     else:
-        with open(folder+"/data.csv", "rb") as data:
+        with open(folder+"/data.csv", str("rb")) as data:
             dialect = None
             try:
                 dialect = csv.Sniffer().sniff(data.read(1024))
@@ -71,7 +71,7 @@ def read_lines_csv(n_lines=None):
     mode = "rb"
     if selectedData == DataType.VIENNA:
         mode = "r"
-    with open(folder+"/data.csv", mode) as data:
+    with open(folder+"/data.csv", str(mode)) as data:
     #with open(folder+"/ms_sc_London_161020_utf.csv", "rb") as data:
         # line = data.readline().strip()
         dialect = None
@@ -101,10 +101,10 @@ def read_lines_csv(n_lines=None):
 
 # destinations = read_destinations()
 prepareCsv = False
-reloadRecords = False
-reloadFids = False
-reloadData = False
-reloadDestinations = False
+reloadRecords = True
+reloadFids = True
+reloadData = True
+reloadDestinations = True
 
 print folder
 
@@ -137,6 +137,7 @@ if reloadFids:
 
 for i,r in enumerate(fetchall_records()):
     print r
+    print r.attributes
 print len(fetchall_records())
 print fetchall_records_users().count()
 

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from sqlalchemy import Column, Integer, Unicode, UnicodeText, Float, String, MetaData, Table, DateTime
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import mapper
+from sqlalchemy.orm import mapper, relationship
 
 
 Base = declarative_base()
@@ -15,7 +15,7 @@ class DataType:
     VIENNA = 3
 
 
-selectedData = DataType.SLO
+selectedData = DataType.VIENNA
 
 #folder = 'data/161020' #London PatternAnalysisTD_161020 17.15  term. 15:02
 # 2018-02-24 20:27:01.528000 2018-02-25 22:02:47.971000
@@ -27,24 +27,27 @@ folder = 'data/' + folders[selectedData-1]
 undirected = True
 
 # postgres
-ConnString = 'postgresql+psycopg2://postgres:postgres123@127.0.0.1:5432/PatternAnalysisTD_'+folder.replace('data/', '')+'_fid'
-if not undirected:
-    ConnString += '_directed'
+#ConnString = 'postgresql+psycopg2://postgres:postgres123@127.0.0.1:5432/PatternAnalysisTD_'+folder.replace('data/', '')+'_fid'
+#if not undirected:
+#    ConnString += '_directed'
 # postgresql+psycopg2://user:password@host:port/dbname[?key=value&key=value...]
 # sqlite
-#ConnString = 'sqlite:///'+folder+'/PatternAnalysisTD_'+folder.replace('data/', '')+'.sqlite'
+ConnString = 'sqlite:///'+folder+'/PatternAnalysisTD_'+folder.replace('data/', '')+'_2.sqlite'
 # https://stackoverflow.com/questionss/2047814/is-it-possible-to-store-python-class-objects-in-sqlite
 # http://docs.sqlalchemy.org/en/latest/orm/mapping_styles.html#classical-mappings
 
 
 class Record(Base):
-    __tablename__ = 'records'
+    __tablename__ = 'record'
     id = Column(Integer, primary_key=True)
     user_id = Column(Unicode)
+    # destination_id = Column(Integer, ForeignKey('destination.destination'))
+    # destination = relationship("Destination", back_populates="records")
     destination = Column(Unicode)
     user_url = Column(Unicode, nullable=True)
     review_date = Column(DateTime)
     flow_id = Column(Integer, default=0)
+    attributes = relationship("Attribute", back_populates="record")
 
     def __init__(self, record_id, user_id, destination, review_date, user_url=None, flow_id=0):
         self.id = record_id
@@ -60,8 +63,27 @@ class Record(Base):
                                  self.review_date, self.flow_id)).encode('utf-8')
 
 
+class Attribute(Base):
+    __tablename__ = 'attribute'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    record_id = Column(Integer, ForeignKey('record.id'))
+    record = relationship("Record", back_populates="attributes")
+    name = Column(Unicode)
+    value = Column(Unicode)
+
+    def __init__(self, record_id, name, value):
+        self.record_id = record_id
+        self.name = name
+        self.value = value
+
+    def __repr__(self):
+        return ("<Attribute(id='%s', record_id='%s', user='%s' destination='%s', name='%s', value='%s')>" % (
+            self.id, self.record_id, self.record.user_id, self.record.destination,
+            self.name, self.value)).encode('utf-8')
+
+
 class Pair(Base):
-    __tablename__ = 'pairs'
+    __tablename__ = 'pair'
     id = Column(Integer, primary_key=True)
     user_id = Column(UnicodeText)
     destination1 = Column(UnicodeText)
@@ -94,12 +116,13 @@ class Link(Base):
             self.id, self.destination1, self.destination2, self.weight)).encode('utf-8')
 
 
-class Destination(Base): # todokk
-    __tablename__ = 'destinations'
+class Destination(Base):  # todokk
+    __tablename__ = 'destination'
     id = Column(Integer, primary_key=True)
-    destination = Column(UnicodeText)
+    destination = Column(UnicodeText)  # better as pk or unique=True?
     latitude = Column(Float)
     longitude = Column(Float)
+    # records = relationship("Record", back_populates="destination")
 
     def __init__(self, destination, latitude, longitude):
         self.destination = destination
@@ -109,6 +132,7 @@ class Destination(Base): # todokk
     def __repr__(self):
         return ("<Destination(id='%s',destination1='%s' - lat='%f': long='%f' )>" % (
             self.id, self.destination, self.latitude, self.longitude)).encode('utf-8')
+
 
 # sqlalchemy_example.db file.
 #mapper(Record, record)

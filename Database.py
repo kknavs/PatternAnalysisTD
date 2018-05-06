@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from databaseEntities import Base, Record, Pair, Link, Destination, ConnString, folder, DataType, selectedData
+from databaseEntities import Base, Record, Attribute, Pair, Link, Destination, ConnString, folder, DataType,\
+    selectedData
 from sqlalchemy import create_engine, distinct, func, inspect
 from sqlalchemy.orm import sessionmaker
 from contextlib import contextmanager
@@ -59,8 +60,20 @@ def add_row(row_object):
 def add_records_from_csv(csvreader, n_lines, selectedData):
     records = []
     countErrors =0
-    locale.setlocale(locale.LC_ALL, 'eng_gbr')  # January 15, 2015
-    # ValueError:  # not on windows
+    #locale.setlocale(locale.LC_ALL, 'eng_gbr')  # January 15, 2015
+    # ValueError:  # if not running on windows
+    if selectedData == DataType.SLO:
+        # ['user_id', 'Dodeljena občina', 'review_date', 'Lat', 'Long']  too many ignore_columns to write
+        attribute_names = ['subject_type', 'user_travel_style', 'user_age', 'gender', 'age']
+        # cIgnore = 5
+    else:
+        ignore_columns =[' uid','place_name', ' review_date', ' username', ' lat', ' lng']
+        attribute_names = []
+        for i,fn in enumerate(csvreader.fieldnames):
+            print fn
+            if unicode(fn.decode('utf-8')) not in ignore_columns:
+                attribute_names.append(fn.decode('utf-8'))
+    print attribute_names
     with session_scope() as session:
         while not n_lines or csvreader.line_num < n_lines:  # performance?
             row = next(csvreader, None)
@@ -78,7 +91,8 @@ def add_records_from_csv(csvreader, n_lines, selectedData):
                                     pydatetime.datetime.strptime(row['review_date'], '%B %d, %Y'))
                     #                row['user_profile_url'].decode('utf-8'))
                     #                #  ali user_profile_url? najbolje, da kar oboje pobereš
-                else: # check problem with whitespaces
+                else:  # place_name, place_details, lat, lng, username,
+                    # review_date, uid, place_rate, review_rate, travel_style, age, gender
                     record = Record(csvreader.line_num, row[' uid'].decode('utf-8').lstrip(),
                                     row['place_name'].decode('utf-8').lstrip(),
                                     pydatetime.datetime.strptime(row[' review_date'].lstrip(), '%Y%m%d'),
@@ -86,6 +100,10 @@ def add_records_from_csv(csvreader, n_lines, selectedData):
 
                 if record.user_id:
                     session.add(record)
+                    attributes = []
+                    for a_n in attribute_names:
+                        attribute = Attribute(csvreader.line_num, a_n, row[a_n].decode('utf-8').lstrip())
+                        session.add(attribute)
                     session.flush()
                     #session.commit()  # počasno
                     records.append(record)
@@ -160,7 +178,6 @@ def delete_destinations():
 
 
 def delete_all_tables():
-    delete_records()
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
 
@@ -198,7 +215,8 @@ def fetchall_links_id_asc_with_weight_threshold(weight):
 
 
 def fetchall_records_users(session=DBSession(bind=connection)):
-    return session.query(distinct(Record.user_id))
+    #return session.query(Record).distinct(Record.user_id).group_by(Record.user_id)
+    return session.query(distinct(Record.user_id), Record.attributes)
 
 
 def get_destinations(session=DBSession(bind=connection)):
@@ -247,7 +265,7 @@ def reload_data():
         # get all different user_id's with all destinations visited
         all_records_users = fetchall_records_users(session)
         allCount = all_records_users.count() # important
-        for count, user_t in enumerate(all_records_users):
+        for count, user_t in enumerate(all_records_users):  # todokk: make fids unique?
             user_id = user_t[0]
             fid = 1
             while True:
