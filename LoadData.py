@@ -9,6 +9,8 @@ import xlrd, logging
 
 
 def read_destinations():
+    delete_destinations()
+
     if selectedData == DataType.SLO:
         with open(folder + "/lat_long_transpose_v11.csv") as data:
             dialect = csv.Sniffer().sniff(data.read(1024))
@@ -45,6 +47,9 @@ def prepare_csv(filename=None):  # vienna already in csv
         if selectedData == DataType.SLO:
             filename = '161124_slovenija_v11 harvesine.xlsm'
         else:
+            if selectedData == DataType.VIENNA or (filename is not None and filename.endswith('.csv')):
+                print "Already CSV! Skipping..."
+                return
             filename = 'sc_London_161020.xlsx'
     path = folder+"/"+filename
     workbook = xlrd.open_workbook(path, encoding_override="cp1252")  # this can take a while
@@ -101,10 +106,10 @@ def read_lines_csv(n_lines=None):
 
 # destinations = read_destinations()
 prepareCsv = False
-reloadRecords = True
-reloadFids = True
-reloadData = True
-reloadDestinations = True
+reloadRecords = False
+reloadFids = False
+reloadData = False
+reloadDestinations = False
 
 print folder
 
@@ -127,7 +132,7 @@ start = pydatetime.datetime.now()
 # Filtered Transactional Data
 if reloadRecords:
     print "***Reload records***"
-    delete_all_tables()
+    #delete_all_tables()
     records = read_lines_csv() #20000
     # add_records(records) we insert all rows at once
 
@@ -135,9 +140,9 @@ if reloadFids:
     print "***Reload fids***"
     generate_fids()
 
-for i,r in enumerate(fetchall_records()):
-    print r
-    print r.attributes
+#for i,r in enumerate(fetchall_records()):
+#    print r
+    #print r.attributes
 print len(fetchall_records())
 print fetchall_records_users().count()
 
@@ -153,11 +158,10 @@ print testCount
 
 if reloadDestinations:
     print "***Reload destinations***"
-    delete_destinations()
     read_destinations()
 
-    #for d in get_destinations():
-    #    print d
+    for d in get_destinations():
+        print d
 
 print start
 print pydatetime.datetime.now()

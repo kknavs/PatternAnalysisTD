@@ -615,15 +615,17 @@ def draw_kernighan_lin_bisection(save, consider_locations=True):
                 plt.savefig(outputFolder + "/graph_kernighan_lin_minW="+str(minW)+"_maxW="+str(maxW)+".png")
     plt.show()
 
+
 if selectedData == DataType.SLO:
     print get_count_for_destinations(u"Bled", u"Ljubljana")
     print get_count_for_destinations(u"Bled", u"Skofljica")
 # 175 mW
 #print get_count_for_destinations(u"British Museum", u"London Underground")  # 13  325 (no fids?, username)
 #print get_count_for_destinations(u"British Museum", u"The London Eye")  # 10  386 (no fids?, username)
-draw_graph3(False)
+#draw_graph3(False)
 #draw_graph_asyn_lpa(False)
 #draw_graph_girvan_newman(False)
 #draw_graph_k_clique(False)
 #draw_kernighan_lin_bisection(False)
+
 

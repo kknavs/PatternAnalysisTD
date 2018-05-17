@@ -8,6 +8,7 @@ import numpy as np
 import snap.win.snap
 from Database import fetchall_links_with_weight_threshold, get_destinations, get_destinations_id_asc, get_max_weight, \
     folder, DataType, selectedData
+from FilterGraph import filter_add_link
 
 #from networkx.algorithms import community as community_nx
 
@@ -355,20 +356,21 @@ import subprocess
 # C:\Users\Karmen\Downloads\infomap-master\Infomap.exe
 
 
-def load_infomap_graph(save=False, consider_locations=True):
+def load_infomap_graph(filters=None, save=False, consider_locations=True):
 
     # add all nodes
     #for d in get_destinations():
     #    G.AddNode(d.id)
     G = nx.Graph()
     if selectedData == DataType.SLO:
-        minW_array = [i * multi for i in [0, 10, 20, 40, 60, 100, 120, 150, 180, 200, 270, 300]]
+        minW_array = [150]#40, 300[i * multi for i in [1, 10, 20, 40, 60, 100, 120, 150, 180, 200, 270, 300]]
     else:
         minW_array = [50, 100, 120, 150, 200, 400, 800]
-    maxW_array = [i * multi for i in [100, 200, 300, 400, 500, 600, 1000]]
+    maxW_array = [] #[i * multi for i in [400]]#[i * multi for i in [100, 300, 500, 700, 1000]]
     #if selectedData == DataType.VIENNA:
     #    maxW_array +=[ 1300, 1500]
-    maxW_array.append(maxWeight)
+    maxW_array.append(maxWeight+1)
+    filters = {"subject_type": ["hotels"]} #, "user_travel_style":["Like a Local"]}
     if not save:
         minW_array = [10 * multi]
         #maxW_array = [maxWeight+100]
@@ -379,7 +381,7 @@ def load_infomap_graph(save=False, consider_locations=True):
                 continue
             plt.clf()
             G.clear()
-            txt_name = "/infomap/infomap_minW="+str(minW/multi)+"_maxW="+str(maxW/multi)+".net"
+            txt_name = "/infomap/infomap_minW="+str(float(minW)/maxWeight)+"_maxW="+str(float(maxW)/maxWeight)+".net"
             with open(outputFolder+txt_name, 'w') as f:
                 # add nodes and edges to txt and graph
                 # A network in Pajek format
@@ -397,7 +399,10 @@ def load_infomap_graph(save=False, consider_locations=True):
                 ..."""
                 for l in links:
                     if minW < l.weight < maxW:
-                        G.add_edge(l.destination1, l.destination2, weight=float(l.weight)/maxWeight)
+                        nw = filter_add_link(l, filters)
+                        #G.add_edge(l.destination1, l.destination2, weight=float(l.weight)/maxWeight)
+                        if nw > 0:
+                            G.add_edge(l.destination1, l.destination2, weight=float(nw)/maxW)
                 if len(G.nodes()) == 0:
                     continue
                 newline = str("\n")  # linux
@@ -413,12 +418,12 @@ def load_infomap_graph(save=False, consider_locations=True):
                         # f.write(str(d.id)+str(' "'+d.destination+'"'+newline))
                         #  Labels are quoted directly after the nodes identifier.
                 f.write(str("*Edges ") + str(len(G.edges()))+newline)
-                for l in links:
-                    if minW < l.weight < maxW:
+                for l in G.edges():
+                    #if minW < l.weight < maxW:
                         #if l.destination1 !='Ljubljana' and l.destination2 !='Ljubljana':
-                        if True:
-                            id1 = temp_v[l.destination1]
-                            id2 = temp_v[l.destination2]
+                    if True:
+                            id1 = temp_v[l[0]]
+                            id2 = temp_v[l[1]]
                             """
                             A link list is a minimal format to describe a network by only specifying a set of links:
 
@@ -430,7 +435,8 @@ def load_infomap_graph(save=False, consider_locations=True):
                             ...
                             Each line corresponds to the triad source target weight which
                             """
-                            f.write(str(str(id1)+' '+str(id2)+' '+str(float(l.weight)/maxWeight))+newline)
+                            e_weight =G[l[0]][l[1]]['weight']
+                            f.write(str(str(id1)+' '+str(id2)+' '+str(e_weight)+newline))
                             #f.write(str(str(id1)+' '+str(id2)+' '+str(float(1)))+newline)
                             #f.write(str(str(id1)+' '+str(id2)+' '+str(1)+'\r\n'))
                             # we write edges in Link list format
@@ -441,7 +447,7 @@ def load_infomap_graph(save=False, consider_locations=True):
             subprocess.check_call([r"c:/Users\Karmen\Downloads\infomap-master\Infomap.exe",
                                    outputFolder+txt_name,
                                    # outputFolder+'/ninetriangless.net',
-                                 out_path, "-N 10", "--tree", "--preferred-number-of-modules 10"           ])
+                                 out_path, "-N 10",  "--overlapping", "--tree"])
             # --preferred-number-of-modules 4
             # --overlapping
             dict_groups = {}
@@ -497,14 +503,63 @@ def load_infomap_graph(save=False, consider_locations=True):
             figManager = plt.get_current_fig_manager()
             figManager.window.state('zoomed')
             if save:
-                plt.savefig(outputFolder + txt_name.replace(".net", ".png"))
+                plt.savefig(outputFolder +
+                         txt_name.replace(".net", " ".join("{}_{}".format(k, v) for k, v in filters.items())+".png"))
+
+            txt_name = "/infomap/infomap_minW="+str(float(minW)/maxWeight)+"_maxW="+str(float(maxW)/maxWeight)+".net"
+            out_path = os.path.dirname(os.path.abspath(__file__))+"/"+outputFolder+"/N10/infomap" #+txt_name.replace(".txt", "_out.txt")
+            # tt =outputFolder+'/ninetriangless.net'
+            modules = len(G.nodes())/2
+            if modules > 10:
+                modules = 10
+            subprocess.check_call([r"c:/Users\Karmen\Downloads\infomap-master\Infomap.exe",
+                               outputFolder+txt_name,
+                               # outputFolder+'/ninetriangless.net',
+                               out_path, "-N 10", "--preferred-number-of-modules "+unicode(modules), "--overlapping",  "--tree"])
+            with open(outputFolder+"/N10"+txt_name.replace('.net','.tree'), 'rU') as f:  # Universal newline mode
+                for line in f:
+                    if line[0] != '#':
+                        print line.strip()
+                        l = line.strip().split('"')
+                        print l
+                        modules, flow_amount = l[0].strip().split(" ")
+                        node_name = l[1]
+                        # modules, flow_amount, node_name, ind = line.strip().split(" ")
+                        #  too many values to unpack - presledki v imenih
+                        #node_name = l[2][1:-1]
+                        dict_groups[node_name] = float(modules.split(":")[0])
+            for n in G.nodes():
+                print n, dict_groups.get(n)
+            pos = nx.spring_layout(G)  # spring, shell, circular positions for all nodes
+            if consider_locations:
+                change_nodes_position(pos)
+            plt.clf()
+            nx.draw_networkx_labels(G, pos, font_size=13, font_family='sans-serif', alpha=0.8)
+            edgewidth = [d['weight']*10 for (u,v,d) in G.edges(data=True)]
+            nx.draw_networkx_edges(G, pos, width=edgewidth, egdelist=G.edges, alpha=0.6)
+            values = [dict_groups.get(node, 0.25) for node in G.nodes()]
+            nx.draw_networkx_nodes(G,pos,
+                                   node_color=values,
+                                   cmap=plt.cm.Set1,
+                                   node_size=350,
+                                   alpha=0.9)
+            #print "The modularity of the network is %f" % modularity
+            plt.axis('off')
+            figManager = plt.get_current_fig_manager()
+            figManager.window.state('zoomed')
+            if save:
+                plt.savefig(outputFolder +"/N10"+
+                            txt_name.replace(".net", " ".join("{}_{}".format(k, v) for k, v in filters.items())+".png"))
+        # --preferred-number-of-modules 4
+        # --overlapping
+        dict_groups = {}
     plt.show()  # display
 
-#load_infomap_graph(False)
+load_infomap_graph(save=True)
 
 import community_louvain as Community
-def draw_greedy(num, size, greedy=False):  # num_cliques, clique_size)
-    G = nx.DiGraph()
+def draw_greedy(num, size, greedy=True):  # num_cliques, clique_size)
+    G = nx.Graph()
     """for n1,n2 in [(0, 1), (1, 2), (2, 3), (0, 3),
                   (1, 4),
                   (4, 5), (5, 6), (6, 7), (4, 7),
@@ -583,5 +638,84 @@ def draw_greedy(num, size, greedy=False):  # num_cliques, clique_size)
 
     #print "The modularity of the network is %f" % modularity
 
-draw_greedy(5, 4)
 
+def draw_test_di_graph(greedy=False):
+    """G = nx.DiGraph(directed=True)
+    G.add_edges_from(
+        [('A', 'B'), ('C', 'B'), ('C', 'D'), ('A', 'D'), ('A', 'E'),
+         ('F', 'E'), ('F', 'G'), ('H', 'G'), ('H', 'E')])
+
+    val_map ={} #{'A': 1.0,'B': 1.0,'': 1.0,'C': 1.0,'D': 1.0    }
+
+    values = [val_map.get(node, 0.25) for node in G.nodes()]
+
+    nx.draw(G, cmap = plt.get_cmap('jet'), node_color = values)
+    plt.show()"""
+    G = nx.DiGraph()
+    G.add_edges_from(
+        [('0', '1'), ('2', '1'), ('2', '3'), ('0', '3'), ('0', '4'),
+         ('5', '4'), ('5', '6'), ('7', '6'), ('7', '4')])
+    #G = nx.ring_of_cliques(num, size)
+    #G = nx.balanced_tree(2, 3)
+
+    #nx.draw(G)
+    pos = nx.spring_layout(G)
+    nx.draw_networkx_edges(G, pos, G.edges())
+
+    dict_groups = {}
+
+    if greedy:
+        dict_groups = Community.best_partition(G, None)
+        #nx.draw(G,pos, node_size=700)
+        print dict_groups
+    else:
+        txt_name = "/infomap_test.net"
+        with open(outputFolder+txt_name, 'w') as f:
+            # add nodes and edges to txt and graph
+            # A network in Pajek format
+            print G.edges()
+            newline = str("\n")  # linux
+            f.write(str("*Vertices ") + str(len(G.nodes()))+newline)
+            c =1
+            temp_v = {}
+            for n in sorted(G.nodes()):
+                f.write(str(n)+str(' "'+str(n)+'"'+newline))
+                temp_v[n] = c
+                c += 1  # must follow a consequitive order.
+            f.write(str("*Edges ") + str(len(G.edges()))+newline)
+            for g in G.edges():
+                f.write(str(str(g[0])+' '+str(g[1]))+newline)
+        import os
+        out_path = os.path.dirname(os.path.abspath(__file__))+"/"+outputFolder
+        subprocess.check_call([r"c:/Users\Karmen\Downloads\infomap-master\Infomap.exe",
+                               outputFolder+txt_name,
+                               out_path,"-d --directed", "-N 10", "--tree", "-z --zero-based-numbering"])
+        # --preferred-number-of-modules 4
+        # --overlapping
+        with open(outputFolder+txt_name.replace('.net','.tree'), 'rU') as f: # Universal newline mode
+            for line in f:
+                if line[0] != '#':
+                    print line.strip()
+                    l = line.strip().split('"')
+                    print l
+                    modules, flow_amount = l[0].strip().split(" ")
+                    node_name = int(l[1])
+                    dict_groups[node_name] = float(modules.split(":")[0])
+
+        for n in G.nodes():
+            print n, dict_groups.get(n)
+
+    values = [dict_groups.get(node, 0.25) for node in G.nodes()]
+    nx.draw_networkx_nodes(G,pos,
+                           node_color=values,
+                           cmap=plt.cm.Set1,
+                           node_size=350,
+                           alpha=1.0)
+    figManager = plt.get_current_fig_manager()
+    figManager.window.state('zoomed')
+    plt.axis('off')
+    plt.show()
+
+
+# draw_greedy(5, 4, True)
+# draw_test_di_graph()

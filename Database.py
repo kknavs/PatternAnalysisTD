@@ -2,8 +2,8 @@
 from __future__ import unicode_literals
 from databaseEntities import Base, Record, Attribute, Pair, Link, Destination, ConnString, folder, DataType,\
     selectedData
-from sqlalchemy import create_engine, distinct, func, inspect
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import create_engine, distinct, func, inspect, join, and_
+from sqlalchemy.orm import sessionmaker, aliased, joinedload
 from contextlib import contextmanager
 import logging
 import datetime as pydatetime
@@ -58,9 +58,11 @@ def add_row(row_object):
 
 # 2018-02-11 04:14:30.260000 slo ca.4h
 def add_records_from_csv(csvreader, n_lines, selectedData):
+    delete_records()
+
     records = []
     countErrors =0
-    #locale.setlocale(locale.LC_ALL, 'eng_gbr')  # January 15, 2015
+    locale.setlocale(locale.LC_ALL, 'eng_gbr')  # January 15, 2015
     # ValueError:  # if not running on windows
     if selectedData == DataType.SLO:
         # ['user_id', 'Dodeljena občina', 'review_date', 'Lat', 'Long']  too many ignore_columns to write
@@ -216,8 +218,34 @@ def fetchall_links_id_asc_with_weight_threshold(weight):
 
 def fetchall_records_users(session=DBSession(bind=connection)):
     #return session.query(Record).distinct(Record.user_id).group_by(Record.user_id)
-    return session.query(distinct(Record.user_id), Record.attributes)
+    return session.query(distinct(Record.user_id))
 
+
+def get_records_by_destinations(destination1, destination2, session=DBSession(bind=connection)):
+    #return session.query(Record).filter(Record.destination.in_([destination1, destination2]))\
+    #    .group_by(Record.id, Record.user_id).order_by(Record.user_id.asc(),Record.review_date.asc())
+    """t = session.query(Record).filter(Record.destination==destination1).group_by(Record.id, Record.user_id) \
+        .outerjoin(
+        (session.query(Record).filter(Record.destination==destination2).group_by(Record.id, Record.user_id)))"""
+    t = session.query(Record.id, Record.user_id, Record.flow_id, Record.destination).\
+        filter(Record.destination==destination1)\
+                    .group_by(Record.id, Record.user_id,  Record.flow_id, Record.destination).distinct(Record.user_id, Record.flow_id).subquery('t')
+    return session.query(Record).filter(and_(
+        Record.user_id == t.c.user_id,
+        Record.flow_id == t.c.flow_id,
+        Record.destination == destination2
+        )).distinct(Record.user_id, Record.flow_id)
+    """record1 = aliased(Record)
+    record2 = aliased(Record)
+    return session.query(record1, record2).filter(record1.destination==destination1, record2.destination == destination2)"""
+
+    #return session.query(Record.user_id, record1, record2).join(record1, Record.user_id) \
+    #.join(record2, Record.user_id)
+    #session.query(Record).options(joinedload(Record.destination),
+    #                             joinedload(Match.away_team))
+        #.order_by(Record.user_id.asc(),Record.review_date.asc())
+#.join(Record, User.id==Address.user_id)
+# todo: raje 2 query-ja?
 
 def get_destinations(session=DBSession(bind=connection)):
     return session.query(Destination).order_by(Destination.destination.asc())
@@ -333,6 +361,14 @@ def get_max_link_weight(n=10):
 def get_avg_weight_nonzero():
     session = DBSession(bind=connection)
     return session.query(func.avg(Link.weight)).filter(Link.weight > 0).scalar()
+
+
+def get_all_different_attributes(session=DBSession(bind=connection)):
+    return session.query(Attribute).distinct(Attribute.name).group_by(Attribute.id)
+
+
+def get_all_different_values_for_attribute_name(name, session=DBSession(bind=connection)):
+    return session.query(Attribute.value).filter(Attribute.name == name).distinct(Attribute.value).all()
 #session.query(MyClass).filter(MyClass.name == 'some name')
 #session.query(func.count(distinct(User.name)))
 #session.query(func.count(User.name), User.name).group_by(User.name).all()

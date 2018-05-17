@@ -15,7 +15,7 @@ class DataType:
     VIENNA = 3
 
 
-selectedData = DataType.VIENNA
+selectedData = DataType.SLO
 
 #folder = 'data/161020' #London PatternAnalysisTD_161020 17.15  term. 15:02
 # 2018-02-24 20:27:01.528000 2018-02-25 22:02:47.971000
@@ -27,12 +27,12 @@ folder = 'data/' + folders[selectedData-1]
 undirected = True
 
 # postgres
-#ConnString = 'postgresql+psycopg2://postgres:postgres123@127.0.0.1:5432/PatternAnalysisTD_'+folder.replace('data/', '')+'_fid'
+ConnString = 'postgresql+psycopg2://postgres:postgres123@127.0.0.1:5432/PatternAnalysisTD_'+folder.replace('data/', '')+'_fid'
 #if not undirected:
 #    ConnString += '_directed'
 # postgresql+psycopg2://user:password@host:port/dbname[?key=value&key=value...]
 # sqlite
-ConnString = 'sqlite:///'+folder+'/PatternAnalysisTD_'+folder.replace('data/', '')+'_2.sqlite'
+#ConnString = 'sqlite:///'+folder+'/PatternAnalysisTD_'+folder.replace('data/', '')+'_2.sqlite'
 # https://stackoverflow.com/questionss/2047814/is-it-possible-to-store-python-class-objects-in-sqlite
 # http://docs.sqlalchemy.org/en/latest/orm/mapping_styles.html#classical-mappings
 
