@@ -317,6 +317,26 @@ def reload_data():
         # co-occurence data
         # generate_links()  # now link is updated when pair is created!
 
+def get_all_baskets(output_folder, min_items=2):
+    baskets = []
+    with session_scope() as session:
+        with open(output_folder, str('w')) as file:
+            all_records_users = fetchall_records_users(session)
+            allCount = all_records_users.count()
+            for count, user_t in enumerate(all_records_users):
+                user_id = user_t[0]
+                fid = 1
+                while True:
+                    destinations = get_destinations_of_user(user_id, fid, session)
+                    if not destinations or len(destinations) < min_items:
+                        break
+                    basket = [d[0] for d in destinations]
+                    file.write(', '.join(basket)+str('\n'))
+                    baskets.append([basket])
+                    fid += 1
+                print "Done baskets: " + str(float(count)/allCount*100)
+    return baskets
+
 
 def get_count_for_destinations(destination1, destination2, session=DBSession(bind=connection)):
     return session.query(Pair).filter(Pair.destination1 == destination1, Pair.destination2 == destination2).count()
@@ -364,7 +384,7 @@ def get_avg_weight_nonzero():
 
 
 def get_all_different_attributes(session=DBSession(bind=connection)):
-    return session.query(Attribute).distinct(Attribute.name).group_by(Attribute.id)
+    return session.query(Attribute).distinct(Attribute.name).group_by(Attribute.name)
 
 
 def get_all_different_values_for_attribute_name(name, session=DBSession(bind=connection)):
