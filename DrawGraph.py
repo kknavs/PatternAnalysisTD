@@ -5,11 +5,9 @@ import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
 
-import snap.mac.snap
+import snap.win.snap
 from Database import fetchall_links_with_weight_threshold, get_destinations, get_destinations_id_asc, get_max_weight, \
     folder, DataType, selectedData
-from FilterGraph import filter_add_link
-
 #from networkx.algorithms import community as community_nx
 
 #The page http://www.swig.org/download.html has a specific download for Windows with a pre-built version of swig.exe.
@@ -376,7 +374,6 @@ def load_infomap_graph(filters=None, save=False, consider_locations=True):
     #if selectedData == DataType.VIENNA:
     #    maxW_array +=[ 1300, 1500]
     maxW_array.append(maxWeight+1)
-    filters = {"subject_type": ["hotels"]} #, "user_travel_style":["Like a Local"]}
     if not save:
         minW_array = [10 * multi]
         #maxW_array = [maxWeight+100]
@@ -391,25 +388,9 @@ def load_infomap_graph(filters=None, save=False, consider_locations=True):
             with open(outputFolder+txt_name, str('w')) as f:
                 # add nodes and edges to txt and graph
                 # A network in Pajek format
-                """*Vertices 27
-                1 "1"
-                2 "2"
-                3 "3"
-                4 "4"
-                ...
-                *Edges 33
-                1 2 1
-                1 3 1
-                1 4 1
-                2 3 1
-                ..."""
                 for l in links:
-                    if minW < l.weight < maxW:
-                        #nw = filter_add_link(l, filters)
-                        nw = 1
-                        #G.add_edge(l.destination1, l.destination2, weight=float(l.weight)/maxWeight)
-                        if nw > 0:
-                            G.add_edge(l.destination1, l.destination2, weight=float(nw)/maxW)
+                    if minW < l.weight < maxW+1:
+                        G.add_edge(l.destination1, l.destination2, weight=float(nw)/maxW)
                 if len(G.nodes()) == 0:
                     continue
                 newline = str("\n")  # linux
@@ -431,17 +412,6 @@ def load_infomap_graph(filters=None, save=False, consider_locations=True):
                     if True:
                             id1 = temp_v[l[0]]
                             id2 = temp_v[l[1]]
-                            """
-                            A link list is a minimal format to describe a network by only specifying a set of links:
-
-                            # A network in link list format
-                            1 2 1
-                            1 3 1
-                            2 3 2
-                            3 5 0.5
-                            ...
-                            Each line corresponds to the triad source target weight which
-                            """
                             e_weight =G[l[0]][l[1]]['weight']
                             f.write(str(str(id1)+' '+str(id2)+' '+str(e_weight)+newline))
                             #f.write(str(str(id1)+' '+str(id2)+' '+str(float(1)))+newline)
@@ -458,6 +428,10 @@ def load_infomap_graph(filters=None, save=False, consider_locations=True):
                                    outputFolder+txt_name,
                                    # outputFolder+'/ninetriangless.net',
                                  out_path, "-N 10",  "--overlapping", "--with-memory", "--bftree"])
+            subprocess.check_call([runp,
+                                   outputFolder+txt_name,
+                                   # outputFolder+'/ninetriangless.net',
+                                   out_path, "-N 10",  "--overlapping", "--with-memory", "--tree"])
             # --preferred-number-of-modules 4
             # --overlapping
             dict_groups = {}

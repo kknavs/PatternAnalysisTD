@@ -384,7 +384,7 @@ def get_avg_weight_nonzero():
 
 
 def get_all_different_attributes(session=DBSession(bind=connection)):
-    return session.query(Attribute).distinct(Attribute.name).group_by(Attribute.name)
+    return session.query(Attribute).distinct(Attribute.name).group_by(Attribute.id) #todokk check why different for sqllite?
 
 
 def get_all_different_values_for_attribute_name(name, session=DBSession(bind=connection)):

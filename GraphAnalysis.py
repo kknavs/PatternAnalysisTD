@@ -7,9 +7,11 @@ import numpy as np, sys
 from collections import defaultdict
 from Database import fetchall_links_with_weight_threshold, get_destinations, get_destinations_id_asc, get_max_weight, \
     folder, DataType, selectedData
+from FilterGraph import generate_graph
 import pandas as pd
 from mlxtend.frequent_patterns import apriori
 from mlxtend.frequent_patterns import association_rules
+import os
 
 # http://pbpython.com/market-basket-analysis.html
 # http://rasbt.github.io/mlxtend/user_guide/frequent_patterns/apriori/
@@ -17,7 +19,7 @@ from mlxtend.frequent_patterns import association_rules
 maxWeight = get_max_weight()
 multi = maxWeight/1700.0
 multi *= 1.1
-outputFolder = folder + "/analysis"
+outputFolder = folder + "/graphs"
 links = fetchall_links_with_weight_threshold(1)
 destinations_dict = dict()
 ids_dict = dict()
@@ -29,20 +31,38 @@ for d in get_destinations():
 print len(destinations_dict)
 
 
-def load_networkx_graph(min_w=0, max_w=maxWeight):
-    G = nx.Graph()
-    if min_w < max_w:
-        # add nodes and edges
-        for l in links:
-            if min_w < l.weight < max_w:
-                if l.weight>0:
-                    w = 1
-                else:
-                    w = 0
-                G.add_edge(l.destination1, l.destination2, weight=w)
+def load_networkx_graph(filters=None, min_w=0, max_w=maxWeight+1):
+    if filters:
+        G = generate_graph(filters)
+        for u,v,d in G.edges(data=True):
+            if d['weight']>0:
+                w = 1
+            else:
+                w = 0
+            d['weight'] = w
+    else:
+        G = nx.Graph()
+        links = fetchall_links_with_weight_threshold(1)
+        if min_w < max_w:
+            # add nodes and edges
+            for l in links:
+                if min_w < l.weight < max_w:
+                    if l.weight>0:
+                        w = 1
+                    else:
+                        w = 0
+                    G.add_edge(l.destination1, l.destination2, weight=w)
     print(nx.info(G))
     return G
 
+""" test:
+208
+Name:
+Type: Graph
+Number of nodes: 81
+Number of edges: 649
+Average degree:  16.0247
+"""
 
 def calculate_rules(G, min_support=0.65, confidence=0.8, lift=1.1):
     """Apriori-based frequent substructure mining algorithms share similar characteristics with Apriori based
@@ -73,8 +93,16 @@ def calculate_rules(G, min_support=0.65, confidence=0.8, lift=1.1):
     # http://intelligentonlinetools.com/blog/2018/02/10/how-to-create-data-visualization-for-association-rules-in-data-mining/
     # https://programminghistorian.org/en/lessons/exploring-and-analyzing-network-data-with-python
 
-G = load_networkx_graph()
-calculate_rules(G)
+filters = {"subject_type": ["attractions"]}
+#filters = {"subject_type": ["hotels"]}
+filters =  {"subject_type": ["restaurants"]}
+filters =  {"gender": ["M"]}
+filters = {"user_travel_style": ["60+ Traveler"]}
+filters ={"user_travel_style": ["Art and Architecture Lover"]}
+#{"user_travel_style": ["Backpacker"]}
+G = load_networkx_graph(filters)
+calculate_rules(G, min_support=0.4, confidence=0.5, lift=1.1)
+
 # https://networkx.github.io/documentation/stable/reference/readwrite/index.html
 # https://algobeans.com/2016/04/01/association-rules-and-the-apriori-algorithm/
 
