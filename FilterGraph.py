@@ -3,9 +3,9 @@ from __future__ import unicode_literals
 
 from Database import fetchall_links_with_weight_threshold, get_destinations, get_destinations_id_asc, get_max_weight, \
     folder, DataType, selectedData, get_all_different_attributes, get_all_different_values_for_attribute_name,\
-    get_records_by_destinations
+    get_records_by_destinations, get_attributte_by_name_for_record_id
 import networkx as nx
-import os
+import os, datetime
 
 outputFolderFilters = folder + "/filters"
 
@@ -32,6 +32,38 @@ class Filter:
         return '' in self.values
 
 
+class Season:
+    ALL = 1
+    SUMMER = 2
+    WINTER = 3
+    NEW_YEAR = 4
+    WINTER_WITHOUT_NEW_YEAR = 5
+
+
+def get_season_string(season):
+    if season == Season.ALL:
+        return ""
+    elif season == Season.SUMMER:
+        return "SUMMER"
+    elif season == Season.WINTER:
+        return "WINTER"
+    elif season == Season.WINTER_WITHOUT_NEW_YEAR:
+        return "INTER_WITHOUT_NEW_YEAR"
+    elif season == Season.NEW_YEAR:
+        return "CHRISTMAS&NEW_YEAR"
+
+
+def get_season_period(season):
+    if season == Season.ALL:
+        return [[1, 1], [31, 12]]
+    elif season == Season.SUMMER:
+        return [[21, 6], [23, 9]]
+    elif season == Season.WINTER or season == Season.WINTER_WITHOUT_NEW_YEAR:
+        return [[21, 12], [21, 3]]
+    elif season == Season.NEW_YEAR:
+        return [[25, 12], [2, 1]]
+
+
 def get_all_available_filters():
     filters = []
     for a in get_all_different_attributes():
@@ -40,7 +72,11 @@ def get_all_available_filters():
         if len(values) > 10:  # e.g.:  60+ Traveler , Family Vacationer , Art and Architecture Lover ,...
             tmp = []
             for v in values:
-                for vt in v[0].split(","):
+                if selectedData == DataType.SLO:
+                    splitter = ","
+                else:
+                    splitter = "&"
+                for vt in v[0].split(splitter):
                     if vt.strip() not in tmp:
                         tmp.append(vt.strip())
             values = sorted(tmp)
@@ -85,22 +121,59 @@ def prepare_filters(filters):
     return available_filters
 
 
-def filter_add_link(link, filters):
+def filter_add_link(link, filters, season=Season.ALL, check_both_nodes=False):
     """
     Check if link is added based on selected filters. Returns new weight.
     Parameters:
       link - edge_with_weight
       filters - list of Filters, which filters to apply are set with apply_filter attribute (default: None)
     """
-    if not filters:
+    if not filters and season == Season.ALL:
         return link.weight
+    season_period = get_season_period(season)
     t = get_records_by_destinations(link.destination1, link.destination2)
     print "Original weight: "+str(link.weight)
     print len(t.all())
 
     w = len(t.all())
     for tt in t:
-        attributes = tt.attributes
+        if season != Season.ALL:
+            date1 = tt[3]
+            date2 = tt[0].review_date
+            if date1 > date2:
+                latest = date1
+                oldest = date2
+            else:
+                latest = date2
+                oldest = date1
+            d_latest = datetime.datetime(latest.year, season_period[1][1], season_period[1][0])
+            d_oldest = datetime.datetime(oldest.year, season_period[0][1], season_period[0][0])
+            if season == Season.SUMMER:
+                if not (latest < d_latest and oldest > d_oldest):
+                    w -= 1
+                    continue
+            else:  # different year in start and end date of season
+                if latest.year == oldest.year:
+                    if latest > d_latest:
+                        d_latest = datetime.datetime(latest.year+1, season_period[1][1], season_period[1][0])
+                    else:
+                        d_oldest = datetime.datetime(oldest.year-1, season_period[0][1], season_period[0][0])
+                if not (latest < d_latest and oldest > d_oldest):
+                    w -= 1
+                    continue
+                else:
+                    if season == Season.WINTER_WITHOUT_NEW_YEAR:
+                        d_latest = datetime.datetime(d_latest.year, get_season_period(Season.NEW_YEAR)[1][1],
+                                                     get_season_period(Season.NEW_YEAR)[1][0])
+                        d_oldest = datetime.datetime(d_oldest.year, get_season_period(Season.NEW_YEAR)[0][1],
+                                                     get_season_period(Season.NEW_YEAR)[0][0])
+                        if latest < d_latest and oldest > d_oldest:
+                            w -= 1
+                            continue
+
+        if not filters:
+            continue
+        attributes = tt[0].attributes
         wtmp = w
         for f in filters:
             if w < wtmp:  # is enough one filter to fail
@@ -110,40 +183,27 @@ def filter_add_link(link, filters):
                     if f.count_diff_values > 10:
                         if a.name == f.name:  # todo: "text-multi"?
                             if (not f.text_all and not any([x.strip() in f.match for x in a.value.split(",")])) :
-                                   # or \
-                                   # (f.text_all and not all([x.strip() in f.match for x in a.value.split(",")])):  # and
+                                # or \
+                                # (f.text_all and not all([x.strip() in f.match for x in a.value.split(",")])):  # and
                                 w -= 1
-                                #print tt
-                                #print attributes
-                                #print [x.strip() for x in a.value.split(",")]
                                 break
                     elif a.name == f.name and not any([a.value == v for v in f.match]):  # or
                         w -= 1
                         break
-    print "New weight"+str(w)
+                    elif a.name == f.name:
+                        if check_both_nodes:
+                            a_v = get_attributte_by_name_for_record_id(f.name, tt[2])[0][0]
+                            if not any([a_v == v for v in f.match]):  # or
+                                w -= 1
+                                break
+    print "New weight: "+str(w)
     return w
 
 
 #available_filters = get_all_available_filters()
 #print_available_filters()
-#links = fetchall_links_with_weight_threshold(1)
-#filters = {"age": ["1"]}
-#filter_add_link(links[11], filters)
-#filters = {"age": ["2"], "user_travel_style":[["Like a Local", "Urban Explorer",""],["all"]]}
-#filter_add_link(links[11], filters)
-"""filters = {"age": ["3"]}
-filter_add_link(links[11], filters)
-filters = {"age": ["4"]}
-filter_add_link(links[11], filters)
-filters = {"age": ["5"]}
-filter_add_link(links[11], filters)
-filters = {"age": ["6"]}
-filter_add_link(links[11], filters)
-filters = {"age": [""]}
-filter_add_link(links[11], filters)"""
 
-
-def generate_graph(filters=None, refresh=False):
+def generate_graph(filters=None, refresh=False, season=Season.ALL, check_both_nodes=False):
     """
     Generate graph, if possible read graph from previously saved file.
     Parameters:
@@ -155,6 +215,7 @@ def generate_graph(filters=None, refresh=False):
         f_name = "full"
     else:
         f_name = " ".join("{}_{}".format(k, v).replace("'", "") for k, v in filters.items())
+    f_name += "_" + get_season_string(season)
     txt_name = "/graph_"+f_name+".net"
     out_path = os.path.dirname(os.path.abspath(__file__))+"/"+outputFolderFilters
 
@@ -187,9 +248,10 @@ def generate_graph(filters=None, refresh=False):
         2 3 1
         ..."""
         for l in links:
-            nw = filter_add_link(l, filters_to_apply)
-            if nw > 0:
-                G.add_edge(l.destination1, l.destination2, weight=nw) #float(nw)/maxW)
+            if selectedData == DataType.SLO or l.weight > 100:
+                nw = filter_add_link(l, filters_to_apply, season=season, check_both_nodes=check_both_nodes)
+                if nw > 0:
+                    G.add_edge(l.destination1, l.destination2, weight=nw) #float(nw)/maxW)
         if len(G.nodes()) == 0:
             print "Empty graph!"
             return G
@@ -214,31 +276,35 @@ def generate_graph(filters=None, refresh=False):
     print "Finished generating, successfully saved."
     return G
 
-# age: 366, 1-0,  2- 4, 3-25, 4-46, 5-68, 6-38, prazni-185 : links[11]
 
-#graph = generate_graph({"age": ["6"]}, refresh=True)
-graph = generate_graph({"user_travel_style": ["Backpacker"]}, refresh=True)
 #print nx.info(graph)
 
 
-filters_arr = [
+# age: 366, 1-0,  2- 4, 3-25, 4-46, 5-68, 6-38, empty-185
     #{"subject_type": ["attractions"]},
     #          {"subject_type": ["hotels"]},
     #          {"subject_type": ["restaurants"]},
+
+filters_arr = [{"subject_type": ["attractions"]},
+          {"subject_type": ["hotels"]},
+          {"subject_type": ["restaurants"]}]
+for filters in filters_arr:
+    generate_graph(filters=filters, refresh=True, check_both_nodes=True)
+
     #          {"gender": ["F"]},
     #          {"gender": ["M"]},
     #          {"age": ["1"]},  {"age": ["2"]},  {"age": ["3"]},
     #          {"age": ["4"]},  {"age": ["5"]},  {"age": ["6"]},
     #          {"user_travel_style": ["60+ Traveler"]},
-    {"user_travel_style": ["Art and Architecture Lover"]}]
-"""  {"user_travel_style": ["Backpacker"]},
-    {"user_travel_style": ["Beach Goer"]},
+ #   {"user_travel_style": ["Art and Architecture Lover"]}]
+# {"user_travel_style": ["Backpacker"]},
+""" {"user_travel_style": ["Beach Goer"]},
     {"user_travel_style": ["Eco-tourist"]},
     {"user_travel_style": ["Family Vacationer"]},
-    {"user_travel_style": ["Foodie"]},
+    {"user_travel_style": ["Foodie"]}
     {"user_travel_style": ["History Buff"]},
     {"user_travel_style": ["Like a Local"]},
-    {"user_travel_style": ["Luxury Traveler"]},
+        {"user_travel_style": ["Luxury Traveler"]},
     {"user_travel_style": ["Nature Lover"]},
     {"user_travel_style": ["Nightlife Seeker"]},
     {"user_travel_style": ["Peace and Quiet Seeker"]},
@@ -247,10 +313,12 @@ filters_arr = [
     {"user_travel_style": ["Thrill Seeker"]},
     {"user_travel_style": ["Trendsetter"]},
     {"user_travel_style": ["Urban Explorer"]},
-    {"user_travel_style": ["Vegetarian"]}]"""
-#, "user_travel_style":["Like a Local"]}
-"""for filters in filters_arr:
-    try:
-        generate_graph(filters=filters, save=True)
-    except:
-        print "Error: "+filters"""
+    {"user_travel_style": ["Vegetarian"]}
+    """
+#for filters in filters_arr:
+#    generate_graph(filters=filters, refresh=True)
+
+#generate_graph(refresh=True, season=Season.SUMMER)
+#generate_graph(refresh=True, season=Season.WINTER)
+#generate_graph(refresh=True, season=Season.NEW_YEAR)
+#generate_graph(refresh=True, season=Season.WINTER_WITHOUT_NEW_YEAR)
