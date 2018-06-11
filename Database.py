@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from databaseEntities import Base, Record, Attribute, Pair, Link, Destination, ConnString, folder, DataType,\
-    selectedData
+    selectedData, GeolocationMapping
 from sqlalchemy import create_engine, distinct, func, inspect, join, and_
 from sqlalchemy.orm import sessionmaker, aliased, joinedload
 from contextlib import contextmanager
@@ -9,6 +9,8 @@ import logging
 import datetime as pydatetime
 import locale
 import itertools
+from countries.MapCountries import *
+import time
 
 engine = create_engine(ConnString) #, echo=True)
 
@@ -58,15 +60,15 @@ def add_row(row_object):
 
 # 2018-02-11 04:14:30.260000 slo ca.4h
 def add_records_from_csv(csvreader, n_lines, selectedData):
+    delete_attributes()
     delete_records()
-
     records = []
     countErrors =0
     locale.setlocale(locale.LC_ALL, 'eng_gbr')  # January 15, 2015
     # ValueError:  # if not running on windows
     if selectedData == DataType.SLO:
         # ['user_id', 'Dodeljena občina', 'review_date', 'Lat', 'Long']  too many ignore_columns to write
-        attribute_names = ['subject_type', 'user_travel_style', 'user_age', 'gender', 'age']
+        attribute_names = ['subject_type', 'user_travel_style', 'user_age', 'gender', 'age', 'user_hometown']
         # cIgnore = 5
     else:
         ignore_columns =[' uid','place_name', ' review_date', ' username', ' lat', ' lng']
@@ -104,7 +106,7 @@ def add_records_from_csv(csvreader, n_lines, selectedData):
                     session.add(record)
                     attributes = []
                     for a_n in attribute_names:
-                        attribute = Attribute(csvreader.line_num, a_n, row[a_n].decode('utf-8').lstrip())
+                        attribute = Attribute(csvreader.line_num, a_n, row[a_n].decode('utf-8').strip())
                         session.add(attribute)
                     session.flush()
                     #session.commit()  # počasno
@@ -164,6 +166,11 @@ def delete_records():
         session.query(Record).delete()
 
 
+def delete_attributes():
+    with session_scope() as session:
+        session.query(Attribute).delete()
+
+
 def delete_pairs():
     with session_scope() as session:
         session.query(Pair).delete()
@@ -179,6 +186,11 @@ def delete_destinations():
         session.query(Destination).delete()
 
 
+def delete_geolocation_mappings():
+    with session_scope() as session:
+        session.query(GeolocationMapping).delete()
+
+
 def delete_all_tables():
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
@@ -191,9 +203,16 @@ def inspect_records():
         print (list(insp.columns))
 
 
-def fetchall_records():
-    session = DBSession(bind=connection)
+def fetchall_records(session=DBSession(bind=connection)):
     return session.query(Record).all()
+
+
+def fetchall_geolocation_mappings(session=DBSession(bind=connection)):
+    return session.query(GeolocationMapping).all()
+
+
+def fetchall_geolocation_mappings_with_no_country(session=DBSession(bind=connection)):
+    return session.query(GeolocationMapping).filter(GeolocationMapping.country==None, GeolocationMapping.formatted_address==None).all()
 
 
 def fetchall_pairs():
@@ -269,6 +288,65 @@ def generate_fids(weeks=1):
                 record.flow_id = 1
                 session.flush()
             lastRecord = record
+
+
+def prepare_geo_location_mappings():
+    delete_geolocation_mappings()
+    mappings = set()
+    with session_scope() as session:
+        for record in fetchall_records(session):
+                user_hometown = get_attributte_by_name_for_record_id('user_hometown', record.id, session)[0][0].title()
+                mapping = GeolocationMapping(user_hometown)
+                # tmp = get_geolocation_mapping_by_user_hometown(user_hometown)
+                if user_hometown not in mappings:  # sqlalchemy.exc.IntegrityError:
+                    mappings.add(user_hometown)
+                    print user_hometown
+                    session.add(mapping)
+                    session.flush()
+    print str(len(mappings))
+
+
+def generate_geo_location_mappings():
+    # first try mapping to known countries
+    countries = get_set_of_countries()
+    states = get_set_of_states()
+    with session_scope() as session:
+        c = 2500  # request per day https://console.cloud.google.com/iam-admin/quotas?project=analysistd-206520&hl=sl
+        for loc in fetchall_geolocation_mappings_with_no_country(session):
+            if "," in loc.user_hometown:
+                loc_items = loc.user_hometown.rsplit(",")
+                country = loc_items[-1].strip()
+            else:
+                country = loc.user_hometown
+
+            if country in countries:
+                loc.country = country
+            elif country in states:
+                loc.country = "United States"
+            elif c > 0:
+                print loc
+                a, b, d, e = search_address(loc.user_hometown)
+                if a:
+                    loc.country = a
+                else:
+                    loc.formatted_address = b
+                #loc.lat = d
+                #loc.lng = e
+                time.sleep(2)
+                c -= 1
+
+            print loc
+            session.flush()
+
+        print str(len(fetchall_geolocation_mappings_with_no_country(session)))
+        # vsi null po državah: 11451
+        # vsi po državah: 5771
+        # po US 4135
+
+
+#  get_attributte_by_name_for_record_id(name, record_id, session=DBSession(bind=connection))
+#        all_records = fetchall_records(session)
+#        allCount = all_records.count() # important
 
 
 def reload_data():
@@ -380,6 +458,10 @@ def get_all_different_values_for_attribute_name(name, session=DBSession(bind=con
 def get_attributte_by_name_for_record_id(name, record_id, session=DBSession(bind=connection)):
     return session.query(Attribute.value).filter(Attribute.name == name, Attribute.record_id == record_id)\
         .distinct(Attribute.value).all()
+
+
+def get_geolocation_mapping_by_user_hometown(user_hometown, session=DBSession(bind=connection)):
+    return session.query(GeolocationMapping.user_hometown).first()
 #session.query(MyClass).filter(MyClass.name == 'some name')
 #session.query(func.count(distinct(User.name)))
 #session.query(func.count(User.name), User.name).group_by(User.name).all()

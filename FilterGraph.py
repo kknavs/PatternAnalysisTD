@@ -48,9 +48,9 @@ def get_season_string(season):
     elif season == Season.WINTER:
         return "WINTER"
     elif season == Season.WINTER_WITHOUT_NEW_YEAR:
-        return "INTER_WITHOUT_NEW_YEAR"
+        return "WINTER_WITHOUT_NEW_YEAR"
     elif season == Season.NEW_YEAR:
-        return "CHRISTMAS&NEW_YEAR"
+        return "CHRISTMAS_NEW_YEAR"
 
 
 def get_season_period(season):
@@ -201,7 +201,16 @@ def filter_add_link(link, filters, season=Season.ALL, check_both_nodes=False):
 
 
 #available_filters = get_all_available_filters()
-#print_available_filters()
+#print_available_filters(available_filters)
+
+def get_fname(filters=None, season=Season.ALL):
+    if not filters:
+        f_name = "full"
+    else:
+        f_name = " ".join("{}_{}".format(k, v).replace("'", "").replace(" ","_") for k, v in filters.items())
+    f_name += "_" + get_season_string(season)
+    return f_name
+
 
 def generate_graph(filters=None, refresh=False, season=Season.ALL, check_both_nodes=False):
     """
@@ -211,18 +220,14 @@ def generate_graph(filters=None, refresh=False, season=Season.ALL, check_both_no
       refresh - bool, force regenerating graph & refreshing output files (default: False)
     """
     G = nx.Graph()
-    if not filters:
-        f_name = "full"
-    else:
-        f_name = " ".join("{}_{}".format(k, v).replace("'", "") for k, v in filters.items())
-    f_name += "_" + get_season_string(season)
+    f_name = get_fname(filters, season)
     txt_name = "/graph_"+f_name+".net"
     out_path = os.path.dirname(os.path.abspath(__file__))+"/"+outputFolderFilters
 
     if os.path.exists(out_path+txt_name[:].replace(".net",".edgelist")) and not refresh:
         print "Graph loaded from: "+out_path
         print "Run with refresh=True if you want to regenerate graph!"
-        G = nx.read_weighted_edgelist(out_path+txt_name, delimiter='\t', encoding='utf-8')
+        G = nx.read_weighted_edgelist(out_path+txt_name.replace(".net",".edgelist"), delimiter='\t', encoding='utf-8')
         return G
     else:
         print "Generating graph: " + out_path+txt_name + " ..."
@@ -285,11 +290,11 @@ def generate_graph(filters=None, refresh=False, season=Season.ALL, check_both_no
     #          {"subject_type": ["hotels"]},
     #          {"subject_type": ["restaurants"]},
 
-filters_arr = [{"subject_type": ["attractions"]},
-          {"subject_type": ["hotels"]},
-          {"subject_type": ["restaurants"]}]
-for filters in filters_arr:
-    generate_graph(filters=filters, refresh=True, check_both_nodes=True)
+filters_arr = [{"subject_type": ["attractions"]}]
+#          {"subject_type": ["hotels"]},
+#          {"subject_type": ["restaurants"]}]
+#for filters in filters_arr:
+#    generate_graph(filters=filters, refresh=True, check_both_nodes=True)
 
     #          {"gender": ["F"]},
     #          {"gender": ["M"]},

@@ -8,6 +8,7 @@ import numpy as np
 import snap.win.snap
 from Database import fetchall_links_with_weight_threshold, get_destinations, get_destinations_id_asc, get_max_weight, \
     folder, DataType, selectedData
+from FilterGraph import Season, generate_graph, get_fname
 #from networkx.algorithms import community as community_nx
 
 #The page http://www.swig.org/download.html has a specific download for Windows with a pre-built version of swig.exe.
@@ -360,7 +361,7 @@ import subprocess
 # C:\Users\Karmen\Downloads\infomap-master\Infomap.exe
 
 
-def load_infomap_graph(filters=None, save=False, consider_locations=True):
+def load_infomap_graph(filters=None, save=False, consider_locations=True, season=Season.ALL):
 
     # add all nodes
     #for d in get_destinations():
@@ -384,35 +385,33 @@ def load_infomap_graph(filters=None, save=False, consider_locations=True):
                 continue
             plt.clf()
             G.clear()
-            txt_name = "/infomap/infomap_minW="+str(float(minW)/maxWeight)+"_maxW="+str(float(maxW)/maxWeight)+".net"
+            g_tmp = generate_graph(filters, False, season)
+
+            # filter based on minW and maxW
+            for destination1, destination2, nw in g_tmp.edges(data=True):
+                if minW-1 < nw['weight'] < maxW:
+                    G.add_edge(destination1, destination2, weight=float(nw['weight'])/maxWeight)
+            if len(G.nodes()) == 0:
+                continue
+            txt_name = "/infomap/infomap_minW="+str(float(minW)/maxWeight)+"_"+get_fname(filters,season)+".net"
             with open(outputFolder+txt_name, str('w')) as f:
-                # add nodes and edges to txt and graph
-                # A network in Pajek format
-                for l in links:
-                    if minW < l.weight < maxW+1:
-                        G.add_edge(l.destination1, l.destination2, weight=float(nw)/maxW)
-                if len(G.nodes()) == 0:
-                    continue
+                # Pajek format (more info in FilterGraph)
                 newline = str("\n")  # linux
                 f.write(str("*Vertices ") + str(len(G.nodes()))+newline)
-                c =1
+                c = 1
                 temp_v = {}
                 for d in get_destinations_id_asc():
                     # G.add_node(d.destination)  # if all nodes added we have problems because of looping?
-                    if d.destination in G.nodes(): # and not d.destination =='Ljubljana':
+                    if d.destination in G.nodes():
                         f.write(str(c)+str(' "'+d.destination+'"'+newline))
                         temp_v[d.destination] = c
                         c += 1  # must follow a consequitive order.
-                        # f.write(str(d.id)+str(' "'+d.destination+'"'+newline))
-                        #  Labels are quoted directly after the nodes identifier.
                 f.write(str("*Edges ") + str(len(G.edges()))+newline)
-                for l in G.edges():
-                    #if minW < l.weight < maxW:
-                        #if l.destination1 !='Ljubljana' and l.destination2 !='Ljubljana':
+                for l in G.edges(data=True):
                     if True:
                             id1 = temp_v[l[0]]
                             id2 = temp_v[l[1]]
-                            e_weight =G[l[0]][l[1]]['weight']
+                            e_weight = G[l[0]][l[1]]['weight']
                             f.write(str(str(id1)+' '+str(id2)+' '+str(e_weight)+newline))
                             #f.write(str(str(id1)+' '+str(id2)+' '+str(float(1)))+newline)
                             #f.write(str(str(id1)+' '+str(id2)+' '+str(1)+'\r\n'))
@@ -427,11 +426,11 @@ def load_infomap_graph(filters=None, save=False, consider_locations=True):
             subprocess.check_call([runp,
                                    outputFolder+txt_name,
                                    # outputFolder+'/ninetriangless.net',
-                                 out_path, "-N 10",  "--overlapping", "--with-memory", "--bftree"])
+                                 out_path, "-N 10",  "--overlapping", "--bftree"])
             subprocess.check_call([runp,
                                    outputFolder+txt_name,
                                    # outputFolder+'/ninetriangless.net',
-                                   out_path, "-N 10",  "--overlapping", "--with-memory", "--tree"])
+                                   out_path, "-N 10",  "--overlapping", "--tree"])
             # --preferred-number-of-modules 4
             # --overlapping
             dict_groups = {}
@@ -474,7 +473,7 @@ def load_infomap_graph(filters=None, save=False, consider_locations=True):
             if consider_locations:
                 change_nodes_position(pos)
             nx.draw_networkx_labels(G, pos, font_size=13, alpha=0.8)  # font_family='sans-serif' can be defined
-            edgewidth = [d['weight']*100 for (u,v,d) in G.edges(data=True)]
+            edgewidth = [d['weight']*10 for (u, v, d) in G.edges(data=True)]
             nx.draw_networkx_edges(G, pos, width=edgewidth, egdelist=G.edges, alpha=0.6)
             values = [dict_groups.get(node, 0.25) for node in G.nodes()]
             nx.draw_networkx_nodes(G,pos,
@@ -488,10 +487,10 @@ def load_infomap_graph(filters=None, save=False, consider_locations=True):
                 figManager.window.state('zoomed')
             if save:
                 plt.savefig(outputFolder +
-                         txt_name.replace(".net", " ".join("{}_{}".format(k, v) for k, v in filters.items())+".png"))
+                         txt_name.replace(".net", ".png"))
 
-            """
-            txt_name = "/infomap/infomap_minW="+str(float(minW)/maxWeight)+"_maxW="+str(float(maxW)/maxWeight)+".net"
+            print nx.info(G)
+            txt_name = "/infomap/infomap_minW="+str(float(minW)/maxWeight)+"_"+get_fname(filters,season)+".net"
             out_path = os.path.dirname(os.path.abspath(__file__))+"/"+outputFolder+"/N10/infomap" #+txt_name.replace(".txt", "_out.txt")
             modules = len(G.nodes())/2
             if modules > 10:
@@ -529,15 +528,46 @@ def load_infomap_graph(filters=None, save=False, consider_locations=True):
                 figManager.window.state('zoomed')
             if save:
                 plt.savefig(outputFolder +"/N10"+
-                            txt_name.replace(".net", " ".join("{}_{}".format(k, v) for k, v in filters.items())+".png"))
-            """
+                            txt_name.replace(".net", ".png"))
+
         # --preferred-number-of-modules 4
         # --overlapping
         dict_groups = {}
-    plt.show()  # display
+    #plt.show()  # display
 
+#load_infomap_graph(save=True)
 
-load_infomap_graph(save=True)
+"""       {"gender": ["F"]},
+         {"gender": ["M"]},
+          {"age": ["1"]},  {"age": ["2"]},  {"age": ["3"]},
+          {"age": ["4"]},  {"age": ["5"]},  {"age": ["6"]},"""
+filters_arr = [      {"user_travel_style": ["60+_Traveler"]}  ]
+"""   {"user_travel_style": ["Art and Architecture Lover"]},
+ {"user_travel_style": ["Backpacker"]},
+ {"user_travel_style": ["Beach Goer"]},
+    {"user_travel_style": ["Eco-tourist"]},
+    {"user_travel_style": ["Family Vacationer"]},
+    {"user_travel_style": ["Foodie"]},
+    {"user_travel_style": ["History Buff"]},
+    {"user_travel_style": ["Like a Local"]},
+        {"user_travel_style": ["Luxury Traveler"]},
+    {"user_travel_style": ["Nature Lover"]},
+    {"user_travel_style": ["Nightlife Seeker"]},
+    {"user_travel_style": ["Peace and Quiet Seeker"]},
+    {"user_travel_style": ["Shopping Fanatic"]},
+    {"user_travel_style": ["Thrifty Traveler"]},
+    {"user_travel_style": ["Thrill Seeker"]},
+    {"user_travel_style": ["Trendsetter"]},
+    {"user_travel_style": ["Urban Explorer"]},
+    {"user_travel_style": ["Vegetarian"]}"""
+
+for filters in filters_arr:
+    load_infomap_graph(filters, save=True)
+"""load_infomap_graph(save=True)
+load_infomap_graph(save=True, season=Season.SUMMER)
+load_infomap_graph(save=True, season=Season.WINTER)
+load_infomap_graph(save=True, season=Season.NEW_YEAR)
+load_infomap_graph(save=True, season=Season.WINTER_WITHOUT_NEW_YEAR)"""
 
 import community_louvain as Community
 def draw_greedy(num, size, greedy=True):  # num_cliques, clique_size)

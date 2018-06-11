@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from sqlalchemy import Column, Integer, Unicode, UnicodeText, Float, String, MetaData, Table, DateTime
+from sqlalchemy import Column, Integer, Float, Unicode, UnicodeText, Float, String, MetaData, Table, DateTime
 from sqlalchemy import create_engine, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import mapper, relationship
@@ -132,6 +132,23 @@ class Destination(Base):  # todokk
     def __repr__(self):
         return ("<Destination(id='%s',destination1='%s' - lat='%f': long='%f' )>" % (
             self.id, self.destination, self.latitude, self.longitude)).encode('utf-8')
+
+
+class GeolocationMapping(Base):
+    __tablename__ = 'geolocation'
+    id = Column(Integer, primary_key=True)
+    user_hometown = Column(UnicodeText, unique=True)
+    country = Column(UnicodeText, nullable=True)
+    formatted_address = Column(UnicodeText, nullable=True)
+    lat = Column(Float, nullable=True)
+    lng = Column(Float, nullable=True)
+
+    def __init__(self, user_hometown):
+        self.user_hometown = user_hometown
+
+    def __repr__(self):
+        return ("<GeolocationMapping(id='%s',user_hometown='%s':country='%s', formatted_address='%s')>" % (
+                self.id, self.user_hometown, self.country, self.formatted_address)).encode('utf-8')
 
 
 # sqlalchemy_example.db file.

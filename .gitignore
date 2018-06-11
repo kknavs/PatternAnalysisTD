@@ -210,7 +210,9 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-
-# big data files (over 100MB)
+# Exclude big data files (over 100MB)
 *.csv
 *.xlsx
+
+# ... but still include csv in countries
+!countries/*.csv

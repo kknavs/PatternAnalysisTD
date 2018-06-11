@@ -110,6 +110,7 @@ reloadRecords = False
 reloadFids = False
 reloadData = False
 reloadDestinations = False
+reload_geo_mappings = True
 
 print folder
 
@@ -162,6 +163,12 @@ if reloadDestinations:
 
     for d in get_destinations():
         print d
+
+if reload_geo_mappings:
+    #prepare_geo_location_mappings()
+    generate_geo_location_mappings()
+
+
 
 print start
 print pydatetime.datetime.now()
