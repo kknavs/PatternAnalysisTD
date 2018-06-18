@@ -54,7 +54,9 @@ def search_address(address):
         print(my_location.formatted_address)
         print(my_location.lat)
         print(my_location.lng)
-        return unicode(my_location.country), unicode(my_location.formatted_address), \
+        if my_location.country:
+            my_location.country = unicode(my_location.country.decode("utf-8"))
+        return my_location.country, my_location.formatted_address, \
                my_location.lat, my_location.lng
     except exc.ApiClientException, ex:
         return None, ex.message, None, None

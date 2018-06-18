@@ -110,7 +110,7 @@ reloadRecords = False
 reloadFids = False
 reloadData = False
 reloadDestinations = False
-reload_geo_mappings = True
+reload_geo_mappings = False
 
 print folder
 
@@ -130,6 +130,7 @@ if prepareCsv:
     #exit()
 
 start = pydatetime.datetime.now()
+
 # Filtered Transactional Data
 if reloadRecords:
     print "***Reload records***"
@@ -165,13 +166,24 @@ if reloadDestinations:
         print d
 
 if reload_geo_mappings:
+    #read_geolocation_mappings()
     #prepare_geo_location_mappings()
     generate_geo_location_mappings()
+    #add_geolocation_mapping("N.Ireland", "United Kingdom")
+    #add_geolocation_mapping("Norfolk, England", "United Kingdom")
+    #add_geolocation_mapping("Manchester, England", "United Kingdom")
+    #add_geolocation_mapping("Roma,Italia", "Italy")
 
-
+import FilterGraph
 
 print start
 print pydatetime.datetime.now()
+
+#filters_arr = [{"subject_type": ["attractions"]}]
+#          {"subject_type": ["hotels"]},
+#          {"subject_type": ["restaurants"]}]
+#for filters in filters_arr:
+#    generate_graph(filters=filters, refresh=True, check_both_nodes=True)
 # https://stackoverflow.com/questions/14509269/best-method-of-saving-data
 # http://zetcode.com/db/sqlitepythontutorial/
 # https://docs.python.org/2/library/sqlite3.html

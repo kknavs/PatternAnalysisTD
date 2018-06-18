@@ -24,13 +24,13 @@ selectedData = DataType.SLO
 
 folders = ['161124', '161020', 'vienna']
 folder = 'data/' + folders[selectedData-1]
-undirected = True
 
 # postgres
 ConnString = 'postgresql+psycopg2://postgres:postgres123@127.0.0.1:5432/PatternAnalysisTD_'+folder.replace('data/', '')+'_fid'
-#if not undirected:
-#    ConnString += '_directed'
+# mac: install postgres - https://gist.github.com/lxneng/741932
+# pg_ctl -D /usr/local/var/postgres start
 # postgresql+psycopg2://user:password@host:port/dbname[?key=value&key=value...]
+
 # sqlite
 #ConnString = 'sqlite:///'+folder+'/PatternAnalysisTD_'+folder.replace('data/', '')+'_2.sqlite'
 # https://stackoverflow.com/questionss/2047814/is-it-possible-to-store-python-class-objects-in-sqlite
@@ -44,16 +44,20 @@ class Record(Base):
     # destination_id = Column(Integer, ForeignKey('destination.destination'))
     # destination = relationship("Destination", back_populates="records")
     destination = Column(Unicode)
+    latitude = Column(Float, nullable=True)
+    longitude = Column(Float, nullable=True)
     user_url = Column(Unicode, nullable=True)
     review_date = Column(DateTime)
     flow_id = Column(Integer, default=0)
     attributes = relationship("Attribute", back_populates="record")
 
-    def __init__(self, record_id, user_id, destination, review_date, user_url=None, flow_id=0):
+    def __init__(self, record_id, user_id, destination, review_date, user_url=None, latitude=0, longitude=0, flow_id=0):
         self.id = record_id
         self.user_id = user_id
         self.destination = destination
         self.user_url = user_url
+        self.latitude = latitude
+        self.longitude = longitude
         self.review_date = review_date
         self.flow_id = flow_id
 
@@ -143,8 +147,10 @@ class GeolocationMapping(Base):
     lat = Column(Float, nullable=True)
     lng = Column(Float, nullable=True)
 
-    def __init__(self, user_hometown):
+    def __init__(self, user_hometown, country=None, formatted_address=None):
         self.user_hometown = user_hometown
+        self.country = country
+        self.formatted_address = formatted_address
 
     def __repr__(self):
         return ("<GeolocationMapping(id='%s',user_hometown='%s':country='%s', formatted_address='%s')>" % (

@@ -11,6 +11,7 @@ import locale
 import itertools
 from countries.MapCountries import *
 import time
+import io
 
 engine = create_engine(ConnString) #, echo=True)
 
@@ -60,11 +61,11 @@ def add_row(row_object):
 
 # 2018-02-11 04:14:30.260000 slo ca.4h
 def add_records_from_csv(csvreader, n_lines, selectedData):
-    delete_attributes()
     delete_records()
+    delete_attributes()
     records = []
     countErrors =0
-    locale.setlocale(locale.LC_ALL, 'eng_gbr')  # January 15, 2015
+    #locale.setlocale(locale.LC_ALL, 'eng_gbr')  # January 15, 2015
     # ValueError:  # if not running on windows
     if selectedData == DataType.SLO:
         # ['user_id', 'Dodeljena občina', 'review_date', 'Lat', 'Long']  too many ignore_columns to write
@@ -88,7 +89,9 @@ def add_records_from_csv(csvreader, n_lines, selectedData):
                 if selectedData == DataType.SLO:
                     record = Record(csvreader.line_num, row['user_id'].decode('utf-8'),
                                     row['Dodeljena občina'.encode('utf-8')].decode('utf-8'),
-                                    pydatetime.datetime.strptime(row['review_date'], '%B %d, %Y'))
+                                    pydatetime.datetime.strptime(row['review_date'], '%B %d, %Y'), "",
+                                    row['subject_lat'].decode('utf-8').strip(),
+                                    row['subject_lng'].decode('utf-8').strip())
                 elif selectedData == DataType.LONDON:
                     record = Record(csvreader.line_num, row['user_profile_url'].decode('utf-8'),
                                     row['subject_title'].decode('utf-8'),
@@ -97,10 +100,10 @@ def add_records_from_csv(csvreader, n_lines, selectedData):
                     #                #  ali user_profile_url? najbolje, da kar oboje pobereš
                 else:  # place_name, place_details, lat, lng, username,
                     # review_date, uid, place_rate, review_rate, travel_style, age, gender
-                    record = Record(csvreader.line_num, row[' uid'].decode('utf-8').lstrip(),
-                                    row['place_name'].decode('utf-8').lstrip(),
-                                    pydatetime.datetime.strptime(row[' review_date'].lstrip(), '%Y%m%d'),
-                                    row[' username'].decode('utf-8').lstrip())
+                    record = Record(csvreader.line_num, row[' uid'].decode('utf-8').strip(),
+                                    row['place_name'].decode('utf-8').strip(),
+                                    pydatetime.datetime.strptime(row[' review_date'].strip(), '%Y%m%d'),
+                                    row[' username'].decode('utf-8').strip())
 
                 if record.user_id:
                     session.add(record)
@@ -162,11 +165,13 @@ def add_destinations_from_csv(csvreader, selectedData):
 
 
 def delete_records():
+    # Record.__table__.drop(engine)  # can give error, best to just drop directly!
     with session_scope() as session:
         session.query(Record).delete()
 
 
 def delete_attributes():
+    # Attribute.__table__.drop(engine)
     with session_scope() as session:
         session.query(Attribute).delete()
 
@@ -212,7 +217,7 @@ def fetchall_geolocation_mappings(session=DBSession(bind=connection)):
 
 
 def fetchall_geolocation_mappings_with_no_country(session=DBSession(bind=connection)):
-    return session.query(GeolocationMapping).filter(GeolocationMapping.country==None, GeolocationMapping.formatted_address==None).all()
+    return session.query(GeolocationMapping).filter(GeolocationMapping.country=='').all()
 
 
 def fetchall_pairs():
@@ -240,7 +245,9 @@ def fetchall_records_users(session=DBSession(bind=connection)):
     return session.query(distinct(Record.user_id))
 
 
-def get_records_by_destinations(destination1, destination2, session=DBSession(bind=connection)):
+def get_records_by_destinations(destination1, destination2, session=DBSession(bind=connection), destination = None):
+    if destination:
+        return get_records_by_destinations_with_location(destination1, destination2)
     t = session.query(Record.id, Record.user_id, Record.flow_id, Record.destination, Record.review_date).\
         filter(Record.destination==destination1)\
         .group_by(Record.id, Record.user_id,  Record.flow_id, Record.destination).distinct(Record.user_id, Record.flow_id).subquery('t')
@@ -250,6 +257,20 @@ def get_records_by_destinations(destination1, destination2, session=DBSession(bi
         Record.destination == destination2
         )).distinct(Record.user_id, Record.flow_id).add_column(t.c.destination.label("destination1")) \
         .add_column(t.c.id.label("id1")).add_column(t.c.review_date.label("review_date1"))
+
+
+def get_records_by_destinations_with_location(destination1, destination2, session=DBSession(bind=connection)):
+    t = session.query(Record.id, Record.user_id, Record.flow_id, Record.destination, Record.review_date, Record.latitude,
+                      Record.longitude).filter(Record.destination==destination1) \
+        .group_by(Record.id, Record.user_id,  Record.flow_id, Record.destination).distinct(Record.user_id, Record.flow_id).subquery('t')
+    return session.query(Record).filter(and_(
+        Record.user_id == t.c.user_id,
+        Record.flow_id == t.c.flow_id,
+        Record.destination == destination2
+    )).distinct(Record.user_id, Record.flow_id).add_column(t.c.destination.label("destination1")) \
+        .add_column(t.c.id.label("id1")).add_column(t.c.review_date.label("review_date1"))\
+        .add_column(t.c.latitude.label("lat1"))\
+        .add_column(t.c.longitude.label("lng1"))
 
 
 def get_destinations(session=DBSession(bind=connection)):
@@ -290,19 +311,63 @@ def generate_fids(weeks=1):
             lastRecord = record
 
 
+def add_geolocation_mapping(user_hometown, country):
+    with session_scope() as session:
+        mapping = get_geolocation_mapping_by_user_hometown(user_hometown, session)
+        if not mapping:
+            mapping_new = GeolocationMapping(user_hometown, country)
+            session.add(mapping_new)
+        else:
+            mapping.country = country
+        session.commit()
+
+
+def get_empty_if_none(value):
+    if value:
+        return value
+    return unicode("")
+
+
+def write_geolocation_mappings():  # then mappings can be transferred to different machine
+    with io.open("countries/geolocation_mappings.txt", "w", encoding='utf-8') as data:
+        with session_scope() as session:
+            for record in fetchall_geolocation_mappings(session):
+                user_hometown = record.user_hometown
+                data.write(get_empty_if_none(record.user_hometown)+"\t:"+get_empty_if_none(record.country)
+                           + "\t:"+get_empty_if_none(record.formatted_address)+"\n")
+
+    print "***Finished writing geolocation_mappings.***"
+
+
+def read_geolocation_mappings():
+    with io.open("countries/geolocation_mappings.txt", "r", encoding='utf-8') as data:
+        with session_scope() as session:
+            while True:
+                line = data.readline()
+                if not line:
+                    break
+                user_hometown, country, formatted_address = line.split("\t:")
+                mapping = GeolocationMapping(user_hometown, country, formatted_address.strip())
+                print mapping
+                session.add(mapping)
+                session.flush()
+
+    print "***Finished reading geolocation_mappings.***"
+
+
 def prepare_geo_location_mappings():
     delete_geolocation_mappings()
     mappings = set()
     with session_scope() as session:
         for record in fetchall_records(session):
-                user_hometown = get_attributte_by_name_for_record_id('user_hometown', record.id, session)[0][0].title()
+                user_hometown = get_attributte_value_by_name_for_record_id('user_hometown', record.id, session)[0][0].title()
                 mapping = GeolocationMapping(user_hometown)
                 # tmp = get_geolocation_mapping_by_user_hometown(user_hometown)
                 if user_hometown not in mappings:  # sqlalchemy.exc.IntegrityError:
                     mappings.add(user_hometown)
                     print user_hometown
                     session.add(mapping)
-                    session.flush()
+                    session.commit()
     print str(len(mappings))
 
 
@@ -310,9 +375,17 @@ def generate_geo_location_mappings():
     # first try mapping to known countries
     countries = get_set_of_countries()
     states = get_set_of_states()
+    # add special mapping
+    add_geolocation_mapping("N.Ireland", "United Kingdom")
     with session_scope() as session:
-        c = 2500  # request per day https://console.cloud.google.com/iam-admin/quotas?project=analysistd-206520&hl=sl
+        print "Locations with no country"
+        print str(len(fetchall_geolocation_mappings_with_no_country(session)))
+        c = 0  # request per day https://console.cloud.google.com/iam-admin/quotas?project=analysistd-206520&hl=sl
         for loc in fetchall_geolocation_mappings_with_no_country(session):
+            if loc.user_hometown is None:
+                loc.country = None
+                continue
+
             if "," in loc.user_hometown:
                 loc_items = loc.user_hometown.rsplit(",")
                 country = loc_items[-1].strip()
@@ -323,6 +396,8 @@ def generate_geo_location_mappings():
                 loc.country = country
             elif country in states:
                 loc.country = "United States"
+            elif "England" in loc.user_hometown:
+                loc.country = "United Kingdom"
             elif c > 0:
                 print loc
                 a, b, d, e = search_address(loc.user_hometown)
@@ -332,16 +407,67 @@ def generate_geo_location_mappings():
                     loc.formatted_address = b
                 #loc.lat = d
                 #loc.lng = e
-                time.sleep(2)
+                time.sleep(3)
                 c -= 1
 
             print loc
-            session.flush()
-
+            session.commit()  # better to commit immediately
+        print "Locations with no country"
         print str(len(fetchall_geolocation_mappings_with_no_country(session)))
         # vsi null po državah: 11451
         # vsi po državah: 5771
         # po US 4135
+        # 243
+    with session_scope() as session:
+        ctmp =0
+        for record in fetchall_records(session):
+            user_hometown = get_attributte_value_by_name_for_record_id('user_hometown', record.id, session)[0][0]
+            if user_hometown:
+                mapping = get_geolocation_mapping_by_user_hometown(user_hometown, session)
+                if not mapping:
+                    if user_hometown is None:
+                        country = ""
+                    else:
+                        if "," in user_hometown:
+                            loc_items = user_hometown.rsplit(",")
+                            country = loc_items[-1].strip()
+                        else:
+                            if user_hometown in countries:
+                                country = user_hometown
+                            else:
+                                country = user_hometown.rsplit()[-1]
+                        if country in countries:
+                            country = country
+                        elif country in states:
+                            country = "United States"
+                        elif "England" in user_hometown:
+                            country = "United Kingdom"
+                        elif "Uk" == user_hometown[-2:].title():
+                            country = "United Kingdom"
+                        else:
+                            country = ""
+                else:
+                    country = mapping.country
+            else:
+                country = ""
+
+            #a = get_attributte_single_by_name_for_record_id('user_hometown_country', record.id)
+            #if not a and user_hometown:
+            #    print country
+            #    print user_hometown
+            #    print a
+            #   a.value = country
+            #   session.commit()
+
+            # always new
+            attribute = Attribute(record.id, 'user_hometown_country', country)
+            session.add(attribute)
+            ctmp += 1
+            if ctmp > 10000:
+                session.commit()
+                ctmp = 0
+            else:
+                session.flush()
 
 
 #  get_attributte_by_name_for_record_id(name, record_id, session=DBSession(bind=connection))
@@ -455,13 +581,17 @@ def get_all_different_values_for_attribute_name(name, session=DBSession(bind=con
     return session.query(Attribute.value).filter(Attribute.name == name).distinct(Attribute.value).all()
 
 
-def get_attributte_by_name_for_record_id(name, record_id, session=DBSession(bind=connection)):
+def get_attributte_value_by_name_for_record_id(name, record_id, session=DBSession(bind=connection)):
     return session.query(Attribute.value).filter(Attribute.name == name, Attribute.record_id == record_id)\
         .distinct(Attribute.value).all()
 
 
+def get_attributte_single_by_name_for_record_id(name, record_id, session=DBSession(bind=connection)):
+    return session.query(Attribute).filter(Attribute.name == name, Attribute.record_id == record_id).first()
+
+
 def get_geolocation_mapping_by_user_hometown(user_hometown, session=DBSession(bind=connection)):
-    return session.query(GeolocationMapping.user_hometown).first()
+    return session.query(GeolocationMapping).filter(GeolocationMapping.user_hometown==user_hometown).first()
 #session.query(MyClass).filter(MyClass.name == 'some name')
 #session.query(func.count(distinct(User.name)))
 #session.query(func.count(User.name), User.name).group_by(User.name).all()

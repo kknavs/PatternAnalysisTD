@@ -4,11 +4,12 @@ from __future__ import unicode_literals
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
+import os
 
 import snap.win.snap
 from Database import fetchall_links_with_weight_threshold, get_destinations, get_destinations_id_asc, get_max_weight, \
     folder, DataType, selectedData
-from FilterGraph import Season, generate_graph, get_fname
+from FilterGraph import Season, generate_graph, generate_graph_for_destination, get_fname
 #from networkx.algorithms import community as community_nx
 
 #The page http://www.swig.org/download.html has a specific download for Windows with a pre-built version of swig.exe.
@@ -417,7 +418,6 @@ def load_infomap_graph(filters=None, save=False, consider_locations=True, season
                             #f.write(str(str(id1)+' '+str(id2)+' '+str(1)+'\r\n'))
                             # we write edges in Link list format
             #./Infomap ninetriangles.net output/ -N 10 --tree --bftree
-            import os
             out_path = os.path.dirname(os.path.abspath(__file__))+"/"+outputFolder+"/infomap" #+txt_name.replace(".txt", "_out.txt")
             # tt =outputFolder+'/ninetriangless.net'
             runp = r"c:/Users\Karmen\Downloads\infomap-master\Infomap.exe"
@@ -537,6 +537,23 @@ def load_infomap_graph(filters=None, save=False, consider_locations=True, season
 
 #load_infomap_graph(save=True)
 
+
+def draw_graph_for_destination(destination, save=False, filters=None, season=Season.ALL):
+    G = generate_graph_for_destination(destination, filters=filters, refresh=True, season=season)
+    print(nx.info(G))
+    nx.draw(G)
+    plt.axis('on')
+    figManager = plt.get_current_fig_manager()
+    if os.name != 'posix':  # mac
+        figManager.window.state('zoomed')
+    if save:
+        plt.savefig(outputFolder + "/" + destination+"_"+get_fname(filters,season)+".png")
+    plt.show()
+
+    # --preferred-number-of-modules 4
+    # --overlapping
+dict_groups = {}
+#plt.show()  # display
 """       {"gender": ["F"]},
          {"gender": ["M"]},
           {"age": ["1"]},  {"age": ["2"]},  {"age": ["3"]},
@@ -560,9 +577,16 @@ filters_arr = [      {"user_travel_style": ["60+_Traveler"]}  ]
     {"user_travel_style": ["Trendsetter"]},
     {"user_travel_style": ["Urban Explorer"]},
     {"user_travel_style": ["Vegetarian"]}"""
-
-for filters in filters_arr:
-    load_infomap_graph(filters, save=True)
+filters_arr = [{"user_hometown_country": ["Slovenia"]},
+               {"user_hometown_country": ["United Kingdom"]},
+               {"user_hometown_country": ["United States"]},
+               {"user_hometown_country": ["Italy"]},
+               {"user_hometown_country": ["Croatia"]},
+               {"user_hometown_country": ["Austria"]},
+               {"user_hometown_country": ["Hungary"]}]
+#for filters in filters_arr:
+#    load_infomap_graph(filters, save=True)
+draw_graph_for_destination("Bled")
 """load_infomap_graph(save=True)
 load_infomap_graph(save=True, season=Season.SUMMER)
 load_infomap_graph(save=True, season=Season.WINTER)
