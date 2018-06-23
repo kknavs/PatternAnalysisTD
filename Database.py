@@ -269,8 +269,8 @@ def get_records_by_destinations_with_location(destination1, destination2, sessio
         Record.destination == destination2
     )).distinct(Record.user_id, Record.flow_id).add_column(t.c.destination.label("destination1")) \
         .add_column(t.c.id.label("id1")).add_column(t.c.review_date.label("review_date1"))\
-        .add_column(t.c.latitude.label("lat1"))\
-        .add_column(t.c.longitude.label("lng1"))
+        .add_column(t.c.longitude.label("lng1")) \
+        .add_column(t.c.latitude.label("lat1"))
 
 
 def get_destinations(session=DBSession(bind=connection)):

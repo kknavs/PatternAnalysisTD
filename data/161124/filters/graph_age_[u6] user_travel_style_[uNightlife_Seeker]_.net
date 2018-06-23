@@ -1,0 +1,25 @@
+*Vertices 8
+1 "Ljubljana"
+2 "Piran/Pirano"
+3 "Bled"
+4 "Kranjska Gora"
+5 "Postojna"
+6 "Gorje"
+7 "Reka"
+8 "Zagreb"
+*Edges 15
+8 1 1
+8 3 1
+8 5 2
+4 1 1
+4 3 1
+4 5 1
+4 2 1
+3 1 1
+3 6 1
+3 2 1
+3 5 2
+7 1 1
+1 5 3
+1 2 1
+2 5 1

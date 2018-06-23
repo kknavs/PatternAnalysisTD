@@ -9,6 +9,7 @@ import numpy as np
 from networkx.algorithms import community as community_nx
 import itertools
 from operator import itemgetter
+from FilterGraph import Season, generate_graph, generate_graph_for_destination, get_fname
 # https://github.com/taynaud/python-louvain/tree/networkx2
 # pip install -U git+https://github.com/taynaud/python-louvain.git@networkx2
 
@@ -119,6 +120,63 @@ def draw_graph2(save, consider_locations=True):
                     plt.savefig(outputFolder + "/graph2_maxW="+str(maxW)+"_midW="+str(midW)+"_minW="+str(minW)+".png")
     plt.show()
 
+
+def draw_louvain(save=True, consider_locations=True,filters=None, season=Season.ALL):
+    plt.clf()
+    G = generate_graph(filters=filters, season=season)
+    print(nx.info(G))
+    #nx.draw_networkx_nodes(G, pos=pos, nodelist=G.nodes)
+
+    # use one of the edge properties to control line thickness
+    edgewidth = [d['weight']/float(maxWeight/avg) for (u,v,d) in G.edges(data=True)]
+    #edgewidth = [d['weight']/float(avg) for (u,v,d) in G.edges(data=True)]
+    emedium = [(u, v) for (u, v, d) in G.edges(data=True)]
+    pos=nx.spring_layout(G)  # spring, shell, circular positions for all nodes
+    if consider_locations:
+        change_nodes_position(pos)
+    # labels
+    nx.draw_networkx_labels(G, pos, font_size=13, alpha=0.8)
+    #nx.draw_networkx_nodes(G,pos,alpha=0.6,node_size=400)
+    nx.draw_networkx_edges(G, pos, edgelist=emedium,
+                           width=edgewidth, alpha=0.7)
+    print nx.is_connected(G)
+    print nx.number_connected_components(G)
+    comps = nx.connected_component_subgraphs(G)
+    print "Comps"
+    for c in comps:
+        print c
+    ccs = nx.clustering(G)
+    print ccs
+    #print sum(ccs)/len(ccs)
+    # print nx.__version__  is 2.1
+    partition = Community.best_partition(G, None, 'weight')
+    for count,i in enumerate(set(partition.values())):
+        print "Community", i
+        members = list_nodes = [nodes for nodes in partition.keys() if partition[nodes] == i]
+        print members
+        #nx.set_node_attributes(members, 'color', 'b')
+        nx.draw_networkx_nodes(G,pos,
+                               nodelist=members,
+                               node_color=colors[count],
+                               node_size=350,
+                               alpha=0.75)
+    plt.axis('off')
+    figManager = plt.get_current_fig_manager()
+    #figManager.window.state('zoomed')
+    if save:
+        plt.savefig(outputFolder + "/louvain/louvain_"+get_fname(filters,season)+".png")
+
+#    plt.show()
+
+filters_arr = [{"user_hometown_country": ["Slovenia"]},
+               {"user_hometown_country": ["United Kingdom"]},
+               {"user_hometown_country": ["United States"]},
+               {"user_hometown_country": ["Italy"]},
+               {"user_hometown_country": ["Croatia"]},
+               {"user_hometown_country": ["Austria"]},
+               {"user_hometown_country": ["Hungary"]}]
+for filters in filters_arr:
+    draw_louvain(filters=filters, save=True)
 
 def draw_graph3(save, consider_locations=True):
     G = nx.Graph()

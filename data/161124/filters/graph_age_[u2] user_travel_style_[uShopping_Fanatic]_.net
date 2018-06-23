@@ -1,0 +1,27 @@
+*Vertices 12
+1 "Ljubljana"
+2 "Piran/Pirano"
+3 "Bled"
+4 "Brezice"
+5 "Bohinj"
+6 "Postojna"
+7 "Kobarid"
+8 "Gorje"
+9 "Umag"
+10 "Reka"
+11 "Zagreb"
+12 "Varazdin"
+*Edges 13
+4 11 1
+9 1 1
+9 3 1
+11 1 4
+11 12 1
+11 10 1
+3 1 2
+3 8 4
+3 5 1
+5 8 1
+5 6 1
+1 2 1
+8 7 1

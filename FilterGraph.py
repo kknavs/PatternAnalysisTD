@@ -209,7 +209,7 @@ def filter_add_link(link, filters, season=Season.ALL, check_both_nodes=False, de
                                 break
         else:
             if destination:
-                if tt[0].destonation == destination:
+                if tt[0].destination == destination:
                     recordsId[tt[0].id] = np.array([tt[0].longitude, tt[0].latitude])
                 else:
                     recordsId[tt[2]] = np.array([tt[4], tt[5]])
@@ -272,7 +272,7 @@ def generate_graph(filters=None, refresh=False, season=Season.ALL, check_both_no
         2 3 1
         ..."""
         for l in links:
-            if selectedData == DataType.SLO or l.weight > 100:
+            if selectedData == DataType.SLO:
                 nw = filter_add_link(l, filters_to_apply, season=season, check_both_nodes=check_both_nodes)
                 if nw > 0:
                     G.add_edge(l.destination1, l.destination2, weight=nw) #float(nw)/maxW)
@@ -327,82 +327,27 @@ def generate_graph_for_destination(destination, filters=None, refresh=False, sea
     filters_to_apply = prepare_filters(filters)
     links = fetchall_links_with_weight_threshold(1)
     # add nodes and edges to txt and graph
-    with open(outputFolderFiltersC+txt_name, 'w') as f:
-        # link list format - is a minimal format to describe a network by only specifying a set of links
-        # link list has no support for node names, hence we save graph in Pajek format:
-        # a network in Pajek format
-        """*Vertices 27
-        1 "1"
-        2 "2"
-        3 "3"
-        4 "4"
-        ...
-        *Edges 33
-        1 2 1
-        1 3 1
-        1 4 1
-        2 3 1
-        ..."""
+    pos =dict()
+    with open(outputFolderFiltersC+txt_name, 'r') as f:
         for l in links:
             if l.destination1 == destination or l.destination2 == destination:
                 nw = filter_add_link(l, filters_to_apply,  destination=destination, season=season)
                 if nw:
+                    pos.update(nw)
                     for k, v in nw.iteritems():
-                        G.add_node(k, pos=v)
-                    #G.add_edge(l.destination1, l.destination2, weight=nw) #float(nw)/maxW)
+                        G.add_node(k)
         if len(G.nodes()) == 0:
             print "Empty graph!"
-            return G
-        newline = str("\n")  # linux
-        f.write(str("*Vertices ") + str(len(G.nodes()))+newline)
-        c = 1
-        temp_v = {}
-        for d in get_destinations_id_asc():
-            if d.destination in G.nodes():
-                f.write(str(c)+str(' "'+d.destination+'"'+newline))
-                temp_v[d.destination] = c
-                c += 1  # must follow a consequitive order.
-                #  Labels are quoted directly after the nodes identifier.
-        f.write(str("*Edges ") + str(len(G.edges()))+newline)
-        for l in G.edges():
-            id1 = temp_v[l[0]]
-            id2 = temp_v[l[1]]
-            e_weight = G[l[0]][l[1]]['weight']
-            f.write(str(str(id1)+' '+str(id2)+' '+str(e_weight)+newline))
+            return G, pos
 
     outputFolderFiltersC.replace("/"+destination, "")
     #nx.write_graphml(G, out_path+txt_name[:].replace(".net",".graphML"))
-    nx.write_weighted_edgelist(G, out_path+txt_name[:].replace(".net",".edgelist"), delimiter='\t', encoding='utf-8')
+    #nx.write_weighted_edgelist(G, out_path+txt_name[:].replace(".net",".edgelist"), delimiter='\t', encoding='utf-8')
     print "Finished generating, successfully saved."
-    return G
+    return G, pos
 
 #print nx.info(graph)
 
-
-# age: 366, 1-0,  2- 4, 3-25, 4-46, 5-68, 6-38, empty-185
-    #{"subject_type": ["attractions"]},
-    #          {"subject_type": ["hotels"]},
-    #          {"subject_type": ["restaurants"]},
-
-filters_arr = [{"user_hometown_country": ["Slovenia"]}, {"age": ["2"]}]
-""",
-          {"user_hometown_country": ["United Kingdom"]},
-               {"user_hometown_country": ["United States"]},
-               {"user_hometown_country": ["Italy"]},
-               {"user_hometown_country": ["Croatia"]},
-               {"user_hometown_country": ["Austria"]},
-               {"user_hometown_country": ["Hungary"]}]"""
-
-for filters in filters_arr:
-    generate_graph(refresh=True, filters=filters)
-
-    #          {"gender": ["F"]},
-    #          {"gender": ["M"]},
-    #          {"age": ["1"]},  {"age": ["2"]},  {"age": ["3"]},
-    #          {"age": ["4"]},  {"age": ["5"]},  {"age": ["6"]},
-    #          {"user_travel_style": ["60+ Traveler"]},
- #   {"user_travel_style": ["Art and Architecture Lover"]}]
-# {"user_travel_style": ["Backpacker"]},
 """ {"user_travel_style": ["Beach Goer"]},
     {"user_travel_style": ["Eco-tourist"]},
     {"user_travel_style": ["Family Vacationer"]},
@@ -422,8 +367,3 @@ for filters in filters_arr:
     """
 #for filters in filters_arr:
 #    generate_graph(filters=filters, refresh=True)
-
-#generate_graph(refresh=True, season=Season.SUMMER)
-#generate_graph(refresh=True, season=Season.WINTER)
-#generate_graph(refresh=True, season=Season.NEW_YEAR)
-#generate_graph(refresh=True, season=Season.WINTER_WITHOUT_NEW_YEAR)

@@ -1,0 +1,84 @@
+# 'data/161124/graphs/infomap/infomap_age_[u5]_minW=0.0_maxW=1.00044682752.net D:\FRI\Magistrska\Projekt\PatternAnalysisTD/data/161124/graphs/infomap -N 10 --overlapping --tree' -> 82 nodes partitioned in 3s from codelength 7.813041525 in one level to codelength 4.281812557 in 2 levels.
+# path flow name node:
+1:1 0.181934 "Bled" 3
+1:2 0.169819 "Ljubljana" 1
+1:3 0.0887511 "Zagreb" 74
+1:4 0.0805958 "Gorje" 38
+1:5 0.0608727 "Postojna" 18
+1:6 0.0526583 "Bohinj" 8
+1:7 0.0499352 "Piran/Pirano" 2
+1:8 0.0325391 "Opatija" 71
+1:9 0.0283796 "Trieste" 63
+1:10 0.0201226 "Motovun" 66
+1:11 0.0194592 "Skocjan" 46
+1:12 0.019046 "Kranjska Gora" 4
+1:13 0.0163275 "Kobarid" 20
+1:14 0.0156544 "Bovec" 12
+1:15 0.0134072 "Radovljica" 16
+1:16 0.0100307 "Ptuj" 14
+1:17 0.00877023 "Klagenfurt" 58
+1:18 0.00798596 "Sezana" 17
+1:19 0.00781261 "Reka" 72
+1:20 0.00664418 "Skofja Loka" 39
+1:21 0.00657062 "Maribor" 6
+1:22 0.00640897 "Brda" 29
+1:23 0.00562622 "Koper/Capodistria" 15
+1:24 0.00545826 "Brezice" 5
+1:25 0.00495823 "Groznjan" 68
+1:26 0.00434158 "Udine" 62
+1:27 0.0042135 "Tolmin" 25
+1:28 0.00414278 "Buzet" 70
+1:29 0.00401075 "Solcava" 36
+1:30 0.00380775 "Buje" 67
+1:31 0.00340275 "Smarjeske Toplice" 30
+1:32 0.00340111 "Villach" 57
+1:33 0.00328194 "Varazdin" 75
+1:34 0.00294457 "Divaca" 35
+1:35 0.00266577 "Cerkno" 33
+1:36 0.0024289 "Bistrica ob Sotli" 51
+1:37 0.0022917 "Ankaran/Ancarano" 13
+1:38 0.00218104 "Kamnik" 28
+1:39 0.00218104 "Komen" 42
+1:40 0.00211732 "Vipava" 41
+1:41 0.00204972 "Trzin" 56
+1:42 0.00195199 "Rogatec" 50
+1:43 0.00193072 "Umag" 69
+1:44 0.00192405 "Cirkulane" 52
+1:45 0.0017933 "Idrija" 37
+1:46 0.00167536 "Izola/Isola" 10
+1:47 0.00165853 "Kranj" 19
+1:48 0.00162731 "Dolenjske Toplice" 27
+1:49 0.00141699 "Miren - Kostanjevica" 47
+1:50 0.00114219 "Vojnik" 49
+1:51 0.00112787 "Karlovac" 73
+1:52 0.000975538 "Menges" 53
+1:53 0.00085534 "Podcetrtek" 9
+1:54 0.00085527 "Zelezniki" 44
+1:55 0.00082498 "Moravske Toplice" 7
+1:56 0.000777316 "Novigrad" 65
+1:57 0.000647654 "Bloke" 48
+1:58 0.000481426 "Brezovica" 43
+1:59 0.000462683 "Razkrizje" 54
+1:60 0.000347293 "Celje" 26
+1:61 0.000343933 "Cakovec" 76
+1:62 0.00033224 "Kostel" 40
+1:63 0.000179828 "Rogaska Slatina" 22
+1:64 0.000179828 "Novo mesto" 23
+1:65 0.000168487 "Hrpelje - Kozina" 31
+1:66 0.000159005 "Bad Kalinkirchheim" 59
+1:67 0.000157145 "Kanal" 45
+2:1 0.00220237 "Aquilea" 61
+2:2 0.00077711 "Trieste" 63
+2:3 0.000641317 "Udine" 62
+2:4 0.000436396 "Grado" 60
+2:5 0.000429277 "Sempeter - Vrtojba" 55
+2:6 0.000130703 "Nova Gorica" 11
+2:7 0.000130703 "Brda" 29
+2:8 0.000130703 "Miren - Kostanjevica" 47
+3:1 0.000743001 "Palmanova" 64
+3:2 0.000384832 "Udine" 62
+3:3 0.000128277 "Reka" 72
+4:1 0.000315025 "Verzej" 24
+4:2 0.000315025 "Murska Sobota" 34
+5:1 4.37172e-06 "Radenci" 21
+5:2 4.37172e-06 "Ljutomer" 32

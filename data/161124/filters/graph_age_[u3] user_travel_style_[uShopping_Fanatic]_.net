@@ -1,0 +1,115 @@
+*Vertices 38
+1 "Ljubljana"
+2 "Piran/Pirano"
+3 "Bled"
+4 "Kranjska Gora"
+5 "Brezice"
+6 "Maribor"
+7 "Moravske Toplice"
+8 "Bohinj"
+9 "Podcetrtek"
+10 "Bovec"
+11 "Koper/Capodistria"
+12 "Radovljica"
+13 "Sezana"
+14 "Postojna"
+15 "Kranj"
+16 "Kobarid"
+17 "Tolmin"
+18 "Smarjeske Toplice"
+19 "Murska Sobota"
+20 "Gorje"
+21 "Kanal"
+22 "Skocjan"
+23 "Miren - Kostanjevica"
+24 "Bistrica ob Sotli"
+25 "Cirkulane"
+26 "Skofljica"
+27 "Klagenfurt"
+28 "Bad Kalinkirchheim"
+29 "Trieste"
+30 "Motovun"
+31 "Buje"
+32 "Groznjan"
+33 "Umag"
+34 "Buzet"
+35 "Opatija"
+36 "Reka"
+37 "Zagreb"
+38 "Varazdin"
+*Edges 75
+16 10 1
+16 21 1
+16 17 1
+29 1 2
+29 14 1
+29 2 2
+25 37 1
+1 10 1
+1 37 14
+1 13 2
+1 35 2
+1 22 2
+1 3 26
+1 11 1
+1 36 1
+1 8 4
+1 26 1
+1 6 1
+1 20 5
+1 2 9
+1 14 5
+30 35 1
+30 37 1
+14 37 1
+14 22 2
+14 3 3
+14 8 1
+14 2 2
+9 10 1
+9 2 1
+10 13 1
+10 11 1
+10 17 1
+10 6 1
+10 2 1
+37 24 2
+37 5 2
+37 35 3
+37 18 1
+37 3 6
+37 38 3
+37 36 1
+13 3 1
+13 11 1
+13 6 1
+13 2 1
+23 2 1
+17 21 1
+8 12 1
+8 3 3
+8 20 2
+8 2 2
+31 32 1
+31 34 1
+26 2 1
+2 24 1
+2 33 1
+2 3 2
+2 11 1
+2 38 1
+2 6 1
+2 20 2
+27 28 1
+19 7 1
+4 3 1
+4 15 1
+38 24 1
+32 34 1
+20 3 7
+35 22 1
+35 3 2
+35 36 1
+22 3 3
+3 36 1
+11 6 1

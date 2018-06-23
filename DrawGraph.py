@@ -380,6 +380,7 @@ def load_infomap_graph(filters=None, save=False, consider_locations=True, season
         minW_array = [10 * multi]
         #maxW_array = [maxWeight+100]
         maxW_array = [1300]
+    count_nodes = 0
     for minW in minW_array:
         for maxW in maxW_array:
             if minW >= maxW:
@@ -391,10 +392,12 @@ def load_infomap_graph(filters=None, save=False, consider_locations=True, season
             # filter based on minW and maxW
             for destination1, destination2, nw in g_tmp.edges(data=True):
                 if minW-1 < nw['weight'] < maxW:
+                    count_nodes += nw['weight']*2
                     G.add_edge(destination1, destination2, weight=float(nw['weight'])/maxWeight)
             if len(G.nodes()) == 0:
                 continue
-            txt_name = "/infomap/infomap_minW="+str(float(minW)/maxWeight)+"_"+get_fname(filters,season)+".net"
+            txt_name = ("/infomap/infomap_minW="+str(float(minW)/maxWeight)+"_"+get_fname(filters,season)+ \
+                       "_nodes="+ str(count_nodes)+".net").replace(" ","_")
             with open(outputFolder+txt_name, str('w')) as f:
                 # Pajek format (more info in FilterGraph)
                 newline = str("\n")  # linux
@@ -426,11 +429,19 @@ def load_infomap_graph(filters=None, save=False, consider_locations=True, season
             subprocess.check_call([runp,
                                    outputFolder+txt_name,
                                    # outputFolder+'/ninetriangless.net',
-                                 out_path, "-N 10",  "--overlapping", "--bftree"])
+                                 out_path+"/overlapping", "-N 10",  "--overlapping", "--bftree"])
             subprocess.check_call([runp,
                                    outputFolder+txt_name,
                                    # outputFolder+'/ninetriangless.net',
-                                   out_path, "-N 10",  "--overlapping", "--tree"])
+                                   out_path+"/overlapping", "-N 10",  "--overlapping", "--tree"])
+            subprocess.check_call([runp,
+                                   outputFolder+txt_name,
+                                   # outputFolder+'/ninetriangless.net',
+                                   out_path, "-N 10",  "--non-backtracking", "--bftree"])
+            subprocess.check_call([runp,
+                               outputFolder+txt_name,
+                               # outputFolder+'/ninetriangless.net',
+                               out_path, "-N 10",  "--non-backtracking", "--tree"])
             # --preferred-number-of-modules 4
             # --overlapping
             dict_groups = {}
@@ -490,14 +501,18 @@ def load_infomap_graph(filters=None, save=False, consider_locations=True, season
                          txt_name.replace(".net", ".png"))
 
             print nx.info(G)
-            txt_name = "/infomap/infomap_minW="+str(float(minW)/maxWeight)+"_"+get_fname(filters,season)+".net"
+            txt_name = ("/infomap/infomap_minW="+str(float(minW)/maxWeight)+"_"+get_fname(filters,season)+ \
+                       "_nodes="+ str(count_nodes)+".net").replace(" ","_")
             out_path = os.path.dirname(os.path.abspath(__file__))+"/"+outputFolder+"/N10/infomap" #+txt_name.replace(".txt", "_out.txt")
             modules = len(G.nodes())/2
             if modules > 10:
                 modules = 10
             subprocess.check_call([runp,
                                outputFolder+txt_name,
-                               out_path, "-N 10", "--preferred-number-of-modules "+unicode(modules), "--overlapping",  "--tree"])
+                               out_path, "-N 10", "--preferred-number-of-modules "+unicode(modules), "--overlapping",  "--bftree"])
+            subprocess.check_call([runp,
+                                   outputFolder+txt_name,
+                                   out_path, "-N 10", "--preferred-number-of-modules "+unicode(modules), "--overlapping",  "--tree"])
             with open(outputFolder+"/N10"+txt_name.replace('.net','.tree'), str('rU')) as f:  # Universal newline mode
                 for line in f:
                     if line[0] != '#':
@@ -538,45 +553,67 @@ def load_infomap_graph(filters=None, save=False, consider_locations=True, season
 #load_infomap_graph(save=True)
 
 
-def draw_graph_for_destination(destination, save=False, filters=None, season=Season.ALL):
-    G = generate_graph_for_destination(destination, filters=filters, refresh=True, season=season)
+def draw_graph_for_destination(destination, save=True, filters=None, season=Season.ALL):
+    plt.clf()
+    G, pos = generate_graph_for_destination(destination, filters=filters, season=season)
     print(nx.info(G))
-    nx.draw(G)
-    plt.axis('on')
+    nx.draw_networkx_nodes(G, pos=pos, nodelist=G.nodes)
+
     figManager = plt.get_current_fig_manager()
     if os.name != 'posix':  # mac
         figManager.window.state('zoomed')
     if save:
-        plt.savefig(outputFolder + "/" + destination+"_"+get_fname(filters,season)+".png")
+        plt.savefig(outputFolder + "/" + destination+"/_"+get_fname(filters,season)+
+                    "_nodes="+ str(len(G.nodes))+".png")
     plt.show()
 
     # --preferred-number-of-modules 4
     # --overlapping
 dict_groups = {}
 #plt.show()  # display
-"""       {"gender": ["F"]},
-         {"gender": ["M"]},
+filters_arr =[
+#       {"gender": ["F"]},
+#         {"gender": ["M"]},
           {"age": ["1"]},  {"age": ["2"]},  {"age": ["3"]},
-          {"age": ["4"]},  {"age": ["5"]},  {"age": ["6"]},"""
-filters_arr = [      {"user_travel_style": ["60+_Traveler"]}  ]
-"""   {"user_travel_style": ["Art and Architecture Lover"]},
- {"user_travel_style": ["Backpacker"]},
- {"user_travel_style": ["Beach Goer"]},
-    {"user_travel_style": ["Eco-tourist"]},
+          {"age": ["4"]},  {"age": ["5"]},  {"age": ["6"]}]
+"""
+    {"user_travel_style": ["60+ Traveler"]},
     {"user_travel_style": ["Family Vacationer"]},
-    {"user_travel_style": ["Foodie"]},
-    {"user_travel_style": ["History Buff"]},
-    {"user_travel_style": ["Like a Local"]},
-        {"user_travel_style": ["Luxury Traveler"]},
-    {"user_travel_style": ["Nature Lover"]},
-    {"user_travel_style": ["Nightlife Seeker"]},
+    {"user_travel_style": ["Backpacker"]},
     {"user_travel_style": ["Peace and Quiet Seeker"]},
+    {"user_travel_style": ["History Buff"]},
+
+    {"user_travel_style": ["Luxury Traveler"]},
+    {"user_travel_style": ["Art and Architecture Lover"]},
     {"user_travel_style": ["Shopping Fanatic"]},
-    {"user_travel_style": ["Thrifty Traveler"]},
-    {"user_travel_style": ["Thrill Seeker"]},
-    {"user_travel_style": ["Trendsetter"]},
-    {"user_travel_style": ["Urban Explorer"]},
-    {"user_travel_style": ["Vegetarian"]}"""
+    {"user_travel_style": ["Nightlife Seeker"]},"""
+
+filters_arr =[
+    {"user_travel_style": ["60+ Traveler"]},
+    {"user_travel_style": ["Family Vacationer"]},
+    {"user_travel_style": ["Backpacker"]},
+    {"user_travel_style": ["Peace and Quiet Seeker"]},
+    {"user_travel_style": ["History Buff"]},
+
+    {"user_travel_style": ["Luxury Traveler"]},
+    {"user_travel_style": ["Art and Architecture Lover"]},
+    {"user_travel_style": ["Shopping Fanatic"]},
+    {"user_travel_style": ["Nightlife Seeker"]},
+    {"user_travel_style": ["Luxury Traveler"], "age": ["3"]},
+    {"user_travel_style": ["Art and Architecture Lover"], "age": ["3"]},
+    {"user_travel_style": ["Shopping Fanatic"], "age": ["3"]},
+    {"user_travel_style": ["Nightlife Seeker"], "age": ["3"]},
+    {"user_travel_style": ["Luxury Traveler"], "age": ["2"]},
+    {"user_travel_style": ["Art and Architecture Lover"], "age": ["2"]},
+    {"user_travel_style": ["Shopping Fanatic"], "age": ["2"]},
+    {"user_travel_style": ["Nightlife Seeker"], "age": ["2"]},
+
+    {"user_travel_style": ["Luxury Traveler"], "age": ["6"]},
+    {"user_travel_style": ["Art and Architecture Lover"], "age": ["6"]},
+    {"user_travel_style": ["Shopping Fanatic"], "age": ["6"]},
+    {"user_travel_style": ["Nightlife Seeker"], "age": ["6"]},
+
+]
 filters_arr = [{"user_hometown_country": ["Slovenia"]},
                {"user_hometown_country": ["United Kingdom"]},
                {"user_hometown_country": ["United States"]},
@@ -584,9 +621,10 @@ filters_arr = [{"user_hometown_country": ["Slovenia"]},
                {"user_hometown_country": ["Croatia"]},
                {"user_hometown_country": ["Austria"]},
                {"user_hometown_country": ["Hungary"]}]
-#for filters in filters_arr:
-#    load_infomap_graph(filters, save=True)
-draw_graph_for_destination("Bled")
+
+for filters in filters_arr:
+    #load_infomap_graph(filters, save=True)
+    draw_graph_for_destination("Ljubljana", True, filters)
 """load_infomap_graph(save=True)
 load_infomap_graph(save=True, season=Season.SUMMER)
 load_infomap_graph(save=True, season=Season.WINTER)

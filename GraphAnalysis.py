@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import matplotlib.pyplot as plt
 import networkx as nx
-import numpy as np, sys
-from collections import defaultdict
 from Database import fetchall_links_with_weight_threshold, get_destinations, get_destinations_id_asc, get_max_weight, \
     folder, DataType, selectedData
 from FilterGraph import generate_graph
@@ -64,6 +61,7 @@ Number of edges: 649
 Average degree:  16.0247
 """
 
+
 def calculate_rules(G, min_support=0.65, confidence=0.8, lift=1.1):
     """Apriori-based frequent substructure mining algorithms share similar characteristics with Apriori based
         frequent itemset mining algorithms. The search for frequent graphs starts with graphs of
@@ -94,12 +92,7 @@ def calculate_rules(G, min_support=0.65, confidence=0.8, lift=1.1):
     # https://programminghistorian.org/en/lessons/exploring-and-analyzing-network-data-with-python
 
 filters = {"subject_type": ["attractions"]}
-#filters = {"subject_type": ["hotels"]}
-filters =  {"subject_type": ["restaurants"]}
-filters =  {"gender": ["M"]}
-filters = {"user_travel_style": ["60+ Traveler"]}
-filters ={"user_travel_style": ["Art and Architecture Lover"]}
-#{"user_travel_style": ["Backpacker"]}
+
 G = load_networkx_graph(filters)
 calculate_rules(G, min_support=0.4, confidence=0.5, lift=1.1)
 

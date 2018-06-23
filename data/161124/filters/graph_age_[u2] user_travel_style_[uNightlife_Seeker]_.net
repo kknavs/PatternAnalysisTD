@@ -1,0 +1,57 @@
+*Vertices 19
+1 "Ljubljana"
+2 "Bled"
+3 "Kranjska Gora"
+4 "Brezice"
+5 "Bohinj"
+6 "Bovec"
+7 "Postojna"
+8 "Cerklje na Gorenjskem"
+9 "Brda"
+10 "Smarjeske Toplice"
+11 "Gorje"
+12 "Vipava"
+13 "Skocjan"
+14 "Udine"
+15 "Trieste"
+16 "Buzet"
+17 "Opatija"
+18 "Reka"
+19 "Zagreb"
+*Edges 36
+6 1 1
+6 2 1
+6 11 1
+6 13 1
+6 5 1
+4 19 1
+19 15 1
+19 17 1
+19 8 1
+19 2 3
+19 18 2
+19 1 8
+19 11 1
+17 1 1
+17 7 1
+13 1 1
+13 2 1
+13 11 1
+13 5 1
+9 1 1
+9 12 1
+3 1 1
+3 10 1
+2 15 1
+2 14 1
+2 5 2
+2 1 7
+2 11 5
+14 1 1
+12 1 1
+16 1 1
+5 1 2
+5 11 1
+1 15 1
+1 11 2
+1 7 1
