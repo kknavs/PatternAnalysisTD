@@ -8,6 +8,7 @@ from FilterGraph import generate_graph
 import pandas as pd
 from mlxtend.frequent_patterns import apriori
 from mlxtend.frequent_patterns import association_rules
+from DrawGraph import relabel_destination
 import os
 
 # http://pbpython.com/market-basket-analysis.html
@@ -49,6 +50,7 @@ def load_networkx_graph(filters=None, min_w=0, max_w=maxWeight+1):
                     else:
                         w = 0
                     G.add_edge(l.destination1, l.destination2, weight=w)
+    relabel_destination(G)
     print(nx.info(G))
     return G
 

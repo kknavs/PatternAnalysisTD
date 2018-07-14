@@ -3,10 +3,11 @@ from __future__ import unicode_literals
 
 from Database import fetchall_links_with_weight_threshold, get_destinations, get_destinations_id_asc, get_max_weight, \
     folder, DataType, selectedData, get_all_different_attributes, get_all_different_values_for_attribute_name,\
-    get_records_by_destinations, get_attributte_value_by_name_for_record_id
+    get_records_by_destinations_with_location, get_attributte_value_by_name_for_record_id
 import networkx as nx
 import os, datetime
 import numpy as np
+import copy
 
 outputFolderFilters = folder + "/filters"
 
@@ -26,8 +27,8 @@ class Filter:
         self.apply_filter = apply_filter
 
     def __repr__(self):
-        return ("Filter: name='%s', count_diff_values='%s', apply_filter='%r'" % (
-            self.name, self.count_diff_values, self.apply_filter)).encode('utf-8')
+        return ("Filter: name='%s', count_diff_values='%s', apply_filter='%r' match='%s'" % (
+            self.name, self.count_diff_values, self.apply_filter, self.match)).encode('utf-8')
 
     def has_empty_values(self):
         return '' in self.values
@@ -105,10 +106,11 @@ def reset_filters():
     return available_filters
 
 
-def prepare_filters(filters):
+def prepare_filters(filters, get_only_active=True):
     if not filters:
         return None
     available_filters = reset_filters()
+    f_copies =[]
     if filters:
         keys = filters.keys()[::]
         for f in available_filters:
@@ -116,16 +118,24 @@ def prepare_filters(filters):
                 f.apply_filter = True
                 f.match = filters[f.name]
                 if len(filters[f.name]) > 1:
-                    f.match = filters[f.name][0]
-                    if filters[f.name][1] == ["all"]:
+                    if filters[f.name][1] == ["all"]:  # still needed?
+                        f.match = filters[f.name][0]
                         f.text_all = True
+                    #else:
+                    #    for f_match in filters[f.name]:
+                    #        f_copy = copy.deepcopy(f)
+                    #        f_copies.append(f_copy)
+                    #        f.match = f_match
+
                 keys.remove(f.name)
         if len(keys) > 0:
             print "INVALID FILTERS: "+', '.join(keys)
-    return available_filters
+    if get_only_active:
+        return [f for f in available_filters if f.apply_filter]+f_copies
+    return available_filters + f_copies
 
 
-def filter_add_link(link, filters, season=Season.ALL, check_both_nodes=False, destination=None):
+def filter_add_link(link, false_users, filters, season=Season.ALL, check_both_nodes=False, destination=None, fname=None):
     """
     Check if link is added based on selected filters. Returns new weight.
     If destination is present, returns dict with record id as key, value is lat & long of records.
@@ -136,13 +146,16 @@ def filter_add_link(link, filters, season=Season.ALL, check_both_nodes=False, de
     if not filters and season == Season.ALL and not destination:
         return link.weight
     season_period = get_season_period(season)
-    t = get_records_by_destinations(link.destination1, link.destination2, destination=destination)
+    t = get_records_by_destinations_with_location(link.destination1, link.destination2)
     print "Original weight: "+str(link.weight)
 
     w = len(t.all())
     print w
     recordsId = dict()
     for tt in t:
+        if tt[0].user_id in false_users: #s22:32:50.337475 22:52:53.054646
+            w -= 1
+            continue
         if season != Season.ALL:
             date1 = tt[3]
             date2 = tt[0].review_date
@@ -157,6 +170,7 @@ def filter_add_link(link, filters, season=Season.ALL, check_both_nodes=False, de
             if season == Season.SUMMER:
                 if not (latest < d_latest and oldest > d_oldest):
                     w -= 1
+                    false_users.add(tt[0].user_id)
                     continue
             else:  # different year in start and end date of season
                 if latest.year == oldest.year:
@@ -166,6 +180,7 @@ def filter_add_link(link, filters, season=Season.ALL, check_both_nodes=False, de
                         d_oldest = datetime.datetime(oldest.year-1, season_period[0][1], season_period[0][0])
                 if not (latest < d_latest and oldest > d_oldest):
                     w -= 1
+                    false_users.add(tt[0].user_id)
                     continue
                 else:
                     if season == Season.WINTER_WITHOUT_NEW_YEAR:
@@ -175,14 +190,21 @@ def filter_add_link(link, filters, season=Season.ALL, check_both_nodes=False, de
                                                      get_season_period(Season.NEW_YEAR)[0][0])
                         if latest < d_latest and oldest > d_oldest:
                             w -= 1
+                            false_users.add(tt[0].user_id)
                             continue
 
         if not filters:
-            if destination:
+            if fname:
+                fname.write(tt[0].user_id + "**" + tt[0].destination + "*" + str(tt[0].id) + "*" +
+                            tt[0].review_date.ctime() + "*" +str(tt[0].latitude) + "*" + str(tt[0].longitude) + "**" +
+                            tt[1] + "*" + str(tt[2]) + "*" +
+                            tt[3].ctime() + "*" + str(tt[5]) + "*" + str(tt[4]) +
+                            '\n')
+            """if destination:
                 if tt[0].destination == destination:
                     recordsId[tt[0].id] = np.array([tt[0].longitude, tt[0].latitude])
                 else:
-                    recordsId[tt[2]] = np.array([tt[4], tt[5]])
+                    recordsId[tt[2]] = np.array([tt[4], tt[5]])"""
             continue
         attributes = tt[0].attributes
         wtmp = w
@@ -197,22 +219,31 @@ def filter_add_link(link, filters, season=Season.ALL, check_both_nodes=False, de
                                 # or \
                                 # (f.text_all and not all([x.strip() in f.match for x in a.value.split(",")])):  # and
                                 w -= 1
+                                false_users.add(tt[0].user_id)
                                 break
                     elif a.name == f.name and not any([a.value == v for v in f.match]):  # or
                         w -= 1
+                        false_users.add(tt[0].user_id)
                         break
                     elif a.name == f.name:
                         if check_both_nodes:
                             a_v = get_attributte_value_by_name_for_record_id(f.name, tt[2])[0][0]
                             if not any([a_v == v for v in f.match]):  # or
                                 w -= 1
+                                false_users.add(tt[0].user_id)
                                 break
         else:
-            if destination:
+            if fname:
+                fname.write(tt[0].user_id + "**" + tt[0].destination + "*" + str(tt[0].id) + "*" +
+                            tt[0].review_date.ctime() + "*" +str(tt[0].latitude) + "*" + str(tt[0].longitude) + "**" +
+                            tt[1] + "*" + str(tt[2]) + "*" +
+                            tt[3].ctime() + "*" + str(tt[5]) + "*" + str(tt[4]) +
+                            '\n')
+            """if destination:
                 if tt[0].destination == destination:
                     recordsId[tt[0].id] = np.array([tt[0].longitude, tt[0].latitude])
                 else:
-                    recordsId[tt[2]] = np.array([tt[4], tt[5]])
+                    recordsId[tt[2]] = np.array([tt[4], tt[5]])"""
     if destination:
         return recordsId
     print "New weight: "+str(w)
@@ -255,7 +286,8 @@ def generate_graph(filters=None, refresh=False, season=Season.ALL, check_both_no
     filters_to_apply = prepare_filters(filters)
     links = fetchall_links_with_weight_threshold(1)
     # add nodes and edges to txt and graph
-    with open(outputFolderFilters+txt_name, 'w') as f:
+    with open(outputFolderFilters+txt_name, 'w') as f, \
+            open(outputFolderFilters+txt_name.replace(".net","graph_links"), 'w') as gf:
         # link list format - is a minimal format to describe a network by only specifying a set of links
         # link list has no support for node names, hence we save graph in Pajek format:
         # a network in Pajek format
@@ -271,11 +303,11 @@ def generate_graph(filters=None, refresh=False, season=Season.ALL, check_both_no
         1 4 1
         2 3 1
         ..."""
+        false_users = set()
         for l in links:
-            if selectedData == DataType.SLO:
-                nw = filter_add_link(l, filters_to_apply, season=season, check_both_nodes=check_both_nodes)
-                if nw > 0:
-                    G.add_edge(l.destination1, l.destination2, weight=nw) #float(nw)/maxW)
+            nw = filter_add_link(l, false_users, filters_to_apply, season=season, check_both_nodes=check_both_nodes, fname=gf)
+            if nw > 0:
+                G.add_edge(l.destination1, l.destination2, weight=nw) # float(nw)/maxW)
         if len(G.nodes()) == 0:
             print "Empty graph!"
             return G
@@ -301,7 +333,6 @@ def generate_graph(filters=None, refresh=False, season=Season.ALL, check_both_no
     return G
 
 
-# TODO:
 def generate_graph_for_destination(destination, filters=None, refresh=False, season=Season.ALL):
     """
     Generate graph of records for destination, if possible read graph from previously saved file.
@@ -327,8 +358,8 @@ def generate_graph_for_destination(destination, filters=None, refresh=False, sea
     filters_to_apply = prepare_filters(filters)
     links = fetchall_links_with_weight_threshold(1)
     # add nodes and edges to txt and graph
-    pos =dict()
-    with open(outputFolderFiltersC+txt_name, 'r') as f:
+    pos = dict()
+    with open(outputFolderFiltersC+txt_name, str('rw')) as f:
         for l in links:
             if l.destination1 == destination or l.destination2 == destination:
                 nw = filter_add_link(l, filters_to_apply,  destination=destination, season=season)
@@ -341,7 +372,7 @@ def generate_graph_for_destination(destination, filters=None, refresh=False, sea
             return G, pos
 
     outputFolderFiltersC.replace("/"+destination, "")
-    #nx.write_graphml(G, out_path+txt_name[:].replace(".net",".graphML"))
+    nx.write_graphml(G, out_path+txt_name[:].replace(".net",".graphML"))
     #nx.write_weighted_edgelist(G, out_path+txt_name[:].replace(".net",".edgelist"), delimiter='\t', encoding='utf-8')
     print "Finished generating, successfully saved."
     return G, pos
@@ -366,4 +397,9 @@ def generate_graph_for_destination(destination, filters=None, refresh=False, sea
     {"user_travel_style": ["Vegetarian"]}
     """
 #for filters in filters_arr:
-#    generate_graph(filters=filters, refresh=True)
+start = datetime.datetime.now()
+filter = {"age": ["1"]} # 1: 10, 13  2: 45, 131  1+2: 47, 139
+#graph = generate_graph(filters=filter, refresh=True)
+#print nx.info(graph)
+#print start
+#print datetime.datetime.now()

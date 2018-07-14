@@ -9,7 +9,7 @@ import numpy as np
 from networkx.algorithms import community as community_nx
 import itertools
 from operator import itemgetter
-from FilterGraph import Season, generate_graph, generate_graph_for_destination, get_fname
+from DrawGraph import draw_labels
 # https://github.com/taynaud/python-louvain/tree/networkx2
 # pip install -U git+https://github.com/taynaud/python-louvain.git@networkx2
 
@@ -112,7 +112,7 @@ def draw_graph2(save, consider_locations=True):
                 nx.draw_networkx_edges(G, pos, edgelist=esmall,
                                        width=1, alpha=0.2, edge_color='b', style='dashed')
                 # labels
-                nx.draw_networkx_labels(G, pos, font_size=15, font_family='sans-serif')
+                draw_labels(G, pos)
                 plt.axis('off')
                 figManager = plt.get_current_fig_manager()
                 figManager.window.state('zoomed')
@@ -120,63 +120,6 @@ def draw_graph2(save, consider_locations=True):
                     plt.savefig(outputFolder + "/graph2_maxW="+str(maxW)+"_midW="+str(midW)+"_minW="+str(minW)+".png")
     plt.show()
 
-
-def draw_louvain(save=True, consider_locations=True,filters=None, season=Season.ALL):
-    plt.clf()
-    G = generate_graph(filters=filters, season=season)
-    print(nx.info(G))
-    #nx.draw_networkx_nodes(G, pos=pos, nodelist=G.nodes)
-
-    # use one of the edge properties to control line thickness
-    edgewidth = [d['weight']/float(maxWeight/avg) for (u,v,d) in G.edges(data=True)]
-    #edgewidth = [d['weight']/float(avg) for (u,v,d) in G.edges(data=True)]
-    emedium = [(u, v) for (u, v, d) in G.edges(data=True)]
-    pos=nx.spring_layout(G)  # spring, shell, circular positions for all nodes
-    if consider_locations:
-        change_nodes_position(pos)
-    # labels
-    nx.draw_networkx_labels(G, pos, font_size=13, alpha=0.8)
-    #nx.draw_networkx_nodes(G,pos,alpha=0.6,node_size=400)
-    nx.draw_networkx_edges(G, pos, edgelist=emedium,
-                           width=edgewidth, alpha=0.7)
-    print nx.is_connected(G)
-    print nx.number_connected_components(G)
-    comps = nx.connected_component_subgraphs(G)
-    print "Comps"
-    for c in comps:
-        print c
-    ccs = nx.clustering(G)
-    print ccs
-    #print sum(ccs)/len(ccs)
-    # print nx.__version__  is 2.1
-    partition = Community.best_partition(G, None, 'weight')
-    for count,i in enumerate(set(partition.values())):
-        print "Community", i
-        members = list_nodes = [nodes for nodes in partition.keys() if partition[nodes] == i]
-        print members
-        #nx.set_node_attributes(members, 'color', 'b')
-        nx.draw_networkx_nodes(G,pos,
-                               nodelist=members,
-                               node_color=colors[count],
-                               node_size=350,
-                               alpha=0.75)
-    plt.axis('off')
-    figManager = plt.get_current_fig_manager()
-    #figManager.window.state('zoomed')
-    if save:
-        plt.savefig(outputFolder + "/louvain/louvain_"+get_fname(filters,season)+".png")
-
-#    plt.show()
-
-filters_arr = [{"user_hometown_country": ["Slovenia"]},
-               {"user_hometown_country": ["United Kingdom"]},
-               {"user_hometown_country": ["United States"]},
-               {"user_hometown_country": ["Italy"]},
-               {"user_hometown_country": ["Croatia"]},
-               {"user_hometown_country": ["Austria"]},
-               {"user_hometown_country": ["Hungary"]}]
-for filters in filters_arr:
-    draw_louvain(filters=filters, save=True)
 
 def draw_graph3(save, consider_locations=True):
     G = nx.Graph()
@@ -207,7 +150,7 @@ def draw_graph3(save, consider_locations=True):
             if consider_locations:
                 change_nodes_position(pos)
             # labels
-            nx.draw_networkx_labels(G, pos, font_size=13, font_family='sans-serif', alpha=0.8)
+            draw_labels(G, pos)
             #nx.draw_networkx_nodes(G,pos,alpha=0.6,node_size=400)
             nx.draw_networkx_edges(G, pos, edgelist=emedium,
                                    width=edgewidth, alpha=0.7)
@@ -279,7 +222,7 @@ def draw_graph4(save, consider_locations=True):
             sliding = float(len(pos))/N_groups
             print sliding
             # labels
-            nx.draw_networkx_labels(G, pos, font_size=13, font_family='sans-serif', alpha=0.8)
+            draw_labels(G, pos)
             #nx.draw_networkx_nodes(G,pos,alpha=0.6,node_size=400)
             nx.draw_networkx_edges(G, pos, edgelist=emedium,
                                    width=edgewidth, alpha=0.7)
@@ -338,7 +281,7 @@ def draw_graph5(save, consider_locations=True):
             sliding = float(len(emedium))/N_groups #maxWeight/N_groups
             print str("Sliding:")+str(sliding)
             # labels
-            nx.draw_networkx_labels(G, pos, font_size=14, font_family='sans-serif', alpha=0.8)
+            draw_labels(G, pos)
             allMembers = set()
             edgeColors = []
             for count in range(N_groups):
@@ -540,7 +483,7 @@ def draw_graph_girvan_newman(save, consider_locations=True):
             >>> limited = itertools.takewhile(lambda c: len(c) <= k, comp)
             >>> for communities in limited:
             ...     print(tuple(sorted(c) for c in communities)) # doctest: +SKIP"""
-            nx.draw_networkx_labels(G, pos, font_size=13, font_family='sans-serif', alpha=0.8)
+            draw_labels(G, pos)
             nx.draw_networkx_edges(G, pos, width=edgewidth, egdelist=G.edges, alpha=0.6)
             for communities in limited:
                 dict_groups = {}
@@ -595,7 +538,7 @@ def draw_graph_k_clique(save, consider_locations=True):
             # some are in no generated communities
             nx.draw_networkx_edges(G, pos, width=edgewidth, egdelist=G.edges, alpha=0.6)
             nx.draw_networkx_nodes(G,  pos, with_lables=False, node_color=(1,1,1),alpha=0.2, node_size=300)
-            nx.draw_networkx_labels(G, pos, font_size=13, font_family='sans-serif', alpha=0.8)
+            draw_labels(G, pos)
 
             #K5 = nx.convert_node_labels_to_integers(G,first_label=2)
             #G.add_edges_from(K5.edges())
@@ -685,5 +628,6 @@ if selectedData == DataType.SLO:
 #draw_graph_girvan_newman(False)
 #draw_graph_k_clique(False)
 #draw_kernighan_lin_bisection(False)
+
 
 

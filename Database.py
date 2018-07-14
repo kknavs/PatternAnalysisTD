@@ -103,7 +103,9 @@ def add_records_from_csv(csvreader, n_lines, selectedData):
                     record = Record(csvreader.line_num, row[' uid'].decode('utf-8').strip(),
                                     row['place_name'].decode('utf-8').strip(),
                                     pydatetime.datetime.strptime(row[' review_date'].strip(), '%Y%m%d'),
-                                    row[' username'].decode('utf-8').strip())
+                                    row[' username'].decode('utf-8').strip(),
+                                    row[' lat'].decode('utf-8').strip(),
+                                    row[' lng'].decode('utf-8').strip())
 
                 if record.user_id:
                     session.add(record)
@@ -243,6 +245,11 @@ def fetchall_links_id_asc_with_weight_threshold(weight):
 def fetchall_records_users(session=DBSession(bind=connection)):
     #return session.query(Record).distinct(Record.user_id).group_by(Record.user_id)
     return session.query(distinct(Record.user_id))
+
+
+#def  get_users_with_records(session=DBSession(bind=connection)):
+#    return session.query(Record).filter(Record.user_id == user_id, Record.flow_id == fid) \
+#        .order_by(Record.destination.asc()).all()
 
 
 def get_records_by_destinations(destination1, destination2, session=DBSession(bind=connection), destination = None):
@@ -518,11 +525,13 @@ def get_all_baskets(output_folder, min_items=2):
                 fid = 1
                 while True:
                     destinations = get_destinations_of_user(user_id, fid, session)
-                    if not destinations or len(destinations) < min_items:
+                    if not destinations:
                         break
-                    basket = [d[0] for d in destinations]
-                    file.write(', '.join(basket)+str('\n'))
-                    baskets.append([basket])
+                    if not len(destinations) < min_items:
+                        basket = [d[0] for d in destinations]
+                        file.write(' * '.join(basket))  # probably safer not to use comma, can be present in destination
+                        baskets.append(basket)
+                        file.write(' * '+user_id+str('\n'))
                     fid += 1
                 print "Done baskets: " + str(float(count)/allCount*100)
     return baskets
