@@ -1,286 +1,269 @@
 Brezovica	Ljubljana	3
 Brezovica	Trieste	1
 Brezovica	Piran/Pirano	1
-Kobarid	Vipava	2
+Kobarid	Vipava	1
 Kobarid	Brda	3
 Kobarid	Solcava	1
-Kobarid	Trieste	10
-Kobarid	Skofja Loka	2
+Kobarid	Trieste	8
+Kobarid	Skofja Loka	1
 Kobarid	Verzej	1
 Kobarid	Idrija	1
-Kobarid	Ljubljana	57
-Kobarid	Motovun	4
-Kobarid	Postojna	12
+Kobarid	Ljubljana	50
+Kobarid	Motovun	3
+Kobarid	Postojna	11
 Kobarid	Podcetrtek	1
-Kobarid	Bovec	19
-Kobarid	Zagreb	11
+Kobarid	Bovec	18
+Kobarid	Zagreb	9
 Kobarid	Jesenice	1
 Kobarid	Sezana	3
 Kobarid	Izola/Isola	1
-Kobarid	Udine	3
+Kobarid	Udine	2
 Kobarid	Tolmin	9
-Kobarid	Bohinj	25
-Kobarid	Buje	2
-Kobarid	Piran/Pirano	20
+Kobarid	Bohinj	24
+Kobarid	Buje	1
+Kobarid	Piran/Pirano	18
 Kobarid	Ptuj	2
 Kobarid	Klagenfurt	1
-Kobarid	Murska Sobota	1
 Kobarid	Smarjeske Toplice	2
 Kobarid	Kranjska Gora	7
 Kobarid	Celje	2
 Kobarid	Groznjan	1
-Kobarid	Gorje	20
+Kobarid	Gorje	18
 Kobarid	Bistrica ob Sotli	2
-Kobarid	Brezice	1
-Kobarid	Umag	1
 Kobarid	Opatija	1
 Kobarid	Kanal	7
-Kobarid	Skocjan	10
+Kobarid	Skocjan	9
 Kobarid	Radovljica	3
 Kobarid	Divaca	1
-Kobarid	Bled	46
+Kobarid	Bled	43
 Kobarid	Koper/Capodistria	1
 Kobarid	Zalec	1
 Kobarid	Cerkno	1
 Kobarid	Maribor	3
 Kobarid	Hrpelje - Kozina	1
-Kobarid	Novigrad	2
+Kobarid	Novigrad	1
 Kobarid	Buzet	1
 Motovun	Vipava	1
 Motovun	Brda	2
 Motovun	Trieste	6
 Motovun	Buzet	17
-Motovun	Ljubljana	40
+Motovun	Ljubljana	36
 Motovun	Postojna	15
 Motovun	Bovec	2
-Motovun	Zagreb	40
+Motovun	Zagreb	39
 Motovun	Sezana	1
 Motovun	Bohinj	7
 Motovun	Buje	9
-Motovun	Piran/Pirano	10
+Motovun	Piran/Pirano	9
 Motovun	Novo mesto	1
 Motovun	Klagenfurt	1
 Motovun	Kranjska Gora	1
-Motovun	Reka	4
-Motovun	Gorje	7
-Motovun	Groznjan	17
+Motovun	Reka	3
+Motovun	Gorje	6
+Motovun	Groznjan	15
 Motovun	Novigrad	9
-Motovun	Vojnik	1
 Motovun	Brezice	3
 Motovun	Umag	8
-Motovun	Opatija	14
+Motovun	Opatija	13
 Motovun	Kanal	1
 Motovun	Skocjan	3
 Motovun	Radovljica	1
-Motovun	Bled	33
-Motovun	Koper/Capodistria	1
+Motovun	Bled	31
 Motovun	Varazdin	2
 Motovun	Cerkno	1
-Motovun	Maribor	1
 Motovun	Cirkulane	1
-Tolmin	Bovec	8
+Tolmin	Bovec	7
 Tolmin	Klagenfurt	1
 Tolmin	Trieste	1
-Tolmin	Kranjska Gora	4
+Tolmin	Kranjska Gora	3
 Tolmin	Kanal	1
 Tolmin	Sezana	1
 Tolmin	Zagreb	2
 Tolmin	Skocjan	5
 Tolmin	Brda	1
-Tolmin	Bled	22
+Tolmin	Bled	20
 Tolmin	Udine	1
-Tolmin	Bohinj	8
+Tolmin	Bohinj	7
 Tolmin	Ljubljana	13
 Tolmin	Gorje	13
 Tolmin	Komen	1
-Tolmin	Piran/Pirano	3
+Tolmin	Piran/Pirano	2
 Tolmin	Postojna	5
 Tolmin	Opatija	1
 Bohinj	Menges	1
-Bohinj	Umag	1
-Bohinj	Karlovac	1
-Bohinj	Brda	1
 Bohinj	Solcava	1
-Bohinj	Trieste	19
-Bohinj	Skofja Loka	7
+Bohinj	Trieste	14
+Bohinj	Skofja Loka	5
 Bohinj	Buzet	1
-Bohinj	Ljubljana	200
+Bohinj	Ljubljana	191
 Bohinj	Kamnik	2
-Bohinj	Postojna	73
-Bohinj	Bovec	36
-Bohinj	Zagreb	22
+Bohinj	Postojna	67
+Bohinj	Bovec	35
+Bohinj	Zagreb	20
 Bohinj	Zelezniki	2
-Bohinj	Sezana	3
+Bohinj	Sezana	2
 Bohinj	Izola/Isola	2
-Bohinj	Piran/Pirano	52
+Bohinj	Piran/Pirano	47
+Bohinj	Villach	1
 Bohinj	Ptuj	7
 Bohinj	Kungota	1
 Bohinj	Klagenfurt	7
-Bohinj	Grado	1
-Bohinj	Smarjeske Toplice	2
-Bohinj	Kranjska Gora	67
+Bohinj	Smarjeske Toplice	1
+Bohinj	Kranjska Gora	64
 Bohinj	Palmanova	2
+Bohinj	Dolenjske Toplice	1
 Bohinj	Celje	4
 Bohinj	Groznjan	1
-Bohinj	Gorje	126
+Bohinj	Gorje	123
 Bohinj	Kranj	1
-Bohinj	Dolenjske Toplice	1
-Bohinj	Murska Sobota	1
-Bohinj	Brezice	6
-Bohinj	Villach	1
-Bohinj	Opatija	3
 Bohinj	Cirkulane	1
-Bohinj	Razkrizje	1
-Bohinj	Skocjan	26
-Bohinj	Radovljica	20
-Bohinj	Divaca	3
-Bohinj	Bled	263
-Bohinj	Koper/Capodistria	3
+Bohinj	Grado	1
+Bohinj	Brezice	5
+Bohinj	Umag	1
+Bohinj	Opatija	3
 Bohinj	Kanal	1
+Bohinj	Razkrizje	1
+Bohinj	Skocjan	25
+Bohinj	Radovljica	19
+Bohinj	Divaca	2
+Bohinj	Bled	256
+Bohinj	Koper/Capodistria	2
 Bohinj	Maribor	4
 Bohinj	Hrpelje - Kozina	1
 Bohinj	Novigrad	2
 Bohinj	Idrija	2
+Buje	Postojna	1
 Buje	Trieste	5
-Buje	Umag	5
+Buje	Umag	4
 Buje	Opatija	3
 Buje	Sezana	1
 Buje	Zagreb	5
 Buje	Skocjan	1
-Buje	Miren - Kostanjevica	1
 Buje	Bled	5
-Buje	Postojna	1
-Buje	Vipava	2
-Buje	Buzet	4
+Buje	Miren - Kostanjevica	1
+Buje	Buzet	2
 Buje	Groznjan	6
-Buje	Ljubljana	6
-Buje	Novigrad	6
-Buje	Piran/Pirano	8
+Buje	Ljubljana	4
+Buje	Novigrad	5
+Buje	Piran/Pirano	6
 Buje	Izola/Isola	2
 Buje	Gorje	1
 Kungota	Maribor	1
 Kungota	Gorje	1
 Kungota	Sentilj	1
 Kungota	Bled	1
-Klagenfurt	Ankaran/Ancarano	1
-Klagenfurt	Trieste	3
-Klagenfurt	Ljubljana	14
-Klagenfurt	Postojna	6
+Klagenfurt	Villach	12
 Klagenfurt	Zagreb	3
 Klagenfurt	Piran/Pirano	2
-Klagenfurt	Ptuj	1
+Klagenfurt	Opatija	1
+Klagenfurt	Skocjan	1
+Klagenfurt	Miren - Kostanjevica	1
 Klagenfurt	Kranjska Gora	2
+Klagenfurt	Radovljica	2
+Klagenfurt	Novigrad	1
+Klagenfurt	Bled	19
 Klagenfurt	Bad Kalinkirchheim	3
 Klagenfurt	Reka	1
+Klagenfurt	Ankaran/Ancarano	1
+Klagenfurt	Ljubljana	13
+Klagenfurt	Postojna	5
+Klagenfurt	Trieste	3
 Klagenfurt	Gorje	5
-Klagenfurt	Novigrad	1
-Klagenfurt	Villach	13
-Klagenfurt	Opatija	1
-Klagenfurt	Moravske Toplice	1
-Klagenfurt	Skocjan	1
-Klagenfurt	Radovljica	2
-Klagenfurt	Bled	19
-Klagenfurt	Miren - Kostanjevica	1
 Smarjeske Toplice	Dolenjske Toplice	2
 Smarjeske Toplice	Bovec	3
-Smarjeske Toplice	Trieste	2
+Smarjeske Toplice	Trieste	1
 Smarjeske Toplice	Zagreb	5
 Smarjeske Toplice	Sezana	1
 Smarjeske Toplice	Kranjska Gora	1
-Smarjeske Toplice	Bled	9
-Smarjeske Toplice	Koper/Capodistria	1
+Smarjeske Toplice	Bled	7
 Smarjeske Toplice	Zalec	1
 Smarjeske Toplice	Idrija	1
-Smarjeske Toplice	Ljubljana	10
+Smarjeske Toplice	Ljubljana	9
 Smarjeske Toplice	Maribor	1
 Smarjeske Toplice	Postojna	2
-Smarjeske Toplice	Piran/Pirano	5
-Smarjeske Toplice	Gorje	1
+Smarjeske Toplice	Piran/Pirano	4
 Smarjeske Toplice	Ptuj	2
-Varazdin	Bistrica ob Sotli	2
+Varazdin	Bistrica ob Sotli	1
 Varazdin	Lendava/Lendva	1
 Varazdin	Brezice	1
 Varazdin	Umag	1
 Varazdin	Razkrizje	1
-Varazdin	Rogatec	1
-Varazdin	Zagreb	26
+Varazdin	Zagreb	25
 Varazdin	Cakovec	3
-Varazdin	Bled	1
+Varazdin	Podcetrtek	2
+Varazdin	Rogatec	1
 Varazdin	Reka	2
 Varazdin	Cirkulane	1
 Varazdin	Ljubljana	5
 Varazdin	Postojna	1
-Varazdin	Podcetrtek	2
+Varazdin	Bled	1
 Varazdin	Opatija	1
 Postojna	Lendava/Lendva	1
 Postojna	Vipava	4
-Postojna	Karlovac	2
+Postojna	Karlovac	1
 Postojna	Brda	1
 Postojna	Solcava	1
-Postojna	Trieste	21
-Postojna	Skofja Loka	5
+Postojna	Trieste	19
+Postojna	Skofja Loka	3
 Postojna	Buzet	6
-Postojna	Ljubljana	232
+Postojna	Ljubljana	226
 Postojna	Kamnik	5
 Postojna	Novigrad	2
 Postojna	Podcetrtek	3
 Postojna	Bovec	18
 Postojna	Zagreb	63
 Postojna	Bloke	1
-Postojna	Sezana	30
+Postojna	Sezana	29
 Postojna	Miren - Kostanjevica	2
 Postojna	Lasko	1
-Postojna	Piran/Pirano	62
-Postojna	Villach	2
+Postojna	Piran/Pirano	59
+Postojna	Villach	1
 Postojna	Ptuj	5
 Postojna	Nova Gorica	1
 Postojna	Kranjska Gora	23
 Postojna	Palmanova	1
-Postojna	Reka	8
+Postojna	Reka	7
 Postojna	Celje	3
 Postojna	Groznjan	3
-Postojna	Gorje	112
+Postojna	Gorje	111
 Postojna	Kranj	1
 Postojna	Dolenjske Toplice	1
 Postojna	Bistrica ob Sotli	3
-Postojna	Brezice	7
-Postojna	Umag	4
-Postojna	Opatija	20
+Postojna	Brezice	5
+Postojna	Umag	3
+Postojna	Opatija	18
 Postojna	Razkrizje	1
-Postojna	Skocjan	47
-Postojna	Sempeter - Vrtojba	1
-Postojna	Radovljica	18
-Postojna	Divaca	5
-Postojna	Bled	241
-Postojna	Koper/Capodistria	7
+Postojna	Skocjan	46
+Postojna	Radovljica	17
+Postojna	Divaca	4
+Postojna	Bled	239
+Postojna	Koper/Capodistria	6
 Postojna	Cerkno	1
 Postojna	Maribor	5
-Postojna	Hrpelje - Kozina	1
 Postojna	Idrija	2
 Kranj	Zagreb	1
 Kranj	Karlovac	1
 Kranj	Kranjska Gora	2
 Kranj	Radovljica	1
 Kranj	Bled	4
-Kranj	Bad Kalinkirchheim	1
-Kranj	Ljubljana	9
+Kranj	Ljubljana	8
 Kranj	Gorje	1
 Kranj	Piran/Pirano	1
 Trzin	Bovec	2
-Trzin	Zagreb	2
 Trzin	Kranjska Gora	1
+Trzin	Zagreb	2
 Trzin	Bled	6
 Trzin	Ljubljana	9
 Trzin	Gorje	2
 Trzin	Piran/Pirano	1
-Brezice	Trieste	2
-Brezice	Skofja Loka	3
+Brezice	Trieste	1
+Brezice	Skofja Loka	2
 Brezice	Buzet	1
-Brezice	Ljubljana	14
+Brezice	Ljubljana	12
 Brezice	Kamnik	1
-Brezice	Gorje	6
+Brezice	Gorje	5
 Brezice	Podcetrtek	1
-Brezice	Zagreb	29
+Brezice	Zagreb	25
 Brezice	Sezana	1
 Brezice	Piran/Pirano	1
 Brezice	Ptuj	1
@@ -288,11 +271,11 @@ Brezice	Novigrad	1
 Brezice	Bistrica ob Sotli	2
 Brezice	Umag	1
 Brezice	Opatija	2
-Brezice	Skocjan	3
+Brezice	Skocjan	2
 Brezice	Radovljica	5
 Brezice	Divaca	1
-Brezice	Bled	12
-Brezice	Reka	2
+Brezice	Bled	10
+Brezice	Reka	1
 Brezice	Rogatec	1
 Brezice	Cirkulane	2
 Radovljica	Horjul	1
@@ -300,90 +283,81 @@ Radovljica	Brda	2
 Radovljica	Trieste	5
 Radovljica	Skofja Loka	1
 Radovljica	Buzet	1
-Radovljica	Ljubljana	40
+Radovljica	Ljubljana	37
 Radovljica	Kamnik	1
 Radovljica	Podcetrtek	2
-Radovljica	Bovec	5
-Radovljica	Zagreb	12
+Radovljica	Bovec	4
+Radovljica	Zagreb	11
 Radovljica	Sezana	2
 Radovljica	Lasko	1
 Radovljica	Piran/Pirano	11
 Radovljica	Villach	1
-Radovljica	Kranjska Gora	6
+Radovljica	Kranjska Gora	5
 Radovljica	Celje	2
 Radovljica	Gorje	25
 Radovljica	Cirkulane	1
 Radovljica	Bistrica ob Sotli	1
 Radovljica	Umag	1
-Radovljica	Opatija	5
-Radovljica	Moravske Toplice	1
+Radovljica	Opatija	4
 Radovljica	Skocjan	3
 Radovljica	Divaca	2
-Radovljica	Bled	72
+Radovljica	Bled	71
 Radovljica	Koper/Capodistria	2
 Radovljica	Maribor	2
 Radovljica	Idrija	1
 Divaca	Bovec	2
 Divaca	Vipava	2
 Divaca	Celje	1
-Divaca	Sezana	1
 Divaca	Opatija	1
-Divaca	Skocjan	8
+Divaca	Skocjan	7
 Divaca	Kranjska Gora	2
 Divaca	Izola/Isola	1
-Divaca	Bled	7
-Divaca	Ljubljana	3
+Divaca	Bled	6
+Divaca	Ljubljana	2
 Divaca	Maribor	1
 Divaca	Gorje	6
-Divaca	Piran/Pirano	5
+Divaca	Piran/Pirano	4
 Koper/Capodistria	Ankaran/Ancarano	1
-Koper/Capodistria	Cakovec	1
-Koper/Capodistria	Trieste	7
+Koper/Capodistria	Trieste	6
 Koper/Capodistria	Idrija	1
-Koper/Capodistria	Ljubljana	22
-Koper/Capodistria	Izola/Isola	1
+Koper/Capodistria	Ljubljana	19
+Koper/Capodistria	Gorje	6
 Koper/Capodistria	Bovec	2
 Koper/Capodistria	Zagreb	3
 Koper/Capodistria	Sezana	2
-Koper/Capodistria	Miren - Kostanjevica	1
-Koper/Capodistria	Lasko	1
+Koper/Capodistria	Izola/Isola	1
 Koper/Capodistria	Skofljica	1
-Koper/Capodistria	Piran/Pirano	21
+Koper/Capodistria	Piran/Pirano	19
 Koper/Capodistria	Ptuj	1
 Koper/Capodistria	Nova Gorica	1
 Koper/Capodistria	Kranjska Gora	2
 Koper/Capodistria	Reka	1
-Koper/Capodistria	Gorje	7
-Koper/Capodistria	Vojnik	1
 Koper/Capodistria	Murska Sobota	1
 Koper/Capodistria	Umag	1
 Koper/Capodistria	Opatija	1
 Koper/Capodistria	Skocjan	2
-Koper/Capodistria	Bled	13
-Koper/Capodistria	Sempeter - Vrtojba	1
-Koper/Capodistria	Maribor	1
-Rogatec	Bistrica ob Sotli	4
-Rogatec	Zagreb	11
+Koper/Capodistria	Bled	10
+Koper/Capodistria	Miren - Kostanjevica	1
+Rogatec	Bistrica ob Sotli	3
+Rogatec	Zagreb	9
 Rogatec	Brda	1
 Rogatec	Bled	1
 Rogatec	Cirkulane	5
 Rogatec	Podcetrtek	1
-Maribor	Vipava	1
-Maribor	Ljubljana	13
-Maribor	Kamnik	1
-Maribor	Gorje	4
-Maribor	Podcetrtek	1
-Maribor	Zagreb	1
-Maribor	Sezana	4
-Maribor	Piran/Pirano	2
-Maribor	Ptuj	4
-Maribor	Kranjska Gora	1
-Maribor	Celje	2
-Maribor	Vojnik	1
-Maribor	Opatija	3
-Maribor	Skocjan	3
-Maribor	Bled	10
 Maribor	Cerkno	1
+Maribor	Kamnik	1
+Maribor	Ptuj	4
+Maribor	Zagreb	1
+Maribor	Celje	2
+Maribor	Sezana	4
+Maribor	Opatija	2
+Maribor	Skocjan	3
+Maribor	Kranjska Gora	1
+Maribor	Bled	9
+Maribor	Ljubljana	12
+Maribor	Podcetrtek	1
+Maribor	Piran/Pirano	2
+Maribor	Gorje	4
 Komen	Ljubljana	1
 Komen	Trieste	1
 Komen	Sezana	1
@@ -391,39 +365,38 @@ Horjul	Ljubljana	1
 Horjul	Bled	1
 Lendava/Lendva	Ljubljana	1
 Trieste	Aquilea	4
-Trieste	Skocjan	10
-Trieste	Karlovac	1
+Trieste	Skocjan	9
 Trieste	Brda	3
 Trieste	Solcava	1
-Trieste	Skofja Loka	3
+Trieste	Skofja Loka	2
 Trieste	Verzej	1
 Trieste	Sempeter - Vrtojba	3
-Trieste	Ljubljana	137
-Trieste	Gorje	20
+Trieste	Ljubljana	134
+Trieste	Gorje	17
 Trieste	Bovec	5
-Trieste	Zagreb	47
+Trieste	Zagreb	45
 Trieste	Sezana	4
 Trieste	Miren - Kostanjevica	8
 Trieste	Izola/Isola	2
-Trieste	Udine	16
-Trieste	Piran/Pirano	42
+Trieste	Udine	15
+Trieste	Piran/Pirano	39
 Trieste	Nova Gorica	1
+Trieste	Novigrad	1
 Trieste	Kranjska Gora	5
 Trieste	Palmanova	1
-Trieste	Reka	11
+Trieste	Reka	9
 Trieste	Celje	2
 Trieste	Groznjan	2
 Trieste	Cirkulane	1
 Trieste	Grado	3
 Trieste	Villach	4
 Trieste	Umag	4
-Trieste	Opatija	16
+Trieste	Opatija	15
 Trieste	Kanal	1
 Trieste	Ankaran/Ancarano	5
 Trieste	Bad Kalinkirchheim	1
-Trieste	Bled	69
+Trieste	Bled	67
 Trieste	Hrpelje - Kozina	1
-Trieste	Novigrad	1
 Trieste	Idrija	1
 Verzej	Murska Sobota	2
 Verzej	Bled	2
@@ -431,7 +404,7 @@ Verzej	Ljubljana	4
 Verzej	Piran/Pirano	3
 Cirkulane	Bistrica ob Sotli	2
 Cirkulane	Opatija	1
-Cirkulane	Zagreb	20
+Cirkulane	Zagreb	18
 Cirkulane	Ljubljana	1
 Cirkulane	Bled	1
 Cirkulane	Reka	2
@@ -448,21 +421,20 @@ Kamnik	Skocjan	1
 Kamnik	Solcava	1
 Kamnik	Bled	6
 Kamnik	Cerkno	2
-Kamnik	Ljubljana	4
+Kamnik	Ljubljana	3
 Kamnik	Piran/Pirano	2
-Kamnik	Gorje	4
+Kamnik	Gorje	3
 Izola/Isola	Bovec	2
 Izola/Isola	Ptuj	2
 Izola/Isola	Umag	3
 Izola/Isola	Opatija	1
 Izola/Isola	Zagreb	2
 Izola/Isola	Brda	1
-Izola/Isola	Bled	4
+Izola/Isola	Bled	3
 Izola/Isola	Skofja Loka	1
-Izola/Isola	Ljubljana	12
-Izola/Isola	Gorje	1
-Izola/Isola	Piran/Pirano	6
+Izola/Isola	Ljubljana	11
 Izola/Isola	Novigrad	1
+Izola/Isola	Piran/Pirano	6
 Jesenice	Skocjan	1
 Sezana	Idrija	1
 Sezana	Ljubljana	30
@@ -471,7 +443,7 @@ Sezana	Podcetrtek	2
 Sezana	Bovec	2
 Sezana	Zagreb	2
 Sezana	Udine	1
-Sezana	Piran/Pirano	13
+Sezana	Piran/Pirano	12
 Sezana	Ptuj	1
 Sezana	Umag	1
 Sezana	Skocjan	16
@@ -484,33 +456,29 @@ Novo mesto	Zagreb	3
 Udine	Bovec	2
 Udine	Grado	4
 Udine	Aquilea	3
-Udine	Bled	6
+Udine	Bled	5
 Udine	Kanal	1
-Udine	Zagreb	2
-Udine	Brda	12
+Udine	Zagreb	1
+Udine	Brda	11
 Udine	Kranjska Gora	3
 Udine	Palmanova	4
 Udine	Sempeter - Vrtojba	1
-Udine	Ljubljana	6
+Udine	Ljubljana	5
 Udine	Miren - Kostanjevica	3
 Udine	Gorje	1
-Udine	Piran/Pirano	1
 Lasko	Ptuj	1
 Lasko	Bled	1
 Lasko	Skofja Loka	1
 Lasko	Celje	1
 Lasko	Ljubljana	2
-Skofljica	Ljubljana	8
+Skofljica	Ljubljana	5
 Skofljica	Vipava	1
 Ruse	Ljubljana	1
-Karlovac	Opatija	2
-Karlovac	Zagreb	5
-Karlovac	Bled	2
-Karlovac	Skofja Loka	1
-Karlovac	Reka	1
-Karlovac	Ljubljana	2
-Karlovac	Piran/Pirano	1
-Karlovac	Gorje	2
+Karlovac	Opatija	1
+Karlovac	Zagreb	4
+Karlovac	Bled	1
+Karlovac	Ljubljana	1
+Karlovac	Gorje	1
 Beltinci	Ljubljana	1
 Beltinci	Moravske Toplice	1
 Groznjan	Bovec	1
@@ -521,10 +489,10 @@ Groznjan	Skocjan	2
 Groznjan	Novigrad	1
 Groznjan	Reka	1
 Groznjan	Buzet	6
-Groznjan	Ljubljana	4
-Groznjan	Piran/Pirano	5
-Groznjan	Gorje	3
-Groznjan	Opatija	4
+Groznjan	Ljubljana	3
+Groznjan	Gorje	2
+Groznjan	Piran/Pirano	4
+Groznjan	Opatija	2
 Zelezniki	Bovec	1
 Zelezniki	Zagreb	2
 Zelezniki	Bled	1
@@ -535,43 +503,37 @@ Grado	Aquilea	1
 Grado	Bled	2
 Grado	Zagreb	1
 Grado	Skocjan	1
-Grado	Brda	2
 Grado	Kranjska Gora	1
+Grado	Brda	2
 Grado	Palmanova	1
-Grado	Sempeter - Vrtojba	1
 Grado	Miren - Kostanjevica	2
+Grado	Sempeter - Vrtojba	1
 Grado	Piran/Pirano	2
-Villach	Bovec	2
 Villach	Zagreb	2
 Villach	Miren - Kostanjevica	1
-Villach	Kranjska Gora	3
-Villach	Bled	5
+Villach	Kranjska Gora	2
+Villach	Bled	4
 Villach	Bad Kalinkirchheim	2
-Villach	Ljubljana	7
+Villach	Ljubljana	3
 Villach	Gorje	2
-Villach	Piran/Pirano	1
-Opatija	Vipava	1
 Opatija	Cakovec	1
 Opatija	Skofja Loka	1
-Opatija	Ljubljana	55
-Opatija	Gorje	14
+Opatija	Ljubljana	51
 Opatija	Podcetrtek	3
-Opatija	Bovec	1
-Opatija	Zagreb	126
-Opatija	Piran/Pirano	14
-Opatija	Ptuj	1
+Opatija	Zagreb	120
+Opatija	Piran/Pirano	12
 Opatija	Kostel	1
 Opatija	Novigrad	1
 Opatija	Kranjska Gora	2
-Opatija	Reka	44
+Opatija	Reka	42
+Opatija	Gorje	13
 Opatija	Bistrica ob Sotli	4
 Opatija	Umag	3
 Opatija	Razkrizje	1
-Opatija	Skocjan	6
-Opatija	Bled	70
+Opatija	Skocjan	5
+Opatija	Bled	67
 Opatija	Buzet	8
 Radenci	Ljutomer	1
-Radenci	Moravske Toplice	1
 Ankaran/Ancarano	Bovec	1
 Ankaran/Ancarano	Skocjan	1
 Ankaran/Ancarano	Palmanova	1
@@ -584,36 +546,35 @@ Palmanova	Bled	4
 Palmanova	Ljubljana	3
 Palmanova	Piran/Pirano	1
 Bled	Menges	1
-Bled	Vipava	3
-Bled	Umag	4
+Bled	Vipava	2
+Bled	Umag	3
 Bled	Brda	6
 Bled	Solcava	3
 Bled	Cakovec	1
-Bled	Skofja Loka	12
+Bled	Skofja Loka	8
 Bled	Buzet	4
-Bled	Ljubljana	1071
-Bled	Podcetrtek	4
-Bled	Bovec	80
-Bled	Zagreb	286
-Bled	Bloke	2
+Bled	Ljubljana	1064
+Bled	Podcetrtek	3
+Bled	Bovec	75
+Bled	Zagreb	280
+Bled	Bloke	1
 Bled	Miren - Kostanjevica	4
-Bled	Piran/Pirano	218
+Bled	Piran/Pirano	212
 Bled	Dolenjske Toplice	2
-Bled	Ptuj	27
-Bled	Kranjska Gora	69
-Bled	Reka	10
+Bled	Ptuj	24
+Bled	Kranjska Gora	66
+Bled	Reka	8
 Bled	Aquilea	2
 Bled	Celje	6
-Bled	Gorje	803
-Bled	Vojnik	1
+Bled	Gorje	792
 Bled	Bistrica ob Sotli	3
-Bled	Moravske Toplice	2
-Bled	Skocjan	81
+Bled	Moravske Toplice	1
+Bled	Skocjan	80
 Bled	Kanal	3
 Bled	Cerkno	2
 Bled	Hrpelje - Kozina	3
 Bled	Novigrad	5
-Bled	Idrija	6
+Bled	Idrija	4
 Miren - Kostanjevica	Aquilea	1
 Miren - Kostanjevica	Zagreb	2
 Miren - Kostanjevica	Brda	3
@@ -626,123 +587,114 @@ Cerkno	Idrija	1
 Cerkno	Ljubljana	3
 Cerkno	Piran/Pirano	1
 Cerkno	Ptuj	1
-Hrpelje - Kozina	Umag	1
 Hrpelje - Kozina	Skocjan	2
 Hrpelje - Kozina	Brda	1
-Hrpelje - Kozina	Ljubljana	3
-Hrpelje - Kozina	Novigrad	1
+Hrpelje - Kozina	Ljubljana	2
 Hrpelje - Kozina	Piran/Pirano	2
 Aquilea	Ptuj	1
 Aquilea	Nova Gorica	1
 Aquilea	Brda	1
-Aquilea	Ljubljana	2
+Aquilea	Ljubljana	1
 Aquilea	Gorje	1
 Solcava	Zagreb	1
+Solcava	Kanal	1
 Solcava	Bloke	1
 Solcava	Skocjan	1
 Solcava	Kranjska Gora	1
-Solcava	Kanal	1
 Solcava	Ljubljana	2
 Solcava	Gorje	2
 Solcava	Piran/Pirano	1
-Skofja Loka	Vipava	1
-Skofja Loka	Ljubljana	17
 Skofja Loka	Bovec	1
-Skofja Loka	Zagreb	2
-Skofja Loka	Bloke	1
-Skofja Loka	Piran/Pirano	3
-Skofja Loka	Ptuj	1
+Skofja Loka	Vipava	1
+Skofja Loka	Kranjska Gora	1
+Skofja Loka	Zagreb	1
 Skofja Loka	Celje	1
-Skofja Loka	Gorje	3
-Skofja Loka	Kranjska Gora	2
-Skofja Loka	Skocjan	1
+Skofja Loka	Ljubljana	13
+Skofja Loka	Piran/Pirano	1
+Skofja Loka	Gorje	1
 Idrija	Bovec	1
 Idrija	Zagreb	1
 Idrija	Skocjan	2
-Idrija	Kranjska Gora	1
 Idrija	Ljubljana	8
-Idrija	Piran/Pirano	4
+Idrija	Piran/Pirano	3
 Idrija	Gorje	1
-Ljubljana	Vipava	8
-Ljubljana	Brda	10
+Ljubljana	Vipava	6
+Ljubljana	Brda	9
 Ljubljana	Buzet	9
 Ljubljana	Store	2
-Ljubljana	Podcetrtek	6
-Ljubljana	Bovec	68
-Ljubljana	Zagreb	482
+Ljubljana	Podcetrtek	5
+Ljubljana	Bovec	66
+Ljubljana	Zagreb	477
 Ljubljana	Nova Gorica	1
-Ljubljana	Piran/Pirano	275
-Ljubljana	Ptuj	22
-Ljubljana	Murska Sobota	6
-Ljubljana	Kranjska Gora	59
-Ljubljana	Reka	31
+Ljubljana	Piran/Pirano	264
+Ljubljana	Ptuj	20
+Ljubljana	Murska Sobota	4
+Ljubljana	Kranjska Gora	57
+Ljubljana	Reka	29
 Ljubljana	Dolenjske Toplice	2
 Ljubljana	Celje	6
-Ljubljana	Gorje	274
+Ljubljana	Gorje	267
 Ljubljana	Bloke	1
 Ljubljana	Ljutomer	1
-Ljubljana	Bistrica ob Sotli	3
-Ljubljana	Umag	13
-Ljubljana	Moravske Toplice	2
+Ljubljana	Bistrica ob Sotli	1
+Ljubljana	Umag	11
+Ljubljana	Moravske Toplice	1
 Ljubljana	Razkrizje	2
 Ljubljana	Skocjan	79
 Ljubljana	Kanal	3
 Ljubljana	Sempeter - Vrtojba	1
-Ljubljana	Novigrad	4
+Ljubljana	Novigrad	3
 Gorje	Vipava	3
 Gorje	Buzet	2
+Gorje	Novigrad	1
+Gorje	Bovec	21
+Gorje	Zagreb	65
 Gorje	Podcetrtek	1
-Gorje	Bovec	23
-Gorje	Zagreb	68
-Gorje	Piran/Pirano	70
-Gorje	Ptuj	6
+Gorje	Piran/Pirano	67
+Gorje	Ptuj	5
 Gorje	Kranjska Gora	22
 Gorje	Reka	1
 Gorje	Celje	3
 Gorje	Kanal	1
 Gorje	Moravske Toplice	1
 Gorje	Razkrizje	1
-Gorje	Skocjan	39
-Gorje	Novigrad	1
-Podcetrtek	Bovec	2
-Podcetrtek	Bistrica ob Sotli	6
-Podcetrtek	Ptuj	1
+Gorje	Skocjan	38
+Podcetrtek	Bovec	1
+Podcetrtek	Bistrica ob Sotli	5
 Podcetrtek	Zagreb	6
 Podcetrtek	Celje	2
-Podcetrtek	Piran/Pirano	3
-Ljutomer	Murska Sobota	1
-Piran/Pirano	Vipava	7
-Piran/Pirano	Brda	3
-Piran/Pirano	Buzet	2
-Piran/Pirano	Bovec	28
-Piran/Pirano	Zagreb	32
-Piran/Pirano	Ptuj	8
+Podcetrtek	Piran/Pirano	2
+Podcetrtek	Ptuj	1
+Piran/Pirano	Vipava	6
+Piran/Pirano	Brda	2
+Piran/Pirano	Buzet	1
+Piran/Pirano	Bovec	25
+Piran/Pirano	Zagreb	31
+Piran/Pirano	Ptuj	7
 Piran/Pirano	Nova Gorica	2
-Piran/Pirano	Kranjska Gora	25
+Piran/Pirano	Kranjska Gora	21
 Piran/Pirano	Reka	2
 Piran/Pirano	Celje	3
 Piran/Pirano	Dolenjske Toplice	2
-Piran/Pirano	Umag	11
+Piran/Pirano	Umag	10
 Piran/Pirano	Kanal	1
-Piran/Pirano	Skocjan	26
+Piran/Pirano	Skocjan	25
 Piran/Pirano	Sempeter - Vrtojba	1
-Piran/Pirano	Novigrad	2
-Ptuj	Vipava	1
+Piran/Pirano	Novigrad	1
 Ptuj	Bovec	2
-Ptuj	Zagreb	9
+Ptuj	Zagreb	7
 Ptuj	Kranjska Gora	2
 Ptuj	Reka	1
 Ptuj	Celje	1
-Ptuj	Bistrica ob Sotli	1
 Ptuj	Skocjan	2
-Bistrica ob Sotli	Zagreb	13
+Bistrica ob Sotli	Zagreb	10
 Bistrica ob Sotli	Kranjska Gora	2
 Bistrica ob Sotli	Celje	1
-Kranjska Gora	Brda	3
+Kranjska Gora	Brda	2
 Kranjska Gora	Buzet	1
-Kranjska Gora	Bovec	17
+Kranjska Gora	Bovec	16
 Kranjska Gora	Zagreb	7
-Kranjska Gora	Bloke	2
+Kranjska Gora	Bloke	1
 Kranjska Gora	Bad Kalinkirchheim	1
 Kranjska Gora	Reka	2
 Kranjska Gora	Celje	2
@@ -751,23 +703,22 @@ Kranjska Gora	Skocjan	3
 Kranjska Gora	Novigrad	1
 Vojnik	Celje	1
 Murska Sobota	Moravske Toplice	3
-Vipava	Umag	2
+Vipava	Umag	1
 Vipava	Skocjan	1
 Vipava	Brda	1
-Vipava	Novigrad	2
+Vipava	Novigrad	1
 Brda	Bovec	5
-Brda	Zagreb	2
+Brda	Zagreb	1
 Brda	Umag	1
 Cakovec	Umag	1
 Cakovec	Razkrizje	2
-Cakovec	Zagreb	9
+Cakovec	Zagreb	8
 Cakovec	Reka	1
 Buzet	Bovec	2
 Buzet	Umag	2
-Buzet	Zagreb	14
+Buzet	Zagreb	13
 Buzet	Skocjan	1
-Buzet	Novigrad	1
-Buzet	Reka	2
+Buzet	Reka	1
 Bovec	Zagreb	9
 Bovec	Reka	2
 Bovec	Umag	1
@@ -775,19 +726,19 @@ Bovec	Kanal	2
 Bovec	Skocjan	12
 Bovec	Novigrad	1
 Zagreb	Kostel	1
-Zagreb	Dolenjske Toplice	1
 Zagreb	Celje	1
-Zagreb	Umag	11
+Zagreb	Dolenjske Toplice	1
+Zagreb	Umag	10
 Zagreb	Kanal	2
 Zagreb	Razkrizje	3
-Zagreb	Skocjan	20
+Zagreb	Skocjan	19
 Zagreb	Reka	52
-Zagreb	Novigrad	6
+Zagreb	Novigrad	4
 Bad Kalinkirchheim	Umag	1
 Celje	Skocjan	1
 Celje	Reka	1
 Novigrad	Reka	1
-Novigrad	Umag	14
+Novigrad	Umag	10
 Dolenjske Toplice	Skocjan	1
 Umag	Reka	3
 Kanal	Skocjan	1

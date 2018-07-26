@@ -8,15 +8,14 @@ Trieste	Grado	1
 Trieste	Skocjan	1
 Cirkulane	Zagreb	1
 Ljubljana	Bovec	2
-Ljubljana	Villach	1
 Ljubljana	Zagreb	7
 Ljubljana	Novo mesto	1
 Ljubljana	Sezana	1
 Ljubljana	Klagenfurt	1
 Ljubljana	Kranj	1
 Ljubljana	Kranjska Gora	2
-Ljubljana	Radovljica	2
-Ljubljana	Bled	13
+Ljubljana	Radovljica	1
+Ljubljana	Bled	12
 Ljubljana	Moravske Toplice	1
 Ljubljana	Bohinj	3
 Ljubljana	Gorje	1
@@ -34,8 +33,7 @@ Zagreb	Brezice	2
 Zagreb	Opatija	4
 Zagreb	Razkrizje	1
 Zagreb	Moravske Toplice	1
-Zagreb	Radovljica	1
-Zagreb	Bled	9
+Zagreb	Bled	7
 Zagreb	Varazdin	1
 Zagreb	Reka	2
 Zagreb	Bohinj	1
@@ -52,7 +50,6 @@ Bohinj	Bled	5
 Bohinj	Gorje	2
 Piran/Pirano	Kranjska Gora	1
 Piran/Pirano	Bled	1
-Piran/Pirano	Gorje	1
 Novo mesto	Bled	1
 Klagenfurt	Bled	1
 Kranjska Gora	Bled	1
@@ -61,5 +58,4 @@ Gorje	Bled	8
 Opatija	Bled	4
 Opatija	Reka	1
 Skocjan	Bled	1
-Radovljica	Bled	1
 Bled	Reka	1

@@ -56,7 +56,8 @@ Prefix P in the class name stands for a pointer, while T means a type.
 # https://github.com/snap-stanford/snap-python/blob/master/test/test-2015-18a-attr.py
 
 #plt.switch_backend('QT4Agg')
-mapping = {"Gorje":'Blejski Vintgar'}
+mapping = {"Gorje":"Blejski Vintgar"}
+back_mapping = {"Blejski Vintgar":"Gorje"}
 
 maxWeight = get_max_weight()
 multi = maxWeight/1700.0
@@ -80,13 +81,20 @@ for d in get_destinations():
 print len(destinations_dict)
 
 
-def relabel_destination(G, pos):
+def relabel_destination(G, pos=None, back=False):
     if selectedData == DataType.SLO:
-        if set(mapping.keys()).issubset(set(pos)):
-            nx.relabel_nodes(G, mapping, False)
-            for k, v in mapping.iteritems():
-                pos[v] = pos[k]
-                del pos[k]  # delete old key
+        if back:
+            mapping_t = back_mapping
+        else:
+            mapping_t = mapping
+        if not pos:
+            nx.relabel_nodes(G, mapping_t, False)
+        else:
+            if set(mapping_t.keys()).issubset(set(pos)):
+                nx.relabel_nodes(G, mapping_t, False)
+                for k, v in mapping_t.iteritems():
+                    pos[v] = pos[k]
+                    del pos[k]  # delete old key
 
 
 def draw_labels(G, pos, font_size=13):
@@ -384,6 +392,192 @@ import subprocess
 # C:\Users\Karmen\Downloads\infomap-master\Infomap.exe
 
 
+def draw_infomap_graph(G, minW, count_nodes, filters=None, save=False, consider_locations=True, season=Season.ALL,
+                       recursion_count=0):
+    txt_name = ("/infomap/infomap_minW="+str(float(minW)/maxWeight)+"_"+get_fname(filters, season)+
+                "_nodes=" + str(count_nodes)+".net").replace(" ", "_")
+    if recursion_count > 0:
+        txt_name = ("/infomap/infomap_minW="+str(float(minW)/maxWeight)+"_"+get_fname(filters,season) +
+                    "_nodes=" + str(count_nodes)+"_rec="+str(recursion_count)+".net").replace(" ", "_")
+    with open(outputFolder+txt_name, str('w')) as f:
+        # Pajek format (more info in FilterGraph)
+        newline = str("\n")  # linux
+        f.write(str("*Vertices ") + str(len(G.nodes()))+newline)
+        c = 1
+        temp_v = {}
+        for d in get_destinations_id_asc():
+            # G.add_node(d.destination)  # if all nodes added we have problems because of looping?
+            if d.destination in G.nodes():
+                f.write(str(c)+str(' "'+d.destination+'"'+newline))
+                temp_v[d.destination] = c
+                c += 1  # must follow a consequitive order.
+        f.write(str("*Edges ") + str(len(G.edges()))+newline)
+        for l in G.edges(data=True):
+            if True:
+                id1 = temp_v[l[0]]
+                id2 = temp_v[l[1]]
+                e_weight = G[l[0]][l[1]]['weight']
+                f.write(str(str(id1)+' '+str(id2)+' '+str(e_weight)+newline))
+                #f.write(str(str(id1)+' '+str(id2)+' '+str(float(1)))+newline)
+                #f.write(str(str(id1)+' '+str(id2)+' '+str(1)+'\r\n'))
+                # we write edges in Link list format
+        #./Infomap ninetriangles.net output/ -N 10 --tree --bftree
+    out_path = os.path.dirname(os.path.abspath(__file__))+"/"+outputFolder+"/infomap"
+    # tt =outputFolder+'/ninetriangless.net'
+    runp = r"c:/Users\Karmen\Downloads\infomap-master\Infomap.exe"
+    if os.name == 'posix':  # mac
+        runp = r"/Users/karmen/Downloads/infomap-master/Infomap"
+    mode = "/overlapping"
+    avg =get_avg_weight_nonzero()
+    avg = 0.9
+    subprocess.check_call([runp,
+                           outputFolder+txt_name,
+                           # outputFolder+'/ninetriangless.net',
+                           out_path + mode, "-N 20", "--undirected", "--weight-threshold "+str(avg),"--overlapping", "--bftree"])
+    subprocess.check_call([runp,
+                           outputFolder+txt_name,
+                           # outputFolder+'/ninetriangless.net',
+                           out_path+ mode, "-N 20", "--undirected", "--weight-threshold "+str(avg), "--overlapping",  "--tree"])
+    tp =   outputFolder+txt_name
+    """subprocess.check_call([runp,
+                           outputFolder+txt_name,
+                           # outputFolder+'/ninetriangless.net',
+                           out_path, "-N 10",  "--non-backtracking", "--bftree"])
+    subprocess.check_call([runp,
+                           outputFolder+txt_name,
+                           # outputFolder+'/ninetriangless.net',
+                           out_path, "-N 10",  "--non-backtracking", "--tree"])"""
+    # --preferred-number-of-modules 4
+    # --overlapping
+    dict_groups = {}
+    """Tree format
+    The resulting hierarchy will be written to a file with the extension .tree (plain text file) and corresponds
+     to the best hierarchical partition (shortest description length) of the attempts.
+     The output format has the pattern:
+    
+    # Codelength = 3.48419 bits.
+    1:1:1 0.0384615 "7" 6
+    1:1:2 0.0384615 "8" 7
+    1:1:3 0.0384615 "9" 8
+    1:2:1 0.0384615 "4" 3
+    1:2:2 0.0384615 "5" 4
+    ...
+    Each row (except the first one, which summarizes the result) begins with the
+    multilevel module assignments of a node. The module assignments are colon separated from coarse to fine
+    level, and all modules within each level are sorted by the total flow (PageRank) of the nodes they contain.
+    Further, the integer after the last colon is the rank within the finest-level module, the decimal number is
+    the amount of flow in that node, i.e. the steady state population of random walkers, the content within
+    quotation marks is the node name, and finally, the last integer is the index of the node in
+    the original network file."""
+    with open(out_path+mode+txt_name.replace("infomap/","").replace('.net','.tree'), str('rU')) as f: # Universal newline mode
+        for line in f:
+            if line[0] != '#':
+                print line.strip()
+                l = line.strip().split('"')
+                print l
+                modules, flow_amount = l[0].strip().split(" ")
+                node_name = l[1]
+                # modules, flow_amount, node_name, ind = line.strip().split(" ")
+                #  too many values to unpack - presledki v imenih
+                #node_name = l[2][1:-1]
+                dict_groups[node_name] = float(modules.split(":")[0])
+
+    for n in G.nodes():
+        print n, dict_groups.get(n)
+
+    pos = nx.spring_layout(G)  # spring, shell, circular positions for all nodes
+    if consider_locations:
+        change_nodes_position(pos)
+    plt.clf()
+    values = [dict_groups.get(node, 0.25) for node in G.nodes()]
+
+    draw_labels(G, pos)
+    edgewidth = [d['weight']*10 for (u, v, d) in G.edges(data=True)]
+    nx.draw_networkx_edges(G, pos, width=edgewidth, egdelist=G.edges, alpha=0.6)
+    nx.draw_networkx_nodes(G,pos,
+                           node_color=values,
+                           cmap=plt.cm.Set1,
+                           node_size=350,
+                           alpha=0.9)
+    plt.axis('off')
+    figManager = plt.get_current_fig_manager()
+    if os.name != 'posix':  # mac
+        figManager.window.state('zoomed')
+    if save:
+        plt.savefig(outputFolder +
+                    txt_name.replace(".net", ".png"))
+
+    print nx.info(G)
+
+
+    # uncomment if you want to test setting the modules - seems that setting modules makes singletons
+    """ 
+    txt_name = ("/infomap/infomap_minW="+str(float(minW)/maxWeight)+"_"+get_fname(filters,season)+ \
+               "_nodes="+ str(count_nodes)+".net").replace(" ","_")
+    out_path = os.path.dirname(os.path.abspath(__file__))+"/"+outputFolder+"/N10/infomap" #+txt_name.replace(".txt", "_out.txt")
+    modules = len(G.nodes())/2
+    if modules > 10:
+        modules = 10
+    subprocess.check_call([runp,
+                       outputFolder+txt_name,
+                       out_path, "-N 10", "--preferred-number-of-modules "+unicode(modules), "--overlapping",  "--bftree"])
+    subprocess.check_call([runp,
+                           outputFolder+txt_name,
+                           out_path, "-N 10", "--preferred-number-of-modules "+unicode(modules), "--overlapping",  "--tree"])
+    with open(outputFolder+"/N10"+txt_name.replace('.net','.tree'), str('rU')) as f:  # Universal newline mode
+        for line in f:
+            if line[0] != '#':
+                print line.strip()
+                l = line.strip().split('"')
+                print l
+                modules, flow_amount = l[0].strip().split(" ")
+                node_name = l[1]
+                dict_groups[node_name] = float(modules.split(":")[0])
+    for n in G.nodes():
+        print n, dict_groups.get(n)
+    pos = nx.spring_layout(G)  # spring, shell, circular positions for all nodes
+    if consider_locations:
+        change_nodes_position(pos)
+    plt.clf()
+    draw_labels(G, pos)
+    edgewidth = [d['weight']*10 for (u,v,d) in G.edges(data=True)]
+    nx.draw_networkx_edges(G, pos, width=edgewidth, egdelist=G.edges, alpha=0.6)
+    values = [dict_groups.get(node, 0.25) for node in G.nodes()]
+    nx.draw_networkx_nodes(G,pos,
+                           node_color=values,
+                           cmap=plt.cm.Set1,
+                           node_size=350,
+                           alpha=0.9)
+    plt.axis('off')
+    figManager = plt.get_current_fig_manager()
+    if os.name != 'posix':  # mac
+        figManager.window.state('zoomed')
+    if save:
+        plt.savefig(outputFolder +"/N10"+
+                    txt_name.replace(".net", ".png"))
+    """
+
+    # --preferred-number-of-modules 4
+    # --overlapping
+    plt.show()  # display
+    relabel_destination(G, pos, back=True)
+    if recursion_count < 1:
+        G_first_group = nx.Graph()
+        for n in G.nodes():
+            print n, dict_groups.get(n)
+            if dict_groups.get(n) == 1:
+                for nn in G.neighbors(n):
+                    if dict_groups.get(nn) == 1:
+                        G_first_group.add_edge(n, nn, weight=G[n][nn]["weight"])
+        print "Eliminated: ", set(G.nodes().keys()).difference(G_first_group.nodes().keys())
+        #G_first_group.remove_node("Ljubljana")
+        #G_first_group.remove_node("Bled")
+        #G_first_group.remove_node("Zagreb")
+        #G_first_group.remove_node("Gorje")
+        #draw_infomap_graph(G_first_group, minW, count_nodes, filters, save, consider_locations, season,
+        #              recursion_count+1)
+
+
 def load_infomap_graph(filters=None, save=False, consider_locations=True, season=Season.ALL):
 
     # add all nodes
@@ -393,21 +587,20 @@ def load_infomap_graph(filters=None, save=False, consider_locations=True, season
     if selectedData == DataType.SLO:
         minW_array = [1]#40, 300[i * multi for i in [1, 10, 20, 40, 60, 100, 120, 150, 180, 200, 270, 300]]
     else:
-        minW_array = [50, 100, 120, 150, 200, 400, 800]
+        minW_array = [1]
     maxW_array = [] #[i * multi for i in [400]]#[i * multi for i in [100, 300, 500, 700, 1000]]
     #if selectedData == DataType.VIENNA:
     #    maxW_array +=[ 1300, 1500]
     maxW_array.append(maxWeight+1)
-    if not save:
-        minW_array = [10 * multi]
-        #maxW_array = [maxWeight+100]
-        maxW_array = [1300]
+    #if not save:
+    #    minW_array = [10 * multi]
+    #   #maxW_array = [maxWeight+100]
+    #    maxW_array = [1300]
     count_nodes = 0
     for minW in minW_array:
         for maxW in maxW_array:
             if minW >= maxW:
                 continue
-            plt.clf()
             G.clear()
             g_tmp = generate_graph(filters, False, season)
 
@@ -418,179 +611,64 @@ def load_infomap_graph(filters=None, save=False, consider_locations=True, season
                     G.add_edge(destination1, destination2, weight=float(nw['weight'])/maxWeight)
             if len(G.nodes()) == 0:
                 continue
-            txt_name = ("/infomap/infomap_minW="+str(float(minW)/maxWeight)+"_"+get_fname(filters,season)+ \
-                       "_nodes="+ str(count_nodes)+".net").replace(" ","_")
-            with open(outputFolder+txt_name, str('w')) as f:
-                # Pajek format (more info in FilterGraph)
-                newline = str("\n")  # linux
-                f.write(str("*Vertices ") + str(len(G.nodes()))+newline)
-                c = 1
-                temp_v = {}
-                for d in get_destinations_id_asc():
-                    # G.add_node(d.destination)  # if all nodes added we have problems because of looping?
-                    if d.destination in G.nodes():
-                        f.write(str(c)+str(' "'+d.destination+'"'+newline))
-                        temp_v[d.destination] = c
-                        c += 1  # must follow a consequitive order.
-                f.write(str("*Edges ") + str(len(G.edges()))+newline)
-                for l in G.edges(data=True):
-                    if True:
-                            id1 = temp_v[l[0]]
-                            id2 = temp_v[l[1]]
-                            e_weight = G[l[0]][l[1]]['weight']
-                            f.write(str(str(id1)+' '+str(id2)+' '+str(e_weight)+newline))
-                            #f.write(str(str(id1)+' '+str(id2)+' '+str(float(1)))+newline)
-                            #f.write(str(str(id1)+' '+str(id2)+' '+str(1)+'\r\n'))
-                            # we write edges in Link list format
-            #./Infomap ninetriangles.net output/ -N 10 --tree --bftree
-            out_path = os.path.dirname(os.path.abspath(__file__))+"/"+outputFolder+"/infomap" #+txt_name.replace(".txt", "_out.txt")
-            # tt =outputFolder+'/ninetriangless.net'
-            runp = r"c:/Users\Karmen\Downloads\infomap-master\Infomap.exe"
-            if os.name == 'posix':  # mac
-                runp = r"/Users/karmen/Downloads/infomap-master/Infomap"
-            subprocess.check_call([runp,
-                                   outputFolder+txt_name,
-                                   # outputFolder+'/ninetriangless.net',
-                                 out_path+"/overlapping", "-N 10",  "--overlapping", "--bftree"])
-            subprocess.check_call([runp,
-                                   outputFolder+txt_name,
-                                   # outputFolder+'/ninetriangless.net',
-                                   out_path+"/overlapping", "-N 10",  "--overlapping", "--tree"])
-            subprocess.check_call([runp,
-                                   outputFolder+txt_name,
-                                   # outputFolder+'/ninetriangless.net',
-                                   out_path, "-N 10",  "--non-backtracking", "--bftree"])
-            subprocess.check_call([runp,
-                               outputFolder+txt_name,
-                               # outputFolder+'/ninetriangless.net',
-                               out_path, "-N 10",  "--non-backtracking", "--tree"])
-            # --preferred-number-of-modules 4
-            # --overlapping
-            dict_groups = {}
-            """Tree format
-            The resulting hierarchy will be written to a file with the extension .tree (plain text file) and corresponds
-             to the best hierarchical partition (shortest description length) of the attempts.
-             The output format has the pattern:
 
-            # Codelength = 3.48419 bits.
-            1:1:1 0.0384615 "7" 6
-            1:1:2 0.0384615 "8" 7
-            1:1:3 0.0384615 "9" 8
-            1:2:1 0.0384615 "4" 3
-            1:2:2 0.0384615 "5" 4
-            ...
-            Each row (except the first one, which summarizes the result) begins with the
-            multilevel module assignments of a node. The module assignments are colon separated from coarse to fine
-            level, and all modules within each level are sorted by the total flow (PageRank) of the nodes they contain.
-            Further, the integer after the last colon is the rank within the finest-level module, the decimal number is
-            the amount of flow in that node, i.e. the steady state population of random walkers, the content within
-            quotation marks is the node name, and finally, the last integer is the index of the node in
-            the original network file."""
-            with open(outputFolder+txt_name.replace('.net','.tree'), str('rU')) as f: # Universal newline mode
-                for line in f:
-                    if line[0] != '#':
-                        print line.strip()
-                        l = line.strip().split('"')
-                        print l
-                        modules, flow_amount = l[0].strip().split(" ")
-                        node_name = l[1]
-                        # modules, flow_amount, node_name, ind = line.strip().split(" ")
-                        #  too many values to unpack - presledki v imenih
-                        #node_name = l[2][1:-1]
-                        dict_groups[node_name] = float(modules.split(":")[0])
+            draw_infomap_graph(G, minW, count_nodes, save, consider_locations)
 
-            for n in G.nodes():
-                print n, dict_groups.get(n)
-
-            pos = nx.spring_layout(G)  # spring, shell, circular positions for all nodes
-            if consider_locations:
-                change_nodes_position(pos)
-            draw_labels(G, pos)
-            edgewidth = [d['weight']*10 for (u, v, d) in G.edges(data=True)]
-            nx.draw_networkx_edges(G, pos, width=edgewidth, egdelist=G.edges, alpha=0.6)
-            values = [dict_groups.get(node, 0.25) for node in G.nodes()]
-            nx.draw_networkx_nodes(G,pos,
-                                   node_color=values,
-                                   cmap=plt.cm.Set1,
-                                   node_size=350,
-                                   alpha=0.9)
-            plt.axis('off')
-            figManager = plt.get_current_fig_manager()
-            if os.name != 'posix':  # mac
-                figManager.window.state('zoomed')
-            if save:
-                plt.savefig(outputFolder +
-                         txt_name.replace(".net", ".png"))
-
-            print nx.info(G)
-            txt_name = ("/infomap/infomap_minW="+str(float(minW)/maxWeight)+"_"+get_fname(filters,season)+ \
-                       "_nodes="+ str(count_nodes)+".net").replace(" ","_")
-            out_path = os.path.dirname(os.path.abspath(__file__))+"/"+outputFolder+"/N10/infomap" #+txt_name.replace(".txt", "_out.txt")
-            modules = len(G.nodes())/2
-            if modules > 10:
-                modules = 10
-            subprocess.check_call([runp,
-                               outputFolder+txt_name,
-                               out_path, "-N 10", "--preferred-number-of-modules "+unicode(modules), "--overlapping",  "--bftree"])
-            subprocess.check_call([runp,
-                                   outputFolder+txt_name,
-                                   out_path, "-N 10", "--preferred-number-of-modules "+unicode(modules), "--overlapping",  "--tree"])
-            with open(outputFolder+"/N10"+txt_name.replace('.net','.tree'), str('rU')) as f:  # Universal newline mode
-                for line in f:
-                    if line[0] != '#':
-                        print line.strip()
-                        l = line.strip().split('"')
-                        print l
-                        modules, flow_amount = l[0].strip().split(" ")
-                        node_name = l[1]
-                        dict_groups[node_name] = float(modules.split(":")[0])
-            for n in G.nodes():
-                print n, dict_groups.get(n)
-            pos = nx.spring_layout(G)  # spring, shell, circular positions for all nodes
-            if consider_locations:
-                change_nodes_position(pos)
-            plt.clf()
-            draw_labels(G, pos)
-            edgewidth = [d['weight']*10 for (u,v,d) in G.edges(data=True)]
-            nx.draw_networkx_edges(G, pos, width=edgewidth, egdelist=G.edges, alpha=0.6)
-            values = [dict_groups.get(node, 0.25) for node in G.nodes()]
-            nx.draw_networkx_nodes(G,pos,
-                                   node_color=values,
-                                   cmap=plt.cm.Set1,
-                                   node_size=350,
-                                   alpha=0.9)
-            plt.axis('off')
-            figManager = plt.get_current_fig_manager()
-            if os.name != 'posix':  # mac
-                figManager.window.state('zoomed')
-            if save:
-                plt.savefig(outputFolder +"/N10"+
-                            txt_name.replace(".net", ".png"))
-
-        # --preferred-number-of-modules 4
-        # --overlapping
-        dict_groups = {}
-    #plt.show()  # display
-
-#load_infomap_graph(save=True)
+    # --preferred-number-of-modules 4
+    # --overlapping
 
 
-def draw_graph_for_destination(destination, save=True, filters=None, season=Season.ALL):
+filters_arr = [#{" age": ["13-17", "18-24"]},
+               #{" age": ["35-49", "50-64"]},
+               #{"age": ["65+"]},
+               #{" travel_style": ["Family Vacationer"]} ,
+               {" travel_style": ["Nightlife Seeker"]},
+               {" travel_style": ["History Buff"]}
+               #{" travel_style": ["Backpacker"]}
+               ]
+
+#for f in filters_arr:
+#    load_infomap_graph(filters=f, save=True)
+
+
+def draw_graph_for_destination(destination, save=True, filters=None, season=Season.ALL, known_locations=None):
+
+    Gen, pos, nodesize = generate_graph_for_destination(destination, filters=filters, season=season)
+    #print(nx.info(G))
+    G = nx.Graph()
     plt.clf()
-    G, pos = generate_graph_for_destination(destination, filters=filters, season=season)
-    print(nx.info(G))
-    nx.draw_networkx_nodes(G, pos=pos, nodelist=G.nodes)
+    nx.draw_networkx_nodes(G, pos=pos,  node_size=nodesize, nodelist=Gen.nodes, node_color='b')
+    draw_labels(G, pos)
+    if known_locations:
+        nx.draw_networkx_nodes(G, pos=known_locations,  node_size=50, nodelist=known_locations.keys(), node_color='r')
+        labels = dict()
+        for k in known_locations.keys():
+            labels[k] = k
+        nx.draw_networkx_labels(G, known_locations, font_size=9, labels=labels)
+
 
     figManager = plt.get_current_fig_manager()
     if os.name != 'posix':  # mac
         figManager.window.state('zoomed')
     if save:
         plt.savefig(outputFolder + "/" + destination+"/_"+get_fname(filters,season)+
-                    "_nodes="+ str(len(G.nodes))+".png")
+                    "_nodes="+ str(len(pos))+".png")
     plt.show()
 
-    # --preferred-number-of-modules 4
-    # --overlapping
+
+known_locations = {"Blejsko jezero": np.array([14.0938053, 46.363598]),
+                   "Blejski grad": np.array([14.100680, 46.369874])}
+#draw_graph_for_destination("Bled", False, known_locations=known_locations)
+# Bled: izstopa Reka Hiša spodaj levo
+
+known_locations = {"Ljubljanski grad": np.array([14.508374, 46.048885]),
+                   "Prešernov trg": np.array([14.5062441, 46.0515696]),
+                   "Koseški bajer": np.array([14.469114, 46.067308]),
+                   "Živalski vrt": np.array([14.472088, 46.052740])}
+                   #"Šmarna Gora": np.array([14.491390, 46.128666]),
+f ={"user_hometown_country": ["Slovenia"]}
+#draw_graph_for_destination("Ljubljana", True, filters=None, known_locations=known_locations, season=Season.NEW_YEAR)
+
 dict_groups = {}
 #plt.show()  # display
 filters_arr =[
@@ -644,10 +722,14 @@ filters_arr = [{"user_hometown_country": ["Slovenia"]},
                {"user_hometown_country": ["Austria"]},
                {"user_hometown_country": ["Hungary"]}]
 
+filter = {"user_hometown_country": ["Germany"]}
 #for filters in filters_arr:
-    #load_infomap_graph(filters, save=True)
 #load_infomap_graph()
-#draw_graph_for_destination("Ljubljana", True)
+#filter = {"user_hometown_country": ["Italy"]}
+#load_infomap_graph(save=False)
+
+#load_infomap_graph()
+
 """load_infomap_graph(save=True)
 load_infomap_graph(save=True, season=Season.SUMMER)
 load_infomap_graph(save=True, season=Season.WINTER)
@@ -782,10 +864,13 @@ def draw_louvain(save=True, consider_locations=True,filters=None, season=Season.
     if save:
         plt.savefig(outputFolder + "/louvain/louvain_"+get_fname(filters,season)+".png")
 
-#    plt.show()
+    plt.show()
+
+draw_louvain()
 
 #for filters in filters_arr:
 #    draw_louvain(filters=filters, save=True)
+
 
 
 def draw_test_di_graph(greedy=False):

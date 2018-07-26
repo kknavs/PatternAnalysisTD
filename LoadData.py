@@ -106,11 +106,11 @@ def read_lines_csv(n_lines=None):
 
 # destinations = read_destinations()
 prepareCsv = False
-reloadRecords = True
-reloadFids = True
-reloadData = True
-reloadDestinations = True
-reload_geo_mappings = False
+reloadRecords = False
+reloadFids = False
+reloadData = False
+reloadDestinations = False
+reloadGeoMappings = True
 
 print folder
 
@@ -165,10 +165,10 @@ if reloadDestinations:
     for d in get_destinations():
         print d
 
-if reload_geo_mappings and selectedData == DataType.SLO:
+if reloadGeoMappings and selectedData == DataType.SLO:
     #read_geolocation_mappings()
     #prepare_geo_location_mappings()
-    generate_geo_location_mappings()
+    generate_geo_location_mappings(insert=False)
     #add_geolocation_mapping("N.Ireland", "United Kingdom")
     #add_geolocation_mapping("Norfolk, England", "United Kingdom")
     #add_geolocation_mapping("Manchester, England", "United Kingdom")

@@ -257,7 +257,7 @@ Sardegna	:	:Empty location
 Stuttgart	:Germany	:
 Kăłpavogur	:	:
 West Australia	:	:Empty location
-Dăľsseldorf, Deutschland	:	:
+Dăľsseldorf, Deutschland	:Germany	:
 Bc, Anada	:	:Empty location
 Elgin, Illinois Usa	:United States	:
 Tolyatti, Russia	:Russia	:
@@ -1683,7 +1683,7 @@ Ma	:	:Empty location
 Blue Mountains	:	:Empty location
 Tbilisi	:Georgia	:
 Clifton, Nj Usa	:United States	:
-Măľnchen, Deutschland	:	:
+Măľnchen, Deutschland	:Germany	:
 Bangkok	:Thailand	:
 Leek	:Netherlands	:
 Hallett Cove	:Australia	:
@@ -2677,7 +2677,7 @@ Manchester, England	:United Kingdom	:Over your quota.
 Woking Surrey	:	:Over your quota.
 Stellenbosch	:	:Over your quota.
 Homer Ak	:	:Over your quota.
-Offenbach, Deutschland	:	:Over your quota.
+Offenbach, Deutschland	:Germany	:Over your quota.
 Storrington	:	:Over your quota.
 Frankfurt Germany	:	:Over your quota.
 Melton Mowbray	:	:Over your quota.

@@ -6,12 +6,13 @@ from geolocation.main import GoogleMaps
 from geolocation import exceptions as exc
 
 
-def get_set_of_countries():
+def get_set_of_countries_and_code():
     records = set()
+    codes = dict()
     count_errors = 0
     # countries-20140629.csv from http://blog.plsoucy.com/2012/04/iso-3166-country-code-list-csv-sql/
     # https://github.com/datasets/country-list/blob/master/data.csv
-    with open("countries/countries-20140629.csv") as data:
+    with open("countries/countries-20140629.txt") as data:
             dialect = csv.Sniffer().sniff(data.read(1024))
             data.seek(0)
             csvreader = csv.DictReader(data, dialect=dialect)
@@ -20,12 +21,14 @@ def get_set_of_countries():
                 if row is None:
                     break
                 try:
-                    records.add(row['English Name'].decode('utf-8').title())
+                    country = row['English Name'].decode('utf-8').title()
+                    records.add(country)
+                    codes[row['Code'].decode('utf-8').upper()] = country
                 except Exception, ex:
                     logging.error(str(count_errors)+". Error: " + ex.message)
                     print row
                     count_errors += 1
-    return records
+    return records, codes
 
 
 def get_set_of_states():
