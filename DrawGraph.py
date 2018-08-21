@@ -10,7 +10,7 @@ import os
 #import snap.win.snap
 from Database import fetchall_links_with_weight_threshold, get_destinations, get_destinations_id_asc, get_max_weight, \
     folder, DataType, selectedData, get_avg_weight_nonzero
-from FilterGraph import Season, generate_graph, generate_graph_for_destination, get_fname
+from FilterGraph import Season, generate_graph, generate_graph_for_destination, get_fname, filter_graph_by_weight
 #from networkx.algorithms import community as community_nx
 
 #The page http://www.swig.org/download.html has a specific download for Windows with a pre-built version of swig.exe.
@@ -97,9 +97,9 @@ def relabel_destination(G, pos=None, back=False):
                     del pos[k]  # delete old key
 
 
-def draw_labels(G, pos, font_size=13):
+def draw_labels(G, pos, font_size=13, font_color='black'):
     relabel_destination(G, pos)
-    nx.draw_networkx_labels(G, pos, font_size=font_size, alpha=0.8)  # font_family='sans-serif' can be defined
+    nx.draw_networkx_labels(G, pos, font_size=font_size, font_color=font_color, alpha=0.8)  # font_family='sans-serif' can be defined
 
 
 def change_nodes_position(pos):
@@ -113,6 +113,17 @@ def check_available_fonts():  # sans-serif on win, Microsoft Sans Serif on mac .
     avail_font_names = [f.name for f in matplotlib.font_manager.fontManager.ttflist]
     for f in avail_font_names:
         print f
+
+
+def get_node_size(G):
+    d = nx.degree(G)
+    d = [(d[node]+1) * 10 for node in G.nodes()]
+
+
+def get_infomap_executable_path():
+    if os.name == 'posix':  # mac
+        return r"/Users/karmen/Downloads/infomap-master/Infomap"
+    return r"c:/Users\Karmen\Downloads\infomap-master\Infomap.exe"
 
 # TODO: CESNA
 def PrintGStats(s, Graph):
@@ -405,11 +416,17 @@ def draw_infomap_graph(G, minW, count_nodes, filters=None, save=False, consider_
         f.write(str("*Vertices ") + str(len(G.nodes()))+newline)
         c = 1
         temp_v = {}
+        #relabel_destination(G)
         for d in get_destinations_id_asc():
             # G.add_node(d.destination)  # if all nodes added we have problems because of looping?
             if d.destination in G.nodes():
-                f.write(str(c)+str(' "'+d.destination+'"'+newline))
-                temp_v[d.destination] = c
+                if d.destination in mapping:
+                    dest = mapping[d.destination]
+                    temp_v[d.destination] = c
+                else:
+                    dest = d.destination
+                f.write(str(c)+str(' "'+dest+'"'+newline))
+                temp_v[dest] = c
                 c += 1  # must follow a consequitive order.
         f.write(str("*Edges ") + str(len(G.edges()))+newline)
         for l in G.edges(data=True):
@@ -424,12 +441,11 @@ def draw_infomap_graph(G, minW, count_nodes, filters=None, save=False, consider_
         #./Infomap ninetriangles.net output/ -N 10 --tree --bftree
     out_path = os.path.dirname(os.path.abspath(__file__))+"/"+outputFolder+"/infomap"
     # tt =outputFolder+'/ninetriangless.net'
-    runp = r"c:/Users\Karmen\Downloads\infomap-master\Infomap.exe"
-    if os.name == 'posix':  # mac
-        runp = r"/Users/karmen/Downloads/infomap-master/Infomap"
+    runp = get_infomap_executable_path()
     mode = "/overlapping"
     avg =get_avg_weight_nonzero()
-    avg = 0.9
+    avg = 0 #0.3 #0.95
+    print "avg",avg
     subprocess.check_call([runp,
                            outputFolder+txt_name,
                            # outputFolder+'/ninetriangless.net',
@@ -449,6 +465,7 @@ def draw_infomap_graph(G, minW, count_nodes, filters=None, save=False, consider_
                            out_path, "-N 10",  "--non-backtracking", "--tree"])"""
     # --preferred-number-of-modules 4
     # --overlapping
+    plt.clf()
     dict_groups = {}
     """Tree format
     The resulting hierarchy will be written to a file with the extension .tree (plain text file) and corresponds
@@ -488,11 +505,10 @@ def draw_infomap_graph(G, minW, count_nodes, filters=None, save=False, consider_
     pos = nx.spring_layout(G)  # spring, shell, circular positions for all nodes
     if consider_locations:
         change_nodes_position(pos)
-    plt.clf()
+    draw_labels(G, pos)
     values = [dict_groups.get(node, 0.25) for node in G.nodes()]
 
-    draw_labels(G, pos)
-    edgewidth = [d['weight']*10 for (u, v, d) in G.edges(data=True)]
+    edgewidth = [d['weight']*15 for (u, v, d) in G.edges(data=True)]
     nx.draw_networkx_edges(G, pos, width=edgewidth, egdelist=G.edges, alpha=0.6)
     nx.draw_networkx_nodes(G,pos,
                            node_color=values,
@@ -559,9 +575,10 @@ def draw_infomap_graph(G, minW, count_nodes, filters=None, save=False, consider_
 
     # --preferred-number-of-modules 4
     # --overlapping
-    plt.show()  # display
+    if not save:
+        plt.show()  # display
     relabel_destination(G, pos, back=True)
-    if recursion_count < 1:
+    if recursion_count < 0:
         G_first_group = nx.Graph()
         for n in G.nodes():
             print n, dict_groups.get(n)
@@ -574,18 +591,18 @@ def draw_infomap_graph(G, minW, count_nodes, filters=None, save=False, consider_
         #G_first_group.remove_node("Bled")
         #G_first_group.remove_node("Zagreb")
         #G_first_group.remove_node("Gorje")
-        #draw_infomap_graph(G_first_group, minW, count_nodes, filters, save, consider_locations, season,
-        #              recursion_count+1)
+        draw_infomap_graph(G_first_group, minW, count_nodes, filters, save, consider_locations, season,
+                      recursion_count+1)
 
 
-def load_infomap_graph(filters=None, save=False, consider_locations=True, season=Season.ALL):
+def load_infomap_graph(filters=None, save=True, consider_locations=True, season=Season.ALL):
 
     # add all nodes
     #for d in get_destinations():
     #    G.AddNode(d.id)
     G = nx.Graph()
     if selectedData == DataType.SLO:
-        minW_array = [1]#40, 300[i * multi for i in [1, 10, 20, 40, 60, 100, 120, 150, 180, 200, 270, 300]]
+        minW_array = [500/float(maxWeight)]#40, 300[i * multi for i in [1, 10, 20, 40, 60, 100, 120, 150, 180, 200, 270, 300]]
     else:
         minW_array = [1]
     maxW_array = [] #[i * multi for i in [400]]#[i * multi for i in [100, 300, 500, 700, 1000]]
@@ -611,8 +628,7 @@ def load_infomap_graph(filters=None, save=False, consider_locations=True, season
                     G.add_edge(destination1, destination2, weight=float(nw['weight'])/maxWeight)
             if len(G.nodes()) == 0:
                 continue
-
-            draw_infomap_graph(G, minW, count_nodes, save, consider_locations)
+            draw_infomap_graph(G, minW, count_nodes, filters, save, consider_locations, season)
 
     # --preferred-number-of-modules 4
     # --overlapping
@@ -621,10 +637,10 @@ def load_infomap_graph(filters=None, save=False, consider_locations=True, season
 filters_arr = [#{" age": ["13-17", "18-24"]},
                #{" age": ["35-49", "50-64"]},
                #{"age": ["65+"]},
-               #{" travel_style": ["Family Vacationer"]} ,
+               {" travel_style": ["Family Vacationer"]} ,
                {" travel_style": ["Nightlife Seeker"]},
-               {" travel_style": ["History Buff"]}
-               #{" travel_style": ["Backpacker"]}
+               {" travel_style": ["History Buff"]},
+               {" travel_style": ["Backpacker"]}
                ]
 
 #for f in filters_arr:
@@ -632,36 +648,48 @@ filters_arr = [#{" age": ["13-17", "18-24"]},
 
 
 def draw_graph_for_destination(destination, save=True, filters=None, season=Season.ALL, known_locations=None):
+    draw_graph_for_destination([destination], save, filters, season, known_locations)
 
-    Gen, pos, nodesize = generate_graph_for_destination(destination, filters=filters, season=season)
+
+def draw_graph_for_destinations(destinations, save=True, filters=None, season=Season.ALL, known_locations=None):
+
+    #Gen = [] pos, nodesize = generate_graph_for_destination(destination, filters=filters, season=season)
+    nodes =[]
+    pos = dict()
+    nodesize =[]
+    for d in destinations:
+        t_nodes, t_pos, t_nodesize = generate_graph_for_destination(d, filters=filters, season=season)
+        nodes.extend(t_nodes)
+        pos.update(t_pos)
+        nodesize.extend(t_nodesize)
     #print(nx.info(G))
     G = nx.Graph()
     plt.clf()
-    nx.draw_networkx_nodes(G, pos=pos,  node_size=nodesize, nodelist=Gen.nodes, node_color='b')
+    nx.draw_networkx_nodes(G, pos=pos,  node_size=nodesize, nodelist=nodes, node_color='c')
     draw_labels(G, pos)
     if known_locations:
-        nx.draw_networkx_nodes(G, pos=known_locations,  node_size=50, nodelist=known_locations.keys(), node_color='r')
+        nx.draw_networkx_nodes(G, pos=known_locations,  node_size=60, nodelist=known_locations.keys(), node_color='orange')
         labels = dict()
         for k in known_locations.keys():
             labels[k] = k
-        nx.draw_networkx_labels(G, known_locations, font_size=9, labels=labels)
+        nx.draw_networkx_labels(G, known_locations, font_size=9, labels=labels, font_color='black')
 
 
     figManager = plt.get_current_fig_manager()
     if os.name != 'posix':  # mac
         figManager.window.state('zoomed')
     if save:
-        plt.savefig(outputFolder + "/" + destination+"/_"+get_fname(filters,season)+
-                    "_nodes="+ str(len(pos))+".png")
+        plt.savefig(outputFolder + "/" + destinations + "/_" + get_fname(filters, season) +
+                    "_nodes=" + str(len(pos)) +".png")
     plt.show()
 
 
-known_locations = {"Blejsko jezero": np.array([14.0938053, 46.363598]),
+known_locations_bled = {"Blejsko jezero": np.array([14.0938053, 46.363598]),
                    "Blejski grad": np.array([14.100680, 46.369874])}
 #draw_graph_for_destination("Bled", False, known_locations=known_locations)
 # Bled: izstopa Reka Hiša spodaj levo
 
-known_locations = {"Ljubljanski grad": np.array([14.508374, 46.048885]),
+known_locations_ljubljana = {"Ljubljanski grad": np.array([14.508374, 46.048885]),
                    "Prešernov trg": np.array([14.5062441, 46.0515696]),
                    "Koseški bajer": np.array([14.469114, 46.067308]),
                    "Živalski vrt": np.array([14.472088, 46.052740])}
@@ -674,8 +702,8 @@ dict_groups = {}
 filters_arr =[
 #       {"gender": ["F"]},
 #         {"gender": ["M"]},
-          {"age": ["1"]},  {"age": ["2"]},  {"age": ["3"]},
-          {"age": ["4"]},  {"age": ["5"]},  {"age": ["6"]}]
+          {"age": ["1", "2"]},    {"age": ["3"]},
+          {"age": ["4","5"]},   {"age": ["6"]}]
 """
     {"user_travel_style": ["60+ Traveler"]},
     {"user_travel_style": ["Family Vacationer"]},
@@ -714,21 +742,22 @@ filters_arr =[
     {"user_travel_style": ["Nightlife Seeker"], "age": ["6"]},
 
 ]
-filters_arr = [{"user_hometown_country": ["Slovenia"]},
+"""filters_arr = [{"user_hometown_country": ["Slovenia"]},
                {"user_hometown_country": ["United Kingdom"]},
                {"user_hometown_country": ["United States"]},
                {"user_hometown_country": ["Italy"]},
+               {"user_hometown_country": ["Germany"]},
                {"user_hometown_country": ["Croatia"]},
                {"user_hometown_country": ["Austria"]},
-               {"user_hometown_country": ["Hungary"]}]
+               {"user_hometown_country": ["Hungary"]}]"""
 
-filter = {"user_hometown_country": ["Germany"]}
+filters_arr =[{"age": ["1","2"]}, {"age": ["3","4"]}, {"age": ["5","6"]}]
+
 #for filters in filters_arr:
-#load_infomap_graph()
+#    load_infomap_graph(filters=filters)
 #filter = {"user_hometown_country": ["Italy"]}
 #load_infomap_graph(save=False)
 
-#load_infomap_graph()
 
 """load_infomap_graph(save=True)
 load_infomap_graph(save=True, season=Season.SUMMER)
@@ -781,7 +810,8 @@ def draw_greedy(num, size, greedy=True):  # num_cliques, clique_size)
                 f.write(str(str(g[0])+' '+str(g[1]))+newline)
         import os
         out_path = os.path.dirname(os.path.abspath(__file__))+"/"+outputFolder
-        subprocess.check_call([r"c:/Users\Karmen\Downloads\infomap-master\Infomap.exe",
+        runp = get_infomap_executable_path()
+        subprocess.check_call([runp,
                                outputFolder+txt_name,
                                out_path, "-N 10", "--tree", "-z --zero-based-numbering"])
         # --preferred-number-of-modules 4
@@ -811,7 +841,8 @@ def draw_greedy(num, size, greedy=True):  # num_cliques, clique_size)
     #groups = [partition.get(node, 0.25) for node in G.nodes()]
     #modulariry = community_nx.modularity(G, [])
     figManager = plt.get_current_fig_manager()
-    figManager.window.state('zoomed')
+    #if os.name != 'posix':  # mac
+    #    figManager.window.state('zoomed')
     plt.axis('off')
     plt.show()
 
@@ -819,55 +850,64 @@ def draw_greedy(num, size, greedy=True):  # num_cliques, clique_size)
 
 
 def draw_louvain(save=True, consider_locations=True,filters=None, season=Season.ALL):
-    colors = ['b', 'y', 'g', 'w', 'r', 'c']
+    colors = ['c', 'yellow', 'lightgreen', 'pink', 'lightcoral', 'b']
+    font_colors = ['b', 'darkorange', 'green', 'purple', 'maroon', 'c']
     plt.clf()
     G = generate_graph(filters=filters, season=season)
+    min_w = 372
+    G = filter_graph_by_weight(G, min_weight=min_w)
     print(nx.info(G))
     #nx.draw_networkx_nodes(G, pos=pos, nodelist=G.nodes)
-
     # use one of the edge properties to control line thickness
+    pos=nx.spring_layout(G)  # spring, shell, circular positions for all nodes
+    relabel_destination(G,pos)
     edgewidth = [d['weight']/float(maxWeight/avg) for (u,v,d) in G.edges(data=True)]
     #edgewidth = [d['weight']/float(avg) for (u,v,d) in G.edges(data=True)]
     emedium = [(u, v) for (u, v, d) in G.edges(data=True)]
-    pos=nx.spring_layout(G)  # spring, shell, circular positions for all nodes
     if consider_locations:
         change_nodes_position(pos)
     # labels
-    nx.draw_networkx_labels(G, pos, font_size=13, alpha=0.8)
+    #nx.draw_networkx_labels(G, pos, font_size=13, alpha=0.8)
     #nx.draw_networkx_nodes(G,pos,alpha=0.6,node_size=400)
     nx.draw_networkx_edges(G, pos, edgelist=emedium,
                            width=edgewidth, alpha=0.7)
     print nx.is_connected(G)
     print nx.number_connected_components(G)
     comps = nx.connected_component_subgraphs(G)
-    print "Comps"
-    for c in comps:
-        print c
+    #print "Comps"
+    #for c in comps:
+    #    print c
     ccs = nx.clustering(G)
     print ccs
     #print sum(ccs)/len(ccs)
     # print nx.__version__  is 2.1
+    mapping = dict(zip(G.nodes(), range(1, len(G.nodes()))))
     partition = Community.best_partition(G, None, 'weight')
     for count,i in enumerate(set(partition.values())):
         print "Community", i
-        members = list_nodes = [nodes for nodes in partition.keys() if partition[nodes] == i]
+        members = sorted([str(nodes) for nodes in partition.keys() if partition[nodes] == i])
         print members
+        mapping = dict(zip(members, members))
         #nx.set_node_attributes(members, 'color', 'b')
         nx.draw_networkx_nodes(G,pos,
                                nodelist=members,
                                node_color=colors[count],
                                node_size=350,
                                alpha=0.75)
+        nx.draw_networkx_labels(G, pos, labels=mapping, font_size=13, font_color=font_colors[count], alpha=0.8)
+
+        for k in members:
+            mapping.pop(k, None)
     plt.axis('off')
     figManager = plt.get_current_fig_manager()
     #figManager.window.state('zoomed')
     if save:
         plt.savefig(outputFolder + "/louvain/louvain_"+get_fname(filters,season)+".png")
-
+    print "%:", min_w/float(maxWeight)
     plt.show()
 
-draw_louvain()
-
+#draw_louvain()
+#load_infomap_graph(save=False)
 #for filters in filters_arr:
 #    draw_louvain(filters=filters, save=True)
 
@@ -886,16 +926,17 @@ def draw_test_di_graph(greedy=False):
     nx.draw(G, cmap = plt.get_cmap('jet'), node_color = values)
     plt.show()"""
     G = nx.DiGraph()
-    G.add_edges_from(
+    """G.add_edges_from(
         [('0', '1'), ('2', '1'), ('2', '3'), ('0', '3'), ('0', '4'),
-         ('5', '4'), ('5', '6'), ('7', '6'), ('7', '4')])
+         ('5', '4'), ('5', '6'), ('7', '6'), ('7', '4')])"""
+    G.add_edges_from(
+        [('0', '1'), ('1', '2'), ('2', '3'), ('3', '0'), ('0', '4'),
+         ('4', '5'), ('5', '6'), ('6', '7'), ('7', '4')])
     #G = nx.ring_of_cliques(num, size)
     #G = nx.balanced_tree(2, 3)
 
     #nx.draw(G)
     pos = nx.spring_layout(G)
-    nx.draw_networkx_edges(G, pos, G.edges())
-
     dict_groups = {}
 
     if greedy:
@@ -919,11 +960,14 @@ def draw_test_di_graph(greedy=False):
             f.write(str("*Edges ") + str(len(G.edges()))+newline)
             for g in G.edges():
                 f.write(str(str(g[0])+' '+str(g[1]))+newline)
-        import os
         out_path = os.path.dirname(os.path.abspath(__file__))+"/"+outputFolder
-        subprocess.check_call([r"c:/Users\Karmen\Downloads\infomap-master\Infomap.exe",
+        runp = get_infomap_executable_path()
+        subprocess.check_call([runp,
                                outputFolder+txt_name,
                                out_path,"-d --directed", "-N 10", "--tree", "-z --zero-based-numbering"])
+        subprocess.check_call([runp,
+                               outputFolder+txt_name,
+                               out_path,"-d --directed", "-N 10", "--bftree", "-z --zero-based-numbering", "--overlapping"])
         # --preferred-number-of-modules 4
         # --overlapping
         with open(outputFolder+txt_name.replace('.net','.tree'), 'rU') as f: # Universal newline mode
@@ -933,23 +977,27 @@ def draw_test_di_graph(greedy=False):
                     l = line.strip().split('"')
                     print l
                     modules, flow_amount = l[0].strip().split(" ")
-                    node_name = int(l[1])
+                    node_name = l[1]
                     dict_groups[node_name] = float(modules.split(":")[0])
 
         for n in G.nodes():
             print n, dict_groups.get(n)
 
     values = [dict_groups.get(node, 0.25) for node in G.nodes()]
+    """nx.draw_networkx_edges(G, pos, G.edges())
     nx.draw_networkx_nodes(G,pos,
                            node_color=values,
                            cmap=plt.cm.Set1,
                            node_size=350,
-                           alpha=1.0)
+                           alpha=1.0)"""
+    nx.draw(G, pos, cmap = plt.get_cmap('jet'), node_color = values)
+    nx.draw_networkx_labels(G, pos, font_color='w',  alpha=0.8)
     figManager = plt.get_current_fig_manager()
-    figManager.window.state('zoomed')
+    if os.name != 'posix':  # mac
+        figManager.window.state('zoomed')
     plt.axis('off')
     plt.show()
 
 
-# draw_greedy(5, 4, True)
-# draw_test_di_graph()
+#draw_greedy(5, 4, True)
+#draw_test_di_graph(False)

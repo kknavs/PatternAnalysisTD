@@ -338,6 +338,14 @@ def generate_graph(filters=None, refresh=False, season=Season.ALL, refresh_full_
     return G
 
 
+def filter_graph_by_weight(graph, min_weight, maxWeight=1):
+    G = nx.Graph()
+    for destination1, destination2, nw in graph.edges(data=True):
+        if min_weight <= nw['weight']/float(maxWeight):
+            G.add_edge(destination1, destination2, weight=float(nw['weight'])/float(maxWeight))
+    return G
+
+
 def generate_graph_for_destination(destination, filters=None, refresh=False, season=Season.ALL):
     f_name = get_fname(filters, season)
     txt_name = "/graph_"+f_name+"graph_links.txt"
@@ -353,6 +361,8 @@ def generate_graph_for_destination(destination, filters=None, refresh=False, sea
     if len(G.nodes) == 0:
         print "Empty graph!"
         return
+    if destination not in G.nodes():
+        return [], {}, []
     print nx.info(G, destination)
     pos = dict()
     pos_count = defaultdict(int)
@@ -366,7 +376,7 @@ def generate_graph_for_destination(destination, filters=None, refresh=False, sea
             for i in range(0, 2):
                 record_destination, record_id, date, lat, lng = tmp[ind+i].split("*")
                 if destination == record_destination:
-                    print record_destination, record_id, date, lat, lng
+                    #print record_destination, record_id, date, lat, lng
                     if record_id not in pos:
                         pos_count[lat+lng] += 1
                         pos[record_id] = [lat, lng]
@@ -375,7 +385,7 @@ def generate_graph_for_destination(destination, filters=None, refresh=False, sea
     # we use string so that there is no float rounding problem
     for k, v in pos.iteritems():
         pos[k] = np.array([float(pos[k][1]), float(pos[k][0])])
-    return G, pos, nodesize
+    return G.nodes, pos, nodesize
 
 
 #print nx.info(graph)

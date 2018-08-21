@@ -23,7 +23,7 @@ def get_set_of_countries_and_code():
                 try:
                     country = row['English Name'].decode('utf-8').title()
                     records.add(country)
-                    codes[row['Code'].decode('utf-8').upper()] = country
+                    codes[row['Code'].decode('utf-8').title()] = country
                 except Exception, ex:
                     logging.error(str(count_errors)+". Error: " + ex.message)
                     print row

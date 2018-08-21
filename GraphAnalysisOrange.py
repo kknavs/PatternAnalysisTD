@@ -44,25 +44,35 @@ data = Orange.data.Table(domain)
 for b in baskets:
     ex = Orange.data.Instance(domain)
     for item in b:
-        print map_destination(item)
+        #print map_destination(item)
         ex[map_destination(item)] = 1
     data.append(ex)
 
-rules = Orange.associate.AssociationRulesSparseInducer(data, support=0.3)
+sup = 0.015
+conf = 0.1
+rules = Orange.associate.AssociationRulesSparseInducer(data, support=sup)
 print "%4s %4s  %s" % ("Supp", "Conf", "Rule")
-for r in rules[:10]:
-    print "%4.1f %4.1f  %s" % (r.support, r.confidence, r)
+for r in rules: #[:10]:
+    print "%4.3f %4.3f %4.3f %4.3f %s" % (r.support, r.confidence, r.lift, r.strength, r)
 
 
 """In Apriori, association rule induction is two-stage algorithm first finds itemsets that frequently 
 appear in the data and have sufficient support, and then splits them to rules of sufficient confidence.
 Function get_itemsets reports on itemsets alone and skips rule induction:"""
-data = Orange.data.Table(output_folder)
-ind = Orange.associate.AssociationRulesSparseInducer(support=0.05, storeExamples = True)
+#data = Orange.data.Table(output_folder)
+ind = Orange.associate.AssociationRulesSparseInducer(support=sup, confidence=conf, storeExamples = True)
+# Now itemsets is a list of itemsets along with the examples supporting them since we set store_examples to True.
 itemsets = ind.get_itemsets(data)
-for itemset, tids in itemsets[:10]:
-    print "(%4.2f) %s" % (len(tids)/float(len(data)),
+print "***Itemsets:"+ str(len(itemsets)) + "***"
+c = 0
+for itemset, tids in itemsets[::-1]: #[:10]:
+    if len(itemset) > 1:
+        c += 1
+        print len(tids)
+        # print tids # indexes of itemsets in data, that contains items (not same as in input txt file)
+        print "(%4.3f) %s" % (len(tids)/float(len(data)),
                           " ".join(data.domain[item].name for item in itemset))
+print c
 
 # heatmap correlation graph
 # https://datascience.stackexchange.com/questions/14406/visualizing-items-frequently-purchased-together?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa

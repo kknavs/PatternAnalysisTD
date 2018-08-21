@@ -1,0 +1,27 @@
+*Vertices 13
+1 "Karlskirche"
+2 "Prater"
+3 "Sigmund Freud Museum"
+4 "Imperial Treasury of Vienna"
+5 "St. Stephen's Cathedral"
+6 "Imperial Palace (Hofburg)"
+7 "Historic Center of Vienna"
+8 "Schonbrunn Palace"
+9 "MuseumsQuartier Wien"
+10 "Kahlenberg"
+11 "Rathaus"
+12 "Central Cemetery (Zentralfriedhof)"
+13 "State Hall of the Austrian National Library"
+*Edges 12
+12 3 1
+6 11 1
+6 7 1
+8 10 1
+8 2 1
+8 5 1
+4 1 1
+7 11 1
+10 5 1
+9 11 1
+9 13 1
+11 13 1

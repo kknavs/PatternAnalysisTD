@@ -5,15 +5,13 @@ Brda	Kranjska Gora	1
 Cakovec	Maribor	1
 Trieste	Aquilea	1
 Trieste	Umag	1
-Trieste	Zagreb	1
 Trieste	Klagenfurt	1
 Trieste	Palmanova	1
 Trieste	Udine	2
 Trieste	Ljubljana	4
-Trieste	Piran/Pirano	1
 Ljubljana	Klagenfurt	3
 Ljubljana	Umag	1
-Ljubljana	Bled	9
+Ljubljana	Bled	8
 Ljubljana	Nova Gorica	1
 Ljubljana	Zagreb	7
 Ljubljana	Kranjska Gora	1
@@ -21,18 +19,18 @@ Ljubljana	Izola/Isola	1
 Ljubljana	Koper/Capodistria	1
 Ljubljana	Reka	2
 Ljubljana	Varazdin	1
-Ljubljana	Gorje	3
+Ljubljana	Gorje	2
 Ljubljana	Piran/Pirano	3
 Ljubljana	Postojna	4
 Ljubljana	Opatija	4
 Aquilea	Udine	1
 Aquilea	Palmanova	1
 Zagreb	Bistrica ob Sotli	1
+Zagreb	Buje	1
 Zagreb	Opatija	1
 Zagreb	Bled	1
 Zagreb	Reka	1
 Zagreb	Varazdin	2
-Zagreb	Buje	1
 Sezana	Gorje	1
 Miren - Kostanjevica	Piran/Pirano	1
 Udine	Grado	1
@@ -57,7 +55,7 @@ Klagenfurt	Bled	1
 Klagenfurt	Bad Kalinkirchheim	1
 Kranjska Gora	Bled	1
 Kranjska Gora	Gorje	1
-Gorje	Bled	7
+Gorje	Bled	6
 Umag	Bled	1
 Umag	Bad Kalinkirchheim	1
 Opatija	Bled	1

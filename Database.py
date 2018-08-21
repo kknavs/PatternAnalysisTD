@@ -195,6 +195,7 @@ def delete_destinations():
 
 def delete_geolocation_mappings():
     with session_scope() as session:
+        #GeolocationMapping.__table__.drop(engine)
         session.query(GeolocationMapping).delete()
 
 
@@ -372,7 +373,6 @@ def write_geolocation_mappings():  # then mappings can be transferred to differe
     with io.open("countries/geolocation_mappings.txt", "w", encoding='utf-8') as data:
         with session_scope() as session:
             for record in fetchall_geolocation_mappings(session):
-                user_hometown = record.user_hometown
                 data.write(get_empty_if_none(record.user_hometown)+"\t:"+get_empty_if_none(record.country)
                            + "\t:"+get_empty_if_none(record.formatted_address)+"\n")
 
@@ -380,6 +380,7 @@ def write_geolocation_mappings():  # then mappings can be transferred to differe
 
 
 def read_geolocation_mappings():
+    delete_geolocation_mappings()
     with io.open("countries/geolocation_mappings.txt", "r", encoding='utf-8') as data:
         with session_scope() as session:
             while True:
@@ -387,8 +388,8 @@ def read_geolocation_mappings():
                 if not line:
                     break
                 user_hometown, country, formatted_address = line.split("\t:")
+                print line
                 mapping = GeolocationMapping(user_hometown, country, formatted_address.strip())
-                print mapping
                 session.add(mapping)
                 session.flush()
 
@@ -422,16 +423,16 @@ def generate_geo_location_mappings(insert=True):
     states = get_set_of_states()
     # add special mapping
     add_geolocation_mapping("N.Ireland", "United Kingdom")
+    add_geolocation_mapping("Netherlands", "The Netherlands")
     with session_scope() as session:
         print "Locations with no country"
         print str(len(fetchall_geolocation_mappings_with_no_country(session)))
-        c = 2000  # request per day https://console.cloud.google.com/iam-admin/quotas?project=analysistd-206520&hl=sl
+        c = 1000  # request per day https://console.cloud.google.com/iam-admin/quotas?project=analysistd-206520&hl=sl
         ctmp =0
         for loc in fetchall_geolocation_mappings_with_no_country(session):
             if loc.user_hometown is None:
                 loc.country = ""
                 continue
-
             if "," in loc.user_hometown:
                 loc_items = loc.user_hometown.rsplit(",")
                 country = loc_items[-1].strip()
@@ -445,8 +446,8 @@ def generate_geo_location_mappings(insert=True):
             country = country.title()
             if country in countries:
                 loc.country = country
-            elif country.upper() in codes:
-                loc.country = codes[country.upper()]
+            elif country in codes:
+                loc.country = codes[country]
             elif country in states:
                 loc.country = "United States"
             elif "England" in loc.user_hometown.title():
@@ -462,7 +463,7 @@ def generate_geo_location_mappings(insert=True):
                     loc.formatted_address = b
                 #loc.lat = d
                 #loc.lng = e
-                time.sleep(3)
+                time.sleep(2)
                 c -= 1
 
             print loc
@@ -478,6 +479,7 @@ def generate_geo_location_mappings(insert=True):
         # vsi po državah: 5771
         # po US 4135
         # 243
+    #return
     with session_scope() as session:
         ctmp =0
         for record in fetchall_records(session):
@@ -500,7 +502,7 @@ def generate_geo_location_mappings(insert=True):
                         if country in countries:
                             country = country
                         elif country.upper() in codes:
-                            loc.country = codes[country.upper()]
+                            country = codes[country.upper()]
                         elif country in states:
                             country = "United States"
                         elif "England" in user_hometown:
@@ -518,11 +520,11 @@ def generate_geo_location_mappings(insert=True):
 
             if not insert:
                 a = get_attributte_single_by_name_for_record_id('user_hometown_country', record.id)
-                if not a and user_hometown:
+                if not a.value and user_hometown:
                 #    print country
                 #    print user_hometown
                 #    print a
-                   a.value = country
+                    a.value = country
             else:
                 # always new
                 attribute = Attribute(record.id, 'user_hometown_country', country)
@@ -540,6 +542,11 @@ def generate_geo_location_mappings(insert=True):
 #        allCount = all_records.count() # important
 def get_count_for_attributte_name_value(name, value,session=DBSession(bind=connection)):
     return session.query(Attribute).filter(and_(Attribute.name == name, Attribute.value == value)).count()
+
+
+def get_count_for_attributte_name_value_all(name, value, session=DBSession(bind=connection)):
+    return session.query(Attribute).join(Record).filter(and_(Attribute.name == name, Attribute.value == value))\
+        .distinct(Record.user_id).all()#.count()
 
 
 def get_count_for_attribute_name_value_contains(name, value,session=DBSession(bind=connection)):

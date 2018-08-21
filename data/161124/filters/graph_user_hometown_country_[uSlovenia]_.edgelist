@@ -1,5 +1,4 @@
 Bad Kalinkirchheim	Trieste	1
-Bad Kalinkirchheim	Kranj	1
 Brezovica	Ljubljana	5
 Brezovica	Piran/Pirano	1
 Brezovica	Umag	1
@@ -244,21 +243,20 @@ Podcetrtek	Celje	1
 Podcetrtek	Cerkno	1
 Podcetrtek	Bohinj	1
 Podcetrtek	Piran/Pirano	2
-Bovec	Izola/Isola	1
-Bovec	Tolmin	1
-Bovec	Piran/Pirano	6
+Bovec	Komen	1
+Bovec	Villach	1
+Bovec	Opatija	1
 Bovec	Novo mesto	1
 Bovec	Klagenfurt	1
-Bovec	Gorje	3
-Bovec	Murska Sobota	1
-Bovec	Villach	2
-Bovec	Opatija	1
 Bovec	Skocjan	1
 Bovec	Radovljica	2
-Bovec	Bled	8
+Bovec	Bled	7
 Bovec	Koper/Capodistria	2
+Bovec	Tolmin	1
 Bovec	Cerkno	1
-Bovec	Komen	1
+Bovec	Gorje	3
+Bovec	Piran/Pirano	6
+Bovec	Izola/Isola	1
 Horjul	Kungota	1
 Horjul	Izola/Isola	1
 Zagreb	Izola/Isola	2
@@ -311,7 +309,7 @@ Bohinj	Menges	1
 Bohinj	Piran/Pirano	5
 Bohinj	Ptuj	3
 Bohinj	Klagenfurt	1
-Bohinj	Smarjeske Toplice	1
+Bohinj	Novigrad	1
 Bohinj	Kranjska Gora	6
 Bohinj	Beltinci	1
 Bohinj	Varazdin	1
@@ -328,7 +326,6 @@ Bohinj	Bled	17
 Bohinj	Koper/Capodistria	1
 Bohinj	Cerkno	1
 Bohinj	Maribor	2
-Bohinj	Novigrad	1
 Lasko	Koper/Capodistria	1
 Buje	Dolenjske Toplice	1
 Buje	Opatija	2
@@ -403,7 +400,6 @@ Kranjska Gora	Gorje	3
 Kranjska Gora	Vojnik	1
 Kranjska Gora	Kranj	1
 Kranjska Gora	Dolenjske Toplice	1
-Kranjska Gora	Villach	1
 Kranjska Gora	Moravske Toplice	1
 Kranjska Gora	Bled	6
 Kranjska Gora	Koper/Capodistria	1
@@ -438,12 +434,12 @@ Komen	Skocjan	1
 Komen	Bled	1
 Komen	Cerkno	1
 Brezice	Opatija	2
-Brezice	Radovljica	1
+Brezice	Radovljica	2
 Brezice	Bled	1
 Brezice	Reka	1
 Villach	Koper/Capodistria	1
 Villach	Skocjan	1
-Villach	Bled	2
+Villach	Bled	1
 Villach	Cerkno	1
 Opatija	Murska Sobota	1
 Opatija	Skocjan	1

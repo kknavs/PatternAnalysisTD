@@ -55,6 +55,7 @@ Ljubljana	Radovljica	2
 Ljubljana	Bled	19
 Ljubljana	Miren - Kostanjevica	1
 Ljubljana	Varazdin	1
+Ljubljana	Rogaska Slatina	1
 Ljubljana	Hrpelje - Kozina	1
 Motovun	Umag	2
 Motovun	Opatija	1
@@ -71,7 +72,6 @@ Postojna	Piran/Pirano	1
 Podcetrtek	Bistrica ob Sotli	1
 Bovec	Kranjska Gora	2
 Bovec	Zagreb	1
-Zagreb	Brezice	1
 Zagreb	Opatija	2
 Zagreb	Udine	1
 Zagreb	Smarjeske Toplice	1
@@ -90,7 +90,7 @@ Miren - Kostanjevica	Aquilea	2
 Nova Gorica	Aquilea	1
 Udine	Grado	1
 Udine	Kanal	1
-Udine	Palmanova	5
+Udine	Palmanova	4
 Udine	Sempeter - Vrtojba	2
 Udine	Maribor	1
 Udine	Aquilea	2
@@ -110,13 +110,12 @@ Piran/Pirano	Umag	1
 Piran/Pirano	Bled	1
 Piran/Pirano	Koper/Capodistria	1
 Piran/Pirano	Gorje	1
-Villach	Kranjska Gora	1
 Ptuj	Bled	1
 Ptuj	Hrpelje - Kozina	1
 Klagenfurt	Bled	2
-Grado	Palmanova	1
 Grado	Sempeter - Vrtojba	1
 Kranjska Gora	Umag	1
+Kranjska Gora	Villach	1
 Kranjska Gora	Bled	1
 Kranjska Gora	Gorje	1
 Aquilea	Sempeter - Vrtojba	1
@@ -131,4 +130,4 @@ Umag	Koper/Capodistria	1
 Opatija	Radovljica	1
 Opatija	Bled	1
 Opatija	Reka	2
-Radovljica	Bled	4
+Radovljica	Bled	5

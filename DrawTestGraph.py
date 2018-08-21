@@ -10,6 +10,7 @@ from networkx.algorithms import community as community_nx
 import itertools
 from operator import itemgetter
 from DrawGraph import draw_labels
+import os
 # https://github.com/taynaud/python-louvain/tree/networkx2
 # pip install -U git+https://github.com/taynaud/python-louvain.git@networkx2
 
@@ -68,7 +69,8 @@ def draw_graph1(save, consider_locations=True):
         #print pos
         #plt.axis('off')
         figManager = plt.get_current_fig_manager()
-        figManager.window.state('zoomed')
+        if os.name != 'posix':  # mac
+            figManager.window.state('zoomed')
         if save:
             plt.savefig(outputFolder + "/graph1_minW="+str(minW)+".png")  # save as png
     plt.show()  # display
@@ -84,9 +86,9 @@ def draw_graph2(save, consider_locations=True):
             minW_array = [i * multi for i in [60]]
         else:
             minW_array = [i * multi for i in [100]]
-        minW_array = [i * multi for i in [60]]
-        midW_array = [i * multi for i in [150]]
-        maxW_array = [i * multi for i in [550]]
+        minW_array = [0]#[i * multi for i in [60]]
+        midW_array = [get_avg_weight_nonzero()]#[i * multi for i in [150]]
+        maxW_array = [maxWeight/2]
     for maxW in maxW_array:
         for midW in midW_array:
             for minW in minW_array:
@@ -99,25 +101,31 @@ def draw_graph2(save, consider_locations=True):
                 elarge=[(u, v) for (u, v, d) in G.edges(data=True) if d['weight'] >= maxW]
                 emedium=[(u, v) for (u, v, d) in G.edges(data=True) if d['weight'] > midW and d['weight'] <maxW]
                 esmall=[(u, v) for (u, v, d) in G.edges(data=True) if d['weight'] <= midW and d['weight'] > minW]
+                d = nx.degree(G)
+                #node_size=[v * 100 for v in d.values()]
+                d = nx.degree(G)
+                d = [(d[node]+1) * 10 for node in G.nodes()]
                 pos = nx.shell_layout(G)  # spring, shell, circular positions for all nodes
                 if consider_locations:
                     change_nodes_position(pos)
                 # nodes
-                nx.draw_networkx_nodes(G, pos, alpha=0.7, node_size=300)
+                nx.draw_networkx_nodes(G, pos, alpha=0.6, node_color='orange', node_size=d)
                 # edges
-                nx.draw_networkx_edges(G, pos, edgelist=elarge,
-                                       width=3)
+                nx.draw_networkx_edges(G, pos, edge_color='b', edgelist=elarge,
+                                       width=2)
                 nx.draw_networkx_edges(G, pos, edgelist=emedium,
-                                       width=2,alpha=0.8, edge_color='b', style='dashed')
+                                       width=2, alpha=0.7, edge_color='c', style='dashed')
                 nx.draw_networkx_edges(G, pos, edgelist=esmall,
-                                       width=1, alpha=0.2, edge_color='b', style='dashed')
+                                       width=1, alpha=0.2, edge_color='gray', style='dashed')
                 # labels
-                draw_labels(G, pos)
+                draw_labels(G, pos, font_size=9)
                 plt.axis('off')
                 figManager = plt.get_current_fig_manager()
-                figManager.window.state('zoomed')
+                if os.name != 'posix':  # mac
+                    figManager.window.state('zoomed')
                 if save:
                     plt.savefig(outputFolder + "/graph2_maxW="+str(maxW)+"_midW="+str(midW)+"_minW="+str(minW)+".png")
+                print nx.info(G)
     plt.show()
 
 
@@ -141,16 +149,15 @@ def draw_graph3(save, consider_locations=True):
             for l in links:
                 if minW < l.weight < maxW:
                     G.add_edge(l.destination1, l.destination2, weight=l.weight) #obr?
-
-            # use one of the edge properties to control line thickness
-            edgewidth = [d['weight']/float(maxWeight/avg) for (u,v,d) in G.edges(data=True)]
-            #edgewidth = [d['weight']/float(avg) for (u,v,d) in G.edges(data=True)]
-            emedium = [(u, v) for (u, v, d) in G.edges(data=True)]
             pos=nx.spring_layout(G)  # spring, shell, circular positions for all nodes
             if consider_locations:
                 change_nodes_position(pos)
             # labels
             draw_labels(G, pos)
+            # use one of the edge properties to control line thickness
+            edgewidth = [d['weight']/float(maxWeight/avg) for (u,v,d) in G.edges(data=True)]
+            #edgewidth = [d['weight']/float(avg) for (u,v,d) in G.edges(data=True)]
+            emedium = [(u, v) for (u, v, d) in G.edges(data=True)]
             #nx.draw_networkx_nodes(G,pos,alpha=0.6,node_size=400)
             nx.draw_networkx_edges(G, pos, edgelist=emedium,
                                    width=edgewidth, alpha=0.7)
@@ -184,7 +191,8 @@ def draw_graph3(save, consider_locations=True):
             # poglej še: https://networkx.github.io/documentation/stable/reference/algorithms/community.html
             plt.axis('off')
             figManager = plt.get_current_fig_manager()
-            figManager.window.state('zoomed')
+            if os.name != 'posix':  # mac
+                figManager.window.state('zoomed')
             if save:
                 plt.savefig(outputFolder + "/louvain/graph3_minW="+str(minW)+"_maxW="+str(maxW)+".png")
     plt.show()
@@ -237,7 +245,8 @@ def draw_graph4(save, consider_locations=True):
                                        alpha=0.75)
             plt.axis('off')
             figManager = plt.get_current_fig_manager()
-            figManager.window.state('zoomed')
+            if os.name != 'posix':  # mac
+                figManager.window.state('zoomed')
             if save:
                 plt.savefig(outputFolder + "/graph4_minW="+str(minW)+"_maxW="+str(maxW)+".png")
     plt.show()
@@ -310,7 +319,8 @@ def draw_graph5(save, consider_locations=True):
             #                       width=edgewidth, alpha=0.7)
             plt.axis('off')
             figManager = plt.get_current_fig_manager()
-            figManager.window.state('zoomed')
+            if os.name != 'posix':  # mac
+                figManager.window.state('zoomed')
             if save:
                 plt.savefig(outputFolder + "/graph5_minW="+str(minW)+"_maxW="+str(maxW)+".png")
     plt.show()
@@ -369,7 +379,8 @@ def draw_graph6(save, consider_locations=True):
                 sorted(map(sorted, next_level_communities))
             plt.axis('off')
             figManager = plt.get_current_fig_manager()
-            figManager.window.state('zoomed')
+            if os.name != 'posix':  # mac
+                figManager.window.state('zoomed')
             if save:
                 plt.savefig(outputFolder + "/graph6_minW="+str(minW)+"_count="+str(count)+".png")
 
@@ -432,7 +443,8 @@ def draw_graph_asyn_lpa(save, consider_locations=True):  # looks very random
                                    alpha=0.9)
             plt.axis('off')
             figManager = plt.get_current_fig_manager()
-            figManager.window.state('zoomed')
+            if os.name != 'posix':  # mac
+                figManager.window.state('zoomed')
             if save:
                 plt.savefig(outputFolder + "/graph_asyn_lpa_minW="+str(minW)+"_maxW="+str(maxW)+".png")
     plt.show()
@@ -502,7 +514,8 @@ def draw_graph_girvan_newman(save, consider_locations=True):
                                        alpha=0.9)
             plt.axis('off')
             figManager = plt.get_current_fig_manager()
-            figManager.window.state('zoomed')
+            if os.name != 'posix':  # mac
+                figManager.window.state('zoomed')
             if save:
                 plt.savefig(outputFolder + "/graph_girvan_newman_minW="+str(minW)+"_maxW="+str(maxW)+".png")
     plt.show()
@@ -564,7 +577,8 @@ def draw_graph_k_clique(save, consider_locations=True):
                                    alpha=0.9)
             plt.axis('off')
             figManager = plt.get_current_fig_manager()
-            figManager.window.state('zoomed')
+            if os.name != 'posix':  # mac
+                figManager.window.state('zoomed')
             if save:
                 plt.savefig(outputFolder + "/graph_k_clique_minW="+str(minW)+"_maxW="+str(maxW)+".png")
     plt.show()
@@ -611,7 +625,8 @@ def draw_kernighan_lin_bisection(save, consider_locations=True):
                                    alpha=0.9)
             plt.axis('off')
             figManager = plt.get_current_fig_manager()
-            figManager.window.state('zoomed')
+            if os.name != 'posix':  # mac
+                figManager.window.state('zoomed')
             if save:
                 plt.savefig(outputFolder + "/graph_kernighan_lin_minW="+str(minW)+"_maxW="+str(maxW)+".png")
     plt.show()
@@ -623,7 +638,7 @@ if selectedData == DataType.SLO:
 # 175 mW
 #print get_count_for_destinations(u"British Museum", u"London Underground")  # 13  325 (no fids?, username)
 #print get_count_for_destinations(u"British Museum", u"The London Eye")  # 10  386 (no fids?, username)
-#draw_graph3(False)
+draw_graph2(False, consider_locations=True)
 #draw_graph_asyn_lpa(False)
 #draw_graph_girvan_newman(False)
 #draw_graph_k_clique(False)

@@ -16,20 +16,18 @@ Kobarid	Tolmin	1
 Kobarid	Zagreb	1
 Umag	Trieste	1
 Umag	Ptuj	1
-Umag	Zagreb	13
-Umag	Opatija	4
+Umag	Zagreb	10
+Umag	Opatija	3
 Umag	Skocjan	1
-Umag	Cakovec	2
+Umag	Cakovec	1
 Umag	Buje	1
-Umag	Varazdin	1
 Umag	Reka	2
 Umag	Ljubljana	4
 Umag	Motovun	4
 Umag	Novigrad	1
-Umag	Bled	1
-Umag	Piran/Pirano	2
-Umag	Postojna	1
 Umag	Radovljica	1
+Umag	Piran/Pirano	1
+Umag	Postojna	1
 Karlovac	Brezice	1
 Karlovac	Razkrizje	1
 Karlovac	Zagreb	3
@@ -41,10 +39,9 @@ Brda	Ljubljana	1
 Brda	Udine	1
 Brda	Zagreb	1
 Cakovec	Razkrizje	2
-Cakovec	Zagreb	6
-Cakovec	Bled	1
+Cakovec	Zagreb	5
+Cakovec	Varazdin	2
 Cakovec	Reka	1
-Cakovec	Varazdin	3
 Cakovec	Rogatec	1
 Trieste	Opatija	1
 Trieste	Zagreb	1
@@ -56,7 +53,7 @@ Trieste	Postojna	1
 Cirkulane	Bistrica ob Sotli	2
 Cirkulane	Brezice	3
 Cirkulane	Opatija	1
-Cirkulane	Zagreb	10
+Cirkulane	Zagreb	9
 Cirkulane	Ljubljana	1
 Cirkulane	Bled	1
 Cirkulane	Reka	1
@@ -67,16 +64,16 @@ Cirkulane	Postojna	1
 Cirkulane	Podcetrtek	2
 Ljubljana	Buzet	1
 Ljubljana	Kamnik	1
-Ljubljana	Postojna	5
-Ljubljana	Zagreb	43
+Ljubljana	Gorje	4
+Ljubljana	Zagreb	42
 Ljubljana	Bohinj	6
 Ljubljana	Piran/Pirano	2
+Ljubljana	Postojna	5
 Ljubljana	Ptuj	1
 Ljubljana	Klagenfurt	3
-Ljubljana	Smarjeske Toplice	1
 Ljubljana	Kranjska Gora	2
 Ljubljana	Reka	4
-Ljubljana	Gorje	4
+Ljubljana	Novigrad	1
 Ljubljana	Brezice	3
 Ljubljana	Opatija	6
 Ljubljana	Razkrizje	1
@@ -86,15 +83,14 @@ Ljubljana	Bled	19
 Ljubljana	Koper/Capodistria	1
 Ljubljana	Rogatec	1
 Ljubljana	Maribor	1
-Ljubljana	Novigrad	1
 Motovun	Brezice	1
-Motovun	Opatija	1
-Motovun	Zagreb	4
+Motovun	Opatija	2
+Motovun	Zagreb	3
 Motovun	Skocjan	2
 Motovun	Bled	1
 Motovun	Reka	2
-Motovun	Buzet	7
-Motovun	Buje	3
+Motovun	Buzet	6
+Motovun	Buje	2
 Motovun	Groznjan	1
 Motovun	Postojna	1
 Motovun	Novigrad	3
@@ -124,26 +120,26 @@ Zagreb	Sezana	1
 Zagreb	Miren - Kostanjevica	2
 Zagreb	Izola/Isola	1
 Zagreb	Tolmin	2
-Zagreb	Bohinj	8
+Zagreb	Bohinj	6
 Zagreb	Buje	5
-Zagreb	Piran/Pirano	5
+Zagreb	Piran/Pirano	4
 Zagreb	Kungota	1
 Zagreb	Klagenfurt	1
 Zagreb	Kranjska Gora	2
 Zagreb	Novigrad	3
 Zagreb	Bad Kalinkirchheim	1
-Zagreb	Varazdin	13
+Zagreb	Varazdin	12
 Zagreb	Groznjan	2
 Zagreb	Bistrica ob Sotli	6
 Zagreb	Brezice	22
-Zagreb	Opatija	53
+Zagreb	Opatija	50
 Zagreb	Razkrizje	7
 Zagreb	Skocjan	1
 Zagreb	Cerklje na Gorenjskem	1
-Zagreb	Bled	21
+Zagreb	Bled	20
 Zagreb	Koper/Capodistria	2
-Zagreb	Reka	29
-Zagreb	Rogatec	14
+Zagreb	Reka	27
+Zagreb	Rogatec	13
 Zagreb	Maribor	1
 Zagreb	Buzet	5
 Sezana	Brezice	1
@@ -156,7 +152,7 @@ Bohinj	Bistrica ob Sotli	1
 Bohinj	Klagenfurt	1
 Bohinj	Kranjska Gora	1
 Bohinj	Skocjan	1
-Bohinj	Bled	17
+Bohinj	Bled	16
 Bohinj	Koper/Capodistria	1
 Bohinj	Buzet	1
 Bohinj	Razkrizje	1
@@ -175,7 +171,7 @@ Piran/Pirano	Bled	1
 Piran/Pirano	Koper/Capodistria	1
 Piran/Pirano	Varazdin	1
 Piran/Pirano	Novigrad	1
-Piran/Pirano	Opatija	3
+Piran/Pirano	Opatija	2
 Ptuj	Opatija	1
 Ptuj	Radovljica	1
 Ptuj	Bled	1
@@ -184,6 +180,8 @@ Klagenfurt	Razkrizje	1
 Klagenfurt	Bled	1
 Klagenfurt	Reka	1
 Klagenfurt	Novigrad	1
+Novigrad	Koper/Capodistria	1
+Novigrad	Reka	1
 Kranjska Gora	Villach	1
 Kranjska Gora	Bled	1
 Kranjska Gora	Koper/Capodistria	1
@@ -192,7 +190,7 @@ Palmanova	Opatija	1
 Varazdin	Bistrica ob Sotli	2
 Varazdin	Brezice	1
 Varazdin	Razkrizje	4
-Varazdin	Bled	2
+Varazdin	Bled	1
 Varazdin	Reka	2
 Varazdin	Rogatec	1
 Groznjan	Opatija	1
@@ -213,12 +211,10 @@ Villach	Reka	1
 Villach	Opatija	1
 Opatija	Radovljica	2
 Opatija	Bled	1
-Opatija	Reka	38
+Opatija	Reka	39
 Opatija	Buzet	3
 Razkrizje	Reka	2
 Skocjan	Bled	2
 Radovljica	Bled	5
 Bled	Rogatec	1
-Koper/Capodistria	Novigrad	1
 Reka	Buzet	3
-Reka	Novigrad	1

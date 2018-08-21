@@ -110,7 +110,7 @@ reloadRecords = False
 reloadFids = False
 reloadData = False
 reloadDestinations = False
-reloadGeoMappings = True
+reloadGeoMappings = False
 
 print folder
 
@@ -168,6 +168,7 @@ if reloadDestinations:
 if reloadGeoMappings and selectedData == DataType.SLO:
     #read_geolocation_mappings()
     #prepare_geo_location_mappings()
+    #write_geolocation_mappings()
     generate_geo_location_mappings(insert=False)
     #add_geolocation_mapping("N.Ireland", "United Kingdom")
     #add_geolocation_mapping("Norfolk, England", "United Kingdom")
