@@ -1,0 +1,15 @@
+# 'data/vienna/graphs/infomap/infomap_minW=0.000149075730471__travel_style_[uNightlife_Seeker]__nodes=24.0.net /Users/karmen/Downloads/PatternAnalysisTD/data/vienna/graphs/infomap/overlapping -N 20 --undirected --weight-threshold 0 --overlapping --tree' -> 13 nodes partitioned in 0s from codelength 4.525596913 in one level to codelength 2.051543954 in 2 levels.
+# path flow name node:
+1:1 0.192333 "Rathaus" 11
+1:2 0.100065 "Imperial Palace (Hofburg)" 6
+1:3 0.100065 "Historic Center of Vienna" 7
+1:4 0.100065 "MuseumsQuartier Wien" 9
+1:5 0.100065 "State Hall of the Austrian National Library" 13
+2:1 0.121953 "Schonbrunn Palace" 8
+2:2 0.0842471 "St. Stephen's Cathedral" 5
+2:3 0.0842471 "Kahlenberg" 10
+2:4 0.0428865 "Prater" 2
+3:1 0.0185185 "Karlskirche" 1
+3:2 0.0185185 "Imperial Treasury of Vienna" 4
+4:1 0.0185185 "Sigmund Freud Museum" 3
+4:2 0.0185185 "Central Cemetery (Zentralfriedhof)" 12

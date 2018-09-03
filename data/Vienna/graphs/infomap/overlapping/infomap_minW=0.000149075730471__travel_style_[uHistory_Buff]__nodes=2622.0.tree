@@ -1,0 +1,89 @@
+# 'data/vienna/graphs/infomap/infomap_minW=0.000149075730471__travel_style_[uHistory_Buff]__nodes=2622.0.net /Users/karmen/Downloads/PatternAnalysisTD/data/vienna/graphs/infomap/overlapping -N 20 --undirected --weight-threshold 0 --overlapping --tree' -> 87 nodes partitioned in 1s from codelength 10.487881836 in one level to codelength 5.715496888 in 2 levels.
+# path flow name node:
+1:1 0.0604513 "Schonbrunn Palace" 70
+1:2 0.0490301 "St. Stephen's Cathedral" 66
+1:3 0.0419925 "Belvedere Palace Museum" 67
+1:4 0.0384492 "Imperial Palace (Hofburg)" 68
+1:5 0.0377873 "Kunsthistorisches Museum" 83
+1:6 0.0336086 "Imperial Treasury of Vienna" 63
+1:7 0.0327379 "Historic Center of Vienna" 69
+1:8 0.0321613 "Schonbrunner Gardens" 74
+1:9 0.0290596 "St. Peter's Church" 79
+1:10 0.0286517 "Natural History Museum (Naturhistorisches Museum)" 75
+1:11 0.023746 "Sisi Museum" 27
+1:12 0.0227908 "Stephansplatz" 2
+1:13 0.0222479 "State Opera House" 64
+1:14 0.0220426 "Volksgarten" 71
+1:15 0.0205205 "MuseumsQuartier Wien" 72
+1:16 0.0204522 "State Hall of the Austrian National Library" 84
+1:17 0.0201468 "Albertina" 76
+1:18 0.0200709 "Hundertwasserhaus" 21
+1:19 0.0194602 "Leopold Museum" 73
+1:20 0.0190516 "Parliament Building" 11
+1:21 0.0190205 "Plague Column (Pestsaule)" 29
+1:22 0.0187393 "Rathausplatz" 81
+1:23 0.0176092 "Augustinerkirche" 15
+1:24 0.0175423 "Rathaus" 78
+1:25 0.0173403 "Kapuziner Crypt (Kapuzinergruft)" 8
+1:26 0.0167228 "Stadtpark" 23
+1:27 0.0162556 "Karlskirche" 6
+1:28 0.0151461 "Votivkirche" 32
+1:29 0.0128701 "Ringstrasse" 1
+1:30 0.0116996 "Central Cemetery (Zentralfriedhof)" 80
+1:31 0.0113674 "St. Michael's Church" 28
+1:32 0.0113674 "Anker Clock" 38
+1:33 0.0113079 "Kunst Haus Wien - Museum Hundertwasser" 4
+1:34 0.0113079 "Vienna Woods" 17
+1:35 0.0113079 "Kirche am Steinhof" 85
+1:36 0.0112972 "Maria-Theresien-Platz" 3
+1:37 0.0110355 "St. Mary's on the Bank (Maria Am Gestade)" 44
+1:38 0.0110211 "Tiergarten Schoenbrunn - Zoo Vienna" 65
+1:39 0.0090397 "Griechenkirche zur heiligen Dreifaltigkeit" 34
+1:40 0.00705923 "Mozart Haus" 61
+1:41 0.00578828 "Church of the Jesuits" 77
+1:42 0.00562549 "Capuchin Church (Kapuzinerkirche)" 51
+1:43 0.00561133 "Mozart Statue" 35
+1:44 0.00545039 "Strauss Monument" 25
+1:45 0.00530097 "Freyung" 52
+1:46 0.00528787 "Schwarzenbergplatz" 41
+1:47 0.00528787 "St. Rupert's Church (Ruprechtskirche)" 43
+1:48 0.00528691 "Silberkammer" 48
+1:49 0.00528691 "Haas Haus" 58
+1:50 0.0050507 "Riesenrad" 37
+1:51 0.00498632 "Michaelerplatz" 16
+1:52 0.00498632 "Burggarten" 22
+1:53 0.00498632 "Monument to Empress Elisabeth" 57
+1:54 0.00497837 "Dominican Church" 18
+1:55 0.00478526 "St. Anna's Church" 20
+1:56 0.00471823 "Prater" 36
+1:57 0.00444188 "MAK - Austrian Museum of Applied Arts / Contemporary Art" 9
+1:58 0.00439731 "Minoritenplatz" 56
+1:59 0.0039096 "Sammlung alter Musikinstrumente (Collection of Early Musical Instruments)" 55
+1:60 0.003883 "Madame Tussauds Vienna" 39
+1:61 0.0028059 "Sigmund Freud Museum" 47
+1:62 0.00275242 "Heeresgeschichtliches Museum" 12
+1:63 0.00271591 "Hofjagd- und Ruestkammer" 60
+1:64 0.00270594 "Academy of Fine Arts (Akademie der bildenden Kunste)" 24
+1:65 0.00197162 "Spittelberg Quarter" 45
+1:66 0.00197162 "Franziskanerkirche" 53
+1:67 0.0019604 "Christmas Market on Rathausplatz" 14
+1:68 0.00194226 "Ephesos (Ephesus) Museum" 59
+1:69 0.00156035 "Vienna Museum" 42
+1:70 0.00122937 "Beethoven Pasqualatihaus" 62
+1:71 0.00121102 "Secession Building (Secessionsgebaude)" 46
+1:72 0.00119597 "Twin City Liner" 49
+1:73 0.00119597 "Schmetterlinghaus" 54
+1:74 0.00113922 "Karlsplatz" 26
+1:75 0.00082085 "Clock Museum (Uhrenmuseum)" 50
+1:76 0.00082085 "The Vienna Philharmonic" 82
+1:77 0.000818248 "The Third Man Museum" 86
+1:78 0.000788231 "Haus der Musik" 30
+1:79 0.000776474 "Schoenbrunn Palace Christmas Market" 19
+1:80 0.000738075 "Technisches Museum" 13
+1:81 0.000394018 "Haus des Meeres - Aqua Terra Zoo" 7
+1:82 0.000390316 "Jewish Museum Vienna (Judisches Museum der Stadt Wien)" 40
+2:1 0.0028436 "Danube Tower" 31
+2:2 0.000741394 "The Strudelshow" 33
+2:3 0.000314855 "Donaupark" 5
+2:4 0.000314855 "Kapuziner Crypt (Kapuzinergruft)" 8
+2:5 0.000314855 "Musikverein" 10

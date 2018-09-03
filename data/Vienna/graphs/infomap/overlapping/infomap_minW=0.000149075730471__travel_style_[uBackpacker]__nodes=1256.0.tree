@@ -1,0 +1,53 @@
+# 'data/vienna/graphs/infomap/infomap_minW=0.000149075730471__travel_style_[uBackpacker]__nodes=1256.0.net /Users/karmen/Downloads/PatternAnalysisTD/data/vienna/graphs/infomap/overlapping -N 20 --undirected --weight-threshold 0 --overlapping --tree' -> 51 nodes partitioned in 1s from codelength 9.121914404 in one level to codelength 4.853303252 in 2 levels.
+# path flow name node:
+1:1 0.0838934 "Imperial Palace (Hofburg)" 32
+1:2 0.0738949 "Schonbrunn Palace" 34
+1:3 0.0651864 "Stephansplatz" 2
+1:4 0.0613566 "Schonbrunner Gardens" 38
+1:5 0.0572494 "St. Stephen's Cathedral" 30
+1:6 0.0568893 "Belvedere Palace Museum" 31
+1:7 0.0447102 "Natural History Museum (Naturhistorisches Museum)" 39
+1:8 0.0438777 "Parliament Building" 9
+1:9 0.0409555 "Historic Center of Vienna" 33
+1:10 0.0397422 "Rathaus" 42
+1:11 0.0385815 "Prater" 20
+1:12 0.0307037 "Kunsthistorisches Museum" 46
+1:13 0.0305108 "Imperial Treasury of Vienna" 27
+1:14 0.0255014 "Votivkirche" 17
+1:15 0.0208561 "Sisi Museum" 15
+1:16 0.0206937 "Kunst Haus Wien - Museum Hundertwasser" 4
+1:17 0.0192056 "Tiergarten Schoenbrunn - Zoo Vienna" 29
+1:18 0.0183063 "Rathausplatz" 45
+1:19 0.0182911 "St. Peter's Church" 43
+1:20 0.0177216 "Hundertwasserhaus" 11
+1:21 0.013594 "Graben and Kohlmarkt" 6
+1:22 0.013423 "Heeresgeschichtliches Museum" 10
+1:23 0.0128501 "Karlskirche" 7
+1:24 0.0127584 "State Hall of the Austrian National Library" 47
+1:25 0.0120946 "Leopold Museum" 37
+1:26 0.012093 "Griechenkirche zur heiligen Dreifaltigkeit" 18
+1:27 0.012093 "Riesenrad" 21
+1:28 0.00973517 "Albertina" 40
+1:29 0.00965252 "Ringstrasse" 1
+1:30 0.00965252 "Stadtpark" 13
+1:31 0.00873238 "Plague Column (Pestsaule)" 16
+1:32 0.00873238 "Vienna Naschmarkt" 19
+1:33 0.00730498 "Donaupark" 5
+1:34 0.00724577 "Central Cemetery (Zentralfriedhof)" 44
+1:35 0.00324012 "MuseumsQuartier Wien" 36
+1:36 0.0032167 "Sigmund Freud Museum" 24
+1:37 0.00317867 "MAK - Austrian Museum of Applied Arts / Contemporary Art" 8
+1:38 0.0023853 "Secession Building (Secessionsgebaude)" 23
+1:39 0.00159502 "State Opera House" 28
+1:40 0.000740348 "Mozart Haus" 26
+2:1 0.00321605 "Strauss Monument" 14
+2:2 0.00321605 "Anker Clock" 22
+2:3 0.00321605 "Church of the Jesuits" 41
+2:4 0.00248494 "Kirche am Hof" 25
+2:5 0.00226215 "St. Peter's Church" 43
+2:6 0.00171433 "Hundertwasserhaus" 11
+3:1 0.00264949 "Maria-Theresien-Platz" 3
+3:2 0.00264949 "Burggarten" 12
+3:3 0.00264949 "Volksgarten" 35
+3:4 0.00174836 "Graben and Kohlmarkt" 6
+3:5 0.00174836 "State Hall of the Austrian National Library" 47

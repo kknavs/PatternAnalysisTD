@@ -1,0 +1,209 @@
+# 'data/vienna/graphs/infomap/infomap_minW=0.000149075730471_full_WINTER_nodes=155434.net /Users/karmen/Downloads/PatternAnalysisTD/data/vienna/graphs/infomap/overlapping -N 20 --undirected --weight-threshold 0 --overlapping --tree' -> 207 nodes partitioned in 6s from codelength 11.078423548 in one level to codelength 5.707380912 in 2 levels.
+# path flow name node:
+1:1 0.0887132 "Schonbrunn Palace" 188
+1:2 0.0749122 "St. Stephen's Cathedral" 184
+1:3 0.0578457 "Historic Center of Vienna" 187
+1:4 0.0558582 "Belvedere Palace Museum" 185
+1:5 0.0492934 "Imperial Palace (Hofburg)" 186
+1:6 0.033568 "Stephansplatz" 2
+1:7 0.0333121 "Rathaus" 197
+1:8 0.0325638 "Schonbrunner Gardens" 193
+1:9 0.0321859 "Prater" 59
+1:10 0.0316966 "Kunsthistorisches Museum" 203
+1:11 0.0256794 "State Opera House" 182
+1:12 0.0249656 "Tiergarten Schoenbrunn - Zoo Vienna" 183
+1:13 0.0229871 "Albertina" 195
+1:14 0.0211483 "St. Peter's Church" 198
+1:15 0.0182891 "Natural History Museum (Naturhistorisches Museum)" 194
+1:16 0.0172173 "Rathausplatz" 200
+1:17 0.017094 "Sisi Museum" 40
+1:18 0.0165765 "Ringstrasse" 1
+1:19 0.016048 "MuseumsQuartier Wien" 190
+1:20 0.0142569 "Karlskirche" 8
+1:21 0.0136335 "Hundertwasserhaus" 31
+1:22 0.0131318 "Parliament Building" 13
+1:23 0.0122027 "Imperial Treasury of Vienna" 181
+1:24 0.011656 "State Hall of the Austrian National Library" 204
+1:25 0.00877414 "Graben and Kohlmarkt" 7
+1:26 0.00872638 "Leopold Museum" 191
+1:27 0.00870602 "Maria-Theresien-Platz" 4
+1:28 0.00772093 "Vienna Naschmarkt" 56
+1:29 0.00731919 "Kapuziner Crypt (Kapuzinergruft)" 10
+1:30 0.00684713 "Stadtpark" 34
+1:31 0.00682962 "Vienna U-Bahn" 202
+1:32 0.00627206 "Votivkirche" 48
+1:33 0.00618119 "Danube Tower" 46
+1:34 0.00615684 "Riesenrad" 60
+1:35 0.0061356 "Kunst Haus Wien - Museum Hundertwasser" 5
+1:36 0.0058692 "Volksgarten" 189
+1:37 0.00546165 "Haus der Musik" 44
+1:38 0.00524577 "Mozart Haus" 160
+1:39 0.00520813 "Plague Column (Pestsaule)" 43
+1:40 0.00506235 "Central Cemetery (Zentralfriedhof)" 199
+1:41 0.00490995 "Burggarten" 33
+1:42 0.00474168 "Heeresgeschichtliches Museum" 14
+1:43 0.00468218 "Karlsplatz" 39
+1:44 0.00452789 "Michaelerplatz" 20
+1:45 0.00380416 "Haus des Meeres - Aqua Terra Zoo" 9
+1:46 0.00379565 "Strauss Monument" 37
+1:47 0.00375555 "Sigmund Freud Museum" 87
+1:48 0.00375062 "Secession Building (Secessionsgebaude)" 85
+1:49 0.00365397 "Kaerntnerstrasse" 32
+1:50 0.00364 "Anker Clock" 61
+1:51 0.00360539 "Maria Theresia Denkmal" 42
+1:52 0.00349116 "Augustinerkirche" 19
+1:53 0.00314425 "Heldenplatz" 38
+1:54 0.00311729 "Praterstern" 62
+1:55 0.00307566 "Church of the Jesuits" 196
+1:56 0.0030323 "Madame Tussauds Vienna" 63
+1:57 0.00290233 "Technisches Museum" 16
+1:58 0.00276879 "Kaiserappartements" 69
+1:59 0.00260686 "Schwarzenbergplatz" 67
+1:60 0.00250342 "Mozart Statue" 57
+1:61 0.00239468 "St. Michael's Church" 41
+1:62 0.00237905 "Danube Canal (Donau Kanal)" 108
+1:63 0.00232166 "Gloriette" 29
+1:64 0.00228188 "Silberkammer" 89
+1:65 0.002107 "Vienna Pass" 21
+1:66 0.00209467 "Schoenbrunn Palace Christmas Market" 25
+1:67 0.00207764 "Soviet War Memorial" 53
+1:68 0.00200927 "Musikverein" 12
+1:69 0.00197343 "Palmenhaus Schoenbrunn" 66
+1:70 0.0018507 "Mariahilfer Strasse" 45
+1:71 0.00179901 "Burgtheater" 54
+1:72 0.00177286 "Kahlenberg" 192
+1:73 0.00173983 "Imperial Carriage Museum Vienna" 15
+1:74 0.00171527 "Museum of Modern Art Ludwig Foundation (MUMOK)" 175
+1:75 0.00168605 "Universitat Wien" 18
+1:76 0.00164772 "Wien Hauptbahnhof Sud" 47
+1:77 0.00152793 "Burgtor" 88
+1:78 0.00147587 "Freyung" 101
+1:79 0.00147409 "Judenplatz Holocaust Memorial" 49
+1:80 0.00146598 "Otto Wagner Pavillon Karlsplatz" 77
+1:81 0.00136141 "Schubert Statue" 117
+1:82 0.00136132 "Schmetterlinghaus" 105
+1:83 0.0013557 "Minoritenkirche" 28
+1:84 0.00133557 "Neuer Markt" 110
+1:85 0.00128361 "Capuchin Church (Kapuzinerkirche)" 97
+1:86 0.00128137 "Vienna Ring Tram" 126
+1:87 0.00121403 "Theseus Temple" 134
+1:88 0.00120888 "MAK - Austrian Museum of Applied Arts / Contemporary Art" 11
+1:89 0.00117797 "Griechenkirche zur heiligen Dreifaltigkeit" 55
+1:90 0.00116159 "Kirche am Steinhof" 205
+1:91 0.00111299 "Donaupark" 6
+1:92 0.00108647 "Christmas Market on Rathausplatz" 17
+1:93 0.00106362 "Haas Haus" 143
+1:94 0.00103392 "St. Mary's on the Bank (Maria Am Gestade)" 80
+1:95 0.00102649 "Vienna Museum" 72
+1:96 0.00101492 "Volksoper" 3
+1:97 0.000972478 "Minoritenplatz" 122
+1:98 0.000943241 "Beethoven Statue" 96
+1:99 0.000938341 "Freyung Passage" 107
+1:100 0.000922578 "Jewish Museum Vienna (Judisches Museum der Stadt Wien)" 64
+1:101 0.000892667 "Maltese Church" 120
+1:102 0.000848885 "Hofmobiliendepot (Imperial Furniture Collection)" 50
+1:103 0.00084801 "City Airport Train" 36
+1:104 0.00083838 "Dominican Church" 24
+1:105 0.000831636 "Vienna Woods" 23
+1:106 0.000814396 "The Strudelshow" 52
+1:107 0.000787425 "Vermahlungsbrunnen (Marriage Fountain)" 127
+1:108 0.000775004 "Donner Brunnen" 119
+1:109 0.000770129 "The Vienna Philharmonic" 201
+1:110 0.000769805 "Am Hof" 123
+1:111 0.00076155 "Statue of Johannes Gutenberg" 130
+1:112 0.000759357 "Neue Burg" 30
+1:113 0.000750639 "Looshaus" 132
+1:114 0.000637757 "Academy of Fine Arts (Akademie der bildenden Kunste)" 35
+1:115 0.000630026 "Orangery at Schoenbrunn Palace" 153
+1:116 0.00062556 "St. Rupert's Church (Ruprechtskirche)" 73
+1:117 0.00060228 "Kirche am Hof" 139
+1:118 0.000598131 "Alte Donau" 70
+1:119 0.000564966 "Schottenkirche" 98
+1:120 0.000556911 "Brahms Statue" 156
+1:121 0.000512221 "The Third Man Museum" 206
+1:122 0.000477314 "Globe Museum of the Austrian National Library" 71
+1:123 0.00042539 "Monument to Empress Elisabeth" 125
+1:124 0.000419086 "St. Anna's Church" 26
+1:125 0.000409604 "Botanischer Garten (Botanical Garden of the University of Vienna)" 51
+1:126 0.000392046 "Winter Palace of Prince Eugene" 111
+1:127 0.000328952 "Ephesos (Ephesus) Museum" 144
+1:128 0.000324678 "Desert House" 169
+1:129 0.000292906 "Albertinaplatz" 158
+1:130 0.000284088 "Tourist Info Wien" 154
+1:131 0.000279968 "Ringstrassen Galleries" 163
+1:132 0.000279686 "Spittelberg Quarter" 82
+1:133 0.000278978 "The Gates of Violence Monument" 136
+1:134 0.000266369 "Palais Auersperg" 137
+1:135 0.000262799 "Volkstheater" 83
+1:136 0.000258739 "Clock Museum (Uhrenmuseum)" 93
+1:137 0.000257074 "Meinl am Graben" 79
+1:138 0.000242212 "Postsparkasse" 75
+1:139 0.000238628 "Spittelberg Christmas Market" 27
+1:140 0.000236145 "Franziskanerkirche" 104
+1:141 0.000235969 "Die Burgkapelle (Home of the Vienna Boys' Choir)" 129
+1:142 0.00023223 "Sigmund Freud Park" 167
+1:143 0.000231097 "Austria Center Vienna" 92
+1:144 0.000206309 "Gasometer" 128
+1:145 0.000203528 "Twin City Liner" 91
+1:146 0.000189928 "Trinitarierkirche zum Heiligen Franz von Assisi" 74
+1:147 0.000186041 "Wiener Konzerthaus" 65
+1:148 0.000182633 "United Nations Complex" 100
+1:149 0.000181701 "Dorotheum" 81
+1:150 0.000176563 "Sammlung alter Musikinstrumente (Collection of Early Musical Instruments)" 118
+1:151 0.00016651 "Goethe Monument" 151
+1:152 0.000163971 "Beethoven Pasqualatihaus" 174
+1:153 0.000160414 "Bruckner Statue" 171
+1:154 0.000158736 "District Heating Plant Spittelau" 95
+1:155 0.000155539 "Bundeskanzleramt Oesterreich" 148
+1:156 0.000140372 "Wiener Royal Orchester" 147
+1:157 0.000131209 "Russian Orthodox Cathedral of St. Nicholas" 58
+1:158 0.000126996 "Ernst Happel Stadion" 68
+1:159 0.000118942 "Billa Corso im Herrnhuterhaus" 138
+1:160 0.000118552 "Republic Monument" 173
+1:161 0.000105683 "Hofjagd- und Ruestkammer" 145
+1:162 0.000101738 "Casino Wien" 99
+1:163 9.90867e-05 "Augarten" 94
+1:164 9.3343e-05 "Imperial Crypt" 115
+1:165 9.2347e-05 "Wien Mitte the Mall" 131
+1:166 9.12445e-05 "Vienna Crime Museum" 180
+1:167 8.81799e-05 "Wiener Hofburg - Orchester" 112
+1:168 8.57983e-05 "Flea Market" 133
+1:169 7.82635e-05 "Lainzer Tiergarten" 22
+1:170 7.08678e-05 "Monument to Johann Andreas von Liebenberg" 140
+1:171 6.64463e-05 "Church of the Teutonic Order" 102
+1:172 5.85e-05 "Hochstrahlbrunnen" 142
+1:173 5.43622e-05 "Federal Pathologic-Anatomical Museum" 150
+1:174 5.02626e-05 "Michaelertrakt" 152
+1:175 4.78909e-05 "Wiener Eistraum" 86
+1:176 4.01652e-05 "Torture museum" 178
+1:177 4.01086e-05 "Austrian Theater Museum" 179
+1:178 3.92578e-05 "Cemetery of St. Marx (Friedhof St. Marx)" 84
+1:179 3.79366e-05 "ZOOM Kindermuseum" 116
+1:180 3.73331e-05 "Wiener Strassenbahnmuseum (Street Car Museum)" 76
+1:181 3.26578e-05 "21er Haus" 170
+1:182 3.24162e-05 "Funeral Museum (Bestattungsmuseum)" 135
+1:183 3.00034e-05 "Haydnhaus" 113
+1:184 2.70749e-05 "Roemer Museum" 114
+1:185 2.69227e-05 "Johann Strauss Museum" 157
+1:186 2.61615e-05 "Flohmarkt beim Naschmarkt" 166
+1:187 2.57558e-05 "Erzherzog Karl Denkmal" 165
+1:188 2.05247e-05 "Grinzinger Pfarrkirche" 159
+1:189 2.03771e-05 "Lugner City" 177
+1:190 2.01881e-05 "Majolica House (Majolikahaus)" 121
+1:191 1.92662e-05 "Lessing-Denkmal" 168
+1:192 1.36831e-05 "Palais Schonborn-Batthyany" 90
+1:193 1.36831e-05 "Staatsopernmuseum" 141
+1:194 1.36831e-05 "SchokoMuseum (Chocolate Museum)" 164
+1:195 1.36573e-05 "Privy Garden / Kronprinzengarten de Schonbrunn" 172
+1:196 1.36314e-05 "Music Mile" 149
+1:197 1.36314e-05 "Mariahilfer Kirche" 162
+1:198 1.31521e-05 "Etablissement Ronacher" 103
+1:199 1.31408e-05 "Karl-Marx-Hof" 124
+1:200 1.30324e-05 "Theater an der Wien" 106
+1:201 1.25718e-05 "Stadttempel Synagogue" 146
+1:202 1.25332e-05 "Kunsthalle Wien Museumsquartier" 176
+1:203 6.84155e-06 "Liechtenstein City Palace" 109
+1:204 6.84155e-06 "Beethovenhaus" 161
+1:205 6.54686e-06 "Vienna University of Economics and Business" 78
+2:1 4.30324e-05 "Esperanto Museum" 155
+2:2 2.09598e-05 "Globe Museum of the Austrian National Library" 71

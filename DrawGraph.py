@@ -70,7 +70,6 @@ avg = get_avg_weight_nonzero()
 destinations_dict = dict()
 ids_dict = dict()
 for d in get_destinations():
-    print d
     if d.destination not in destinations_dict:
         destinations_dict[d.destination] = d
         ids_dict[d.id] = d.destination
@@ -78,7 +77,8 @@ for d in get_destinations():
             new_k = mapping[d.destination]
             destinations_dict[new_k] = d
             ids_dict[d.id] = new_k
-print len(destinations_dict)
+print "Count all destinations: ", len(destinations_dict)
+print "MaxWeight: ", maxWeight
 
 
 def relabel_destination(G, pos=None, back=False):
@@ -404,7 +404,7 @@ import subprocess
 
 
 def draw_infomap_graph(G, minW, count_nodes, filters=None, save=False, consider_locations=True, season=Season.ALL,
-                       recursion_count=0):
+                       recursion_count=0, with_markov_time=False):
     txt_name = ("/infomap/infomap_minW="+str(float(minW)/maxWeight)+"_"+get_fname(filters, season)+
                 "_nodes=" + str(count_nodes)+".net").replace(" ", "_")
     if recursion_count > 0:
@@ -446,15 +446,21 @@ def draw_infomap_graph(G, minW, count_nodes, filters=None, save=False, consider_
     avg =get_avg_weight_nonzero()
     avg = 0 #0.3 #0.95
     print "avg",avg
-    subprocess.check_call([runp,
-                           outputFolder+txt_name,
-                           # outputFolder+'/ninetriangless.net',
-                           out_path + mode, "-N 20", "--undirected", "--weight-threshold "+str(avg),"--overlapping", "--bftree"])
-    subprocess.check_call([runp,
-                           outputFolder+txt_name,
-                           # outputFolder+'/ninetriangless.net',
-                           out_path+ mode, "-N 20", "--undirected", "--weight-threshold "+str(avg), "--overlapping",  "--tree"])
-    tp =   outputFolder+txt_name
+    if with_markov_time:
+        subprocess.check_call([runp,
+                               outputFolder+txt_name,
+                               out_path + mode, "-N 20", "--undirected", "--weight-threshold "+str(avg),"--overlapping", "--bftree", "--markov-time 0.75"])
+        subprocess.check_call([runp,
+                               outputFolder+txt_name,
+                               out_path+ mode, "-N 20", "--undirected", "--weight-threshold "+str(avg), "--overlapping",  "--tree", "--markov-time 0.75"])
+    else:
+        subprocess.check_call([runp,
+                               outputFolder+txt_name,
+                               out_path + mode, "-N 20", "--undirected", "--weight-threshold "+str(avg),"--overlapping", "--bftree"])
+        subprocess.check_call([runp,
+                               outputFolder+txt_name,
+                               out_path+ mode, "-N 20", "--undirected", "--weight-threshold "+str(avg), "--overlapping",  "--tree"])
+    tp = outputFolder+txt_name
     """subprocess.check_call([runp,
                            outputFolder+txt_name,
                            # outputFolder+'/ninetriangless.net',
@@ -578,7 +584,7 @@ def draw_infomap_graph(G, minW, count_nodes, filters=None, save=False, consider_
     if not save:
         plt.show()  # display
     relabel_destination(G, pos, back=True)
-    if recursion_count < 0:
+    if recursion_count < 0:  # change if you want to test
         G_first_group = nx.Graph()
         for n in G.nodes():
             print n, dict_groups.get(n)
@@ -595,7 +601,7 @@ def draw_infomap_graph(G, minW, count_nodes, filters=None, save=False, consider_
                       recursion_count+1)
 
 
-def load_infomap_graph(filters=None, save=True, consider_locations=True, season=Season.ALL):
+def load_infomap_graph(filters=None, save=True, consider_locations=True, season=Season.ALL, with_markov_time=False):
 
     # add all nodes
     #for d in get_destinations():
@@ -605,6 +611,8 @@ def load_infomap_graph(filters=None, save=True, consider_locations=True, season=
         minW_array = [500/float(maxWeight)]#40, 300[i * multi for i in [1, 10, 20, 40, 60, 100, 120, 150, 180, 200, 270, 300]]
     else:
         minW_array = [1]
+    if with_markov_time:
+        minW_array = [0,3]
     maxW_array = [] #[i * multi for i in [400]]#[i * multi for i in [100, 300, 500, 700, 1000]]
     #if selectedData == DataType.VIENNA:
     #    maxW_array +=[ 1300, 1500]
@@ -623,24 +631,33 @@ def load_infomap_graph(filters=None, save=True, consider_locations=True, season=
 
             # filter based on minW and maxW
             for destination1, destination2, nw in g_tmp.edges(data=True):
-                if minW-1 < nw['weight'] < maxW:
+                if minW < nw['weight'] < maxW:
                     count_nodes += nw['weight']*2
                     G.add_edge(destination1, destination2, weight=float(nw['weight'])/maxWeight)
             if len(G.nodes()) == 0:
                 continue
-            draw_infomap_graph(G, minW, count_nodes, filters, save, consider_locations, season)
+            draw_infomap_graph(G, minW, count_nodes, filters, save, consider_locations, season,
+                               with_markov_time=with_markov_time)
 
     # --preferred-number-of-modules 4
     # --overlapping
 
-
+#load_infomap_graph(save=True)
 filters_arr = [#{" age": ["13-17", "18-24"]},
                #{" age": ["35-49", "50-64"]},
-               #{"age": ["65+"]},
-               {" travel_style": ["Family Vacationer"]} ,
-               {" travel_style": ["Nightlife Seeker"]},
-               {" travel_style": ["History Buff"]},
-               {" travel_style": ["Backpacker"]}
+              # {" age": ["65+"]},
+    #{" age": ["35-49"]},
+               #{" travel_style": ["Family Vacationer"]} ,
+               #{" travel_style": ["Nightlife Seeker"]},
+               #{" travel_style": ["History Buff"]},
+               #{" travel_style": ["Backpacker"]}
+    {" travel_style": ["Peace and Quiet Seeker"]},
+   # {" travel_style": ["Thrill Seeker"]},
+   # {" travel_style": ["Nature Lover"]},
+   # {" travel_style": ["Luxury Traveler"]},
+   # {" travel_style": ["Art and Architecture Lover"]},
+   # {" travel_style": ["Shopping Fanatic"]},
+    #{" travel_style": ["Nightlife Seeker"]},
                ]
 
 #for f in filters_arr:
@@ -765,19 +782,24 @@ load_infomap_graph(save=True, season=Season.WINTER)
 load_infomap_graph(save=True, season=Season.NEW_YEAR)
 load_infomap_graph(save=True, season=Season.WINTER_WITHOUT_NEW_YEAR)"""
 
+
+
 import community_louvain as Community
-def draw_greedy(num, size, greedy=True):  # num_cliques, clique_size)
+def draw_greedy(num, size, greedy=False):  # num_cliques, clique_size)
     G = nx.Graph()
-    """for n1,n2 in [(0, 1), (1, 2), (2, 3), (0, 3),
-                  (1, 4),
-                  (4, 5), (5, 6), (6, 7), (4, 7),
-                  (2, 8), (7, 8), (8, 9), (2, 9), (7, 9), (8, 9)]:
-        G.add_edge(n1,n2)"""
     for n1,n2 in [(0, 1), (1, 2), (2, 3), (0, 3),
                   (1, 4),
                   (4, 5), (5, 6), (6, 7), (4, 7),
                   (2, 8), (7, 8), (8, 9), (2, 9), (7, 9), (8, 9)]:
         G.add_edge(n1,n2)
+    G = generate_graph()
+    min_w = 150# 20#10 ali 20 #372
+    G = filter_graph_by_weight(G, min_weight=min_w)
+    """for n1,n2 in [(0, 1), (1, 2), (2, 3), (0, 3),
+                  (1, 4),
+                  (4, 5), (5, 6), (6, 7), (4, 7),
+                  (2, 8), (7, 8), (8, 9), (2, 9), (7, 9), (8, 9)]:
+        G.add_edge(n1,n2)"""
     #G = nx.ring_of_cliques(num, size)
     #G = nx.balanced_tree(2, 3)
 
@@ -849,12 +871,14 @@ def draw_greedy(num, size, greedy=True):  # num_cliques, clique_size)
     #print "The modularity of the network is %f" % modularity
 
 
-def draw_louvain(save=True, consider_locations=True,filters=None, season=Season.ALL):
-    colors = ['c', 'yellow', 'lightgreen', 'pink', 'lightcoral', 'b']
-    font_colors = ['b', 'darkorange', 'green', 'purple', 'maroon', 'c']
+def draw_louvain(save=True, consider_locations=True,filters=None, season=Season.ALL, with_resolution=False):
+    colors = ['c', 'yellow', 'lightgreen', 'pink', 'lightcoral', 'gray', 'b', 'darkorange', 'green', 'purple', 'maroon', 'c']
+    font_colors = ['b', 'darkorange', 'green', 'purple', 'maroon', 'black', 'c', 'yellow', 'lightgreen', 'pink', 'lightcoral', 'b']
     plt.clf()
     G = generate_graph(filters=filters, season=season)
     min_w = 372
+    if with_resolution:
+        min_w = 20 #10
     G = filter_graph_by_weight(G, min_weight=min_w)
     print(nx.info(G))
     #nx.draw_networkx_nodes(G, pos=pos, nodelist=G.nodes)
@@ -882,7 +906,10 @@ def draw_louvain(save=True, consider_locations=True,filters=None, season=Season.
     #print sum(ccs)/len(ccs)
     # print nx.__version__  is 2.1
     mapping = dict(zip(G.nodes(), range(1, len(G.nodes()))))
-    partition = Community.best_partition(G, None, 'weight')
+    if with_resolution:
+        partition = Community.best_partition(G, None, 'weight', 0.5)
+    else:
+        partition = Community.best_partition(G, None, 'weight')
     for count,i in enumerate(set(partition.values())):
         print "Community", i
         members = sorted([str(nodes) for nodes in partition.keys() if partition[nodes] == i])
@@ -910,10 +937,10 @@ def draw_louvain(save=True, consider_locations=True,filters=None, season=Season.
 #load_infomap_graph(save=False)
 #for filters in filters_arr:
 #    draw_louvain(filters=filters, save=True)
+#draw_louvain(save=False)
 
 
-
-def draw_test_di_graph(greedy=False):
+def draw_test_di_graph(louvain=False):
     """G = nx.DiGraph(directed=True)
     G.add_edges_from(
         [('A', 'B'), ('C', 'B'), ('C', 'D'), ('A', 'D'), ('A', 'E'),
@@ -939,7 +966,7 @@ def draw_test_di_graph(greedy=False):
     pos = nx.spring_layout(G)
     dict_groups = {}
 
-    if greedy:
+    if louvain:
         dict_groups = Community.best_partition(G, None)
         #nx.draw(G,pos, node_size=700)
         print dict_groups
@@ -977,7 +1004,7 @@ def draw_test_di_graph(greedy=False):
                     l = line.strip().split('"')
                     print l
                     modules, flow_amount = l[0].strip().split(" ")
-                    node_name = l[1]
+                    node_name = int(l[1])
                     dict_groups[node_name] = float(modules.split(":")[0])
 
         for n in G.nodes():
@@ -999,5 +1026,323 @@ def draw_test_di_graph(greedy=False):
     plt.show()
 
 
-#draw_greedy(5, 4, True)
+def draw_step_graph(G, groups, pos=None, louvain=False, step=0, save=False):
+    # we need fixed colors, otherwise jumping...
+    colors = ['c', 'yellow', 'lightgreen', 'pink', 'red', 'gray', 'b',  'green','darkorange', 'purple', 'maroon']
+    #color_dict = {u'Opatija': 'c', u'Zagreb': 'yellow', u'Skocjan': 'lightgreen', u'Trieste':'pink',
+    #              u'Bohinj':'red',  u'Ljubljana':'gray', u'Gorje':'b',  u'Bled':'green',
+    #              u'Piran/Pirano': 'darkorange', u'Postojna': 'purple'}
+    plt.clf()
+    if louvain:
+        colors = ['c', 'yellow', 'lightgreen', 'pink', 'red', 'gray', 'b',  'green','darkorange', 'purple', 'maroon']
+        modularity = Community.modularity(groups, G, 'weight')
+        print "Modularity:", modularity
+    else:
+        map_equation = calculate_map_equation(G, groups)
+        print "Map equation", map_equation
+    if not pos:
+        pos = nx.spring_layout(G)
+    nx.draw_networkx_edges(G, pos, G.edges())
+    print groups
+    #values = [groups.get(node, 0.25) for node in G.nodes()]
+    values = [colors[groups.get(node)] for node in G.nodes()]
+    #values = [color_dict[groups.get(node)] for node in G.nodes()]
+    nx.draw_networkx_nodes(G,pos,
+                           node_color=values,
+                           node_size=350,
+                           alpha=1.0)
+    labels = {}
+    for n in G.nodes():
+        labels[n] = "D"+str(n)
+    nx.draw_networkx_labels(G, pos, labels, font_size=8, alpha=0.8)
+
+    from networkx.algorithms import community as community_nx
+    #groups = [partition.get(node, 0.25) for node in G.nodes()]
+    #modulariry = community_nx.modularity(G, [])
+    mng = plt.get_current_fig_manager()
+    #if os.name != 'posix':  # mac
+    #    figManager.window.state('zoomed')
+    plt.axis('off')
+    if save:
+        if louvain:
+            modularity = Community.modularity(groups,G)
+            plt.savefig(outputFolder + "/louvain_graph_step="+str(step)+"_modularity_"
+                        + str(modularity) + ".png")
+        else:
+            map_equation = calculate_map_equation(G, groups)
+            plt.savefig(outputFolder + "/infomap_graph_step="+str(step)+"_map_equation_"
+                        + str(map_equation) + ".png")
+    else:
+        plt.show()
+
+draw_louvain(save=False)
+
+import random
+from math import log
+def calculate_map_equation(G, groups):
+    groups_arr =[]
+    for k,v in groups.iteritems():
+        if v not in groups_arr:
+            groups_arr.append(v)
+    total_w = 0
+    rel_w ={}
+    for l in G.edges(data=True):
+        total_w += G[l[0]][l[1]]['weight']
+    rel_w_sum = 0
+    for n in G.nodes():
+        rel_w[n] = float(G.degree(n, weight='weight'))/(2 * total_w)
+        rel_w_sum += rel_w[n] * log(rel_w[n], 2)
+
+    rel_w_module_i = {}
+    rel_w_out_i = {}
+    for g in groups_arr:
+        rel_w_module_i[g] = 0
+        rel_w_out_i[g] = 0
+    for l in G.edges(data=True):
+        g1 = groups[l[0]]
+        g2 = groups[l[1]]
+        if g1 != g2:  # link is exiting module
+            rel_w_out_i[g1] += float(G[l[0]][l[1]]['weight'])/(2*total_w)
+            rel_w_out_i[g2] += float(G[l[0]][l[1]]['weight'])/(2*total_w)
+    for n in G.nodes():
+        g = groups[n]
+        rel_w_module_i[g] += rel_w[n]
+
+    rel_w_out_sum = 0
+    total_rel_w_between_modules = 0
+    for k,v in rel_w_out_i.iteritems():
+        total_rel_w_between_modules += v
+        if v == 0:
+            rel_w_out_sum += 0
+        else:
+            rel_w_out_sum += v * log(v,2)
+
+    module_w_sum = 0
+    for g in groups_arr:
+        module_w_sum += (rel_w_out_i[g]+rel_w_module_i[g]) * log((rel_w_out_i[g]+rel_w_module_i[g]),2)
+
+    if total_rel_w_between_modules==0:
+        sum_total_rel_w_between_modules = 0
+    else:
+        sum_total_rel_w_between_modules = total_rel_w_between_modules * log(total_rel_w_between_modules,2)
+
+    LM = sum_total_rel_w_between_modules - (2 * rel_w_out_sum) - rel_w_sum + module_w_sum
+    #print LM
+    return LM
+
+
+def draw_steps(G, louvain=False):  # num_cliques, clique_size)
+    #G = nx.ring_of_cliques(num, size)
+    #G = nx.balanced_tree(2, 3)
+
+    pos = nx.spring_layout(G)
+    dict_groups = {}
+    for n in G.nodes():
+        dict_groups[n] = n
+    if louvain:
+        step = 0
+        picked_arr = [5, 4, 1, 7, 3, 8, 2, 6, 7, 1, 1]
+        draw_step_graph(G, dict_groups, pos, louvain, step,True)
+        while True:
+            # r = random.randint(0, 8)  this can take a while
+            r = picked_arr[step]
+            print "Picked: " + str(r)
+            modularity = Community.modularity(dict_groups,G)
+            b = 0
+            group = -1
+            for n in sorted(G.neighbors(r)):  # not totally random
+                tmp = dict_groups[r]
+                dict_groups[r] = n
+                tmod = Community.modularity(dict_groups,G)
+                print "mod: " + str(tmod) + " for n: "+str(n)
+                diff = tmod - modularity
+                if b < diff:
+                    b = diff
+                    group = n
+                dict_groups[r] = tmp
+            if group != -1:
+                dict_groups[r] = group
+            step += 1
+            draw_step_graph(G, dict_groups, pos, louvain, step, True)
+            if step == 10:
+                break
+        print dict_groups
+        # Stage 2: Coarse Graining
+        G_coarse = nx.Graph()
+        G_coarse.add_edge(1, 2, weight=1)
+        G_coarse.add_edge(1, 1, weight=1)
+        G_coarse.add_edge(1, 3, weight=1)
+        G_coarse.add_edge(2, 3, weight=1)
+        G_coarse.add_edge(3, 3, weight=3)
+        G_coarse.add_edge(3, 4, weight=2)
+        G_coarse.add_edge(4, 4, weight=3)
+        dict_c = { 1: 0, 2: 2, 3: 4, 4: 8}
+        #for n in G_coarse.nodes():
+        #    dict_c[n] = n
+        draw_step_graph(G_coarse, dict_c, pos, louvain, True)
+        picked_arr = [2, 1]
+        step =11
+        while True:
+            # r = random.randint(0, 8)  this can take a while
+            r = picked_arr[step-11]
+            print "Picked: " + str(r)
+            modularity = Community.modularity(dict_c,G_coarse)
+            b = 0
+            group = -1
+            for n in sorted(G_coarse.neighbors(r)):  # not totally random
+                tmp = dict_c[r]
+                dict_c[r] = n
+                tmod = Community.modularity(dict_c,G_coarse)
+                print "mod: " + str(tmod) + " for n: "+str(n)
+                diff = tmod - modularity
+                if b < diff:
+                    b = diff
+                    group = n
+                dict_c[r] = tmp
+            if group != -1:
+                dict_c[r] = group
+            step += 1
+            draw_step_graph(G_coarse, dict_c, pos, louvain, step, True)
+            if step == 13:
+                break
+        final_groups = {0: 2, 1: 2, 2: 2, 3: 4, 4: 4, 5: 4, 6: 8, 7: 8, 8: 8}
+        draw_step_graph(G, final_groups, pos, louvain, step+1, True)
+    else:
+        txt_name = "/infomap_test_steps.net"
+        check = False
+        if check:
+            with open(outputFolder+txt_name, 'w') as f:
+                # add nodes and edges to txt and graph
+                # A network in Pajek format
+                print G.edges()
+                newline = str("\n")  # linux
+                f.write(str("*Vertices ") + str(len(G.nodes()))+newline)
+                c =1
+                temp_v = {}
+                for n in G.nodes():
+                    f.write(str(n)+str(' "'+str(n)+'"'+newline))
+                    temp_v[n] = c
+                    c += 1  # must follow a consequitive order.
+                f.write(str("*Edges ") + str(len(G.edges()))+newline)
+                for g in G.edges():
+                    f.write(str(str(g[0])+' '+str(g[1]))+newline)
+            import os
+            out_path = os.path.dirname(os.path.abspath(__file__))+"/"+outputFolder
+            runp = get_infomap_executable_path()
+            subprocess.check_call([runp,
+                                   outputFolder+txt_name,
+                                   out_path, "-N 10", "--tree", "-z --zero-based-numbering"])
+            # --overlapping
+            with open(outputFolder+txt_name.replace('.net','.tree'), 'rU') as f: # Universal newline mode
+                for line in f:
+                    if line[0] != '#':
+                        print line.strip()
+                        l = line.strip().split('"')
+                        print l
+                        modules, flow_amount = l[0].strip().split(" ")
+                        node_name = int(l[1])
+                        dict_groups[node_name] = int(modules.split(":")[0])
+
+            for n in G.nodes():
+                print n, dict_groups.get(n)
+            draw_step_graph(G, dict_groups, pos)
+            calculate_map_equation(G, dict_groups)
+
+        step = 0
+        picked_arr = [1,3, 4, 6, 5, 7, 6, 3, 2, 1]
+        draw_step_graph(G, dict_groups, pos, louvain, step, True)
+        while True:
+            # r = random.randint(0, 8)  this can take a while
+            r = picked_arr[step]
+            print "Picked: " + str(r)
+            map_eq = calculate_map_equation(G, dict_groups)
+            #modularity = Community.modularity(dict_groups,G)
+            b = 0
+            group = -1
+            for n in sorted(G.neighbors(r)):  # not totally random
+                tmp = dict_groups[r]
+                dict_groups[r] = n
+                t_map = calculate_map_equation(G, dict_groups)
+                print "map eq: " + str(t_map) + " for n: "+str(n)
+                diff = map_eq - t_map
+                if b < diff:
+                    b = diff
+                    group = n
+                dict_groups[r] = tmp
+            if group != -1:
+                dict_groups[r] = group
+            step += 1
+            draw_step_graph(G, dict_groups, pos, louvain, step, True)
+            if step == 9:
+                break
+        print dict_groups
+        # Stage 2: Coarse Graining
+        print "Coarse"
+        G_coarse = nx.Graph()
+        G_coarse.add_edge(1, 2, weight=1)
+        G_coarse.add_edge(1, 1, weight=1)
+        G_coarse.add_edge(1, 3, weight=1)
+        G_coarse.add_edge(2, 3, weight=1)
+        G_coarse.add_edge(3, 3, weight=3)
+        G_coarse.add_edge(3, 4, weight=2)
+        G_coarse.add_edge(4, 4, weight=3)
+        dict_c = { 1: 0, 2: 2, 3: 5, 4: 8}
+        #for n in G_coarse.nodes():
+        #    dict_c[n] = n
+        draw_step_graph(G, dict_groups, pos, louvain)
+        draw_step_graph(G_coarse, dict_c, pos, louvain, step, True)
+        picked_arr = [1,4, 2,3]
+        step =9
+        while True:
+            # r = random.randint(0, 8)  this can take a while
+            r = picked_arr[step-9]
+            print "Picked: " + str(r)
+            map_eq = calculate_map_equation(G_coarse, dict_c)
+            #modularity = Community.modularity(dict_groups,G)
+            b = 0
+            group = -1
+            for n in sorted(G_coarse.neighbors(r)):  # not totally random
+                tmp = dict_c[r]
+                dict_c[r] = n
+                t_map = calculate_map_equation(G_coarse, dict_c)
+                print "map_eq: " + str(t_map) + " for n: "+str(n)
+                diff = map_eq - t_map
+                if b < diff:
+                    b = diff
+                    group = n
+                dict_c[r] = tmp
+            if group != -1:
+                dict_c[r] = group
+            step += 1
+            draw_step_graph(G_coarse, dict_c, pos, louvain, step,True)
+            if step == 13:
+                break
+        final_groups = {0: 2, 1: 2, 2: 2, 3: 2, 4: 2, 5: 2, 6: 8, 7: 8, 8: 8}
+        draw_step_graph(G, final_groups, pos, louvain, step+1, True)
+        final_groups = {0: 2, 1: 2, 2: 2, 3: 2, 4: 8, 5: 2, 6: 8, 7: 8, 8: 8}
+        draw_step_graph(G, final_groups, pos, louvain, step+2, True)
+        final_groups = {0: 2, 1: 2, 2: 2, 3: 2, 4: 2, 5: 8, 6: 8, 7: 8, 8: 8}
+        draw_step_graph(G, final_groups, pos, louvain, step+2, True)
+        # aka by one optim.
+        final_groups = {0: 2, 1: 2, 2: 2, 3: 2, 4: 8, 5: 8, 6: 8, 7: 8, 8: 8}
+        draw_step_graph(G, final_groups, pos, louvain, step+3, True)
+#draw_greedy(5, 4)
 #draw_test_di_graph(False)
+
+G = nx.Graph()
+for n1,n2 in [(1, 2), (0, 1), (2, 3), (0, 3),
+            #  (1, 4),
+              (3, 4), (3, 5), (4, 5),
+              (4, 6), (5, 6), (6, 7), (6,8), (7, 8)]:
+    G.add_edge(n1,n2, weight=1)
+"""for n1,n2 in [(0, 1), (1, 2), (2, 3), (0, 3),
+              (1, 4),
+              (4, 5), (5, 6), (6, 7), (4, 7),
+              (2, 8), (7, 8), (8, 9), (2, 9), (7, 9), (8, 9)]:
+    G.add_edge(n1,n2)"""
+#G = generate_graph()
+#min_w = 150# 20#10 ali 20 #372
+#G = filter_graph_by_weight(G, min_weight=min_w)
+#draw_steps(G)
+
+

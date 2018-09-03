@@ -1,0 +1,244 @@
+﻿Prenocitvene zmogljivosti po: OBCINE, MESEC , MERITVE
+
+ 	2018M01	 	2018M02	 	2018M03	 	2018M04	 	2018M05	 	2018M06	 
+ 	Prihodi turistov - SKUPAJ	Prenocitve turistov - SKUPAJ	Prihodi turistov - SKUPAJ	Prenocitve turistov - SKUPAJ	Prihodi turistov - SKUPAJ	Prenocitve turistov - SKUPAJ	Prihodi turistov - SKUPAJ	Prenocitve turistov - SKUPAJ	Prihodi turistov - SKUPAJ	Prenocitve turistov - SKUPAJ	Prihodi turistov - SKUPAJ	Prenocitve turistov - SKUPAJ
+SLOVENIJA	249011	685804	249170	691161	324557	786466	386441	924376	469183	1132278	570462	1437091
+Ajdovscina	511	895	706	1464	853	1861	1143	2584	873	1729	1278	2243
+Ankaran/Ancarano	716	2384	1964	7964	3993	10221	5357	15309	6119	19150	10868	39089
+Apace	z	z	z	z	z	z	z	z	z	z	z	z
+Beltinci	z	z	z	z	z	z	z	z	z	z	z	z
+Benedikt	12	12	7	7	24	43	55	85	47	277	z	303
+Bistrica ob Sotli	-	-	-	-	z	z	z	z	0	0	z	z
+Bled	14133	30998	12770	26261	22561	37562	35273	65845	50901	98267	58391	130366
+Bloke	16	29	8	8	40	46	79	148	155	375	295	631
+Bohinj	7180	21635	9090	30200	9389	25878	8649	20643	14107	35311	24821	64162
+Borovnica	-	-	z	z	z	z	z	z	z	z	z	z
+Bovec	1152	3573	1293	4264	1810	4932	4991	11417	13478	35987	20024	48636
+Braslovce	-	-	z	z	0	0	z	z	z	z	z	z
+Brda	388	560	565	868	1196	2271	1995	3493	2667	4530	3268	5289
+Brezovica	45	108	36	115	98	154	125	216	133	362	125	303
+Brezice	14568	40563	11531	29968	9537	24593	13588	37968	8492	34648	15991	57968
+Cankova	53	145	z	z	58	100	z	z	61	116	81	171
+Celje	1801	3463	2380	4567	2147	4378	2144	3756	2556	4693	2924	5696
+Cerklje na Gorenjskem	2359	6112	2631	7670	3590	8797	2806	4797	3348	5246	3858	6321
+Cerknica	212	616	66	186	467	1241	699	1701	790	1890	778	2056
+Cerkno	3010	10203	1750	6221	1934	6122	948	1987	1041	2593	1039	3227
+Cerkvenjak	z	z	2	3	14	36	z	z	z	z	z	z
+Cirkulane	z	z	z	z	z	z	z	z	z	z	z	z
+Crensovci	-	-	-	-	-	-	-	-	-	-	-	-
+Crna na Koroskem	5	5	2	6	10	59	z	z	z	z	31	z
+Crnomelj	327	1020	128	237	468	1278	726	1795	833	1743	2169	4305
+Destrnik	-	-	z	z	z	z	z	z	z	z	z	z
+Divaca	173	346	208	365	629	1166	891	1705	1496	2328	1593	2490
+Dobje	z	z	z	z	z	z	-	-	0	0	0	0
+Dobrepolje	-	-	-	-	-	-	-	-	-	-	-	-
+Dobrna	2775	10845	2577	10452	2597	10315	2061	7775	1852	8033	1931	9608
+Dobrova - Polhov Gradec	z	z	z	z	z	z	24	160	z	z	z	z
+Dobrovnik/Dobronak	z	z	z	z	z	z	z	z	0	z	z	z
+Dol pri Ljubljani	z	z	23	144	63	147	z	z	z	z	z	z
+Dolenjske Toplice	1745	8637	1751	8110	2060	8808	2272	10215	2027	8995	2181	10762
+Domzale	742	1211	184	422	2107	3227	2462	3904	2812	4234	2687	4260
+Dornava	-	-	-	-	-	-	-	-	-	-	-	-
+Dravograd	480	1152	416	1011	602	1352	564	1196	849	1761	832	1878
+Duplek	-	-	-	-	-	-	-	-	-	-	-	-
+Gorenja vas - Poljane	117	292	124	274	133	333	159	389	213	587	424	1018
+Gorisnica	z	z	z	z	z	z	z	z	z	z	z	z
+Gorje	469	1465	457	1782	488	1313	477	1098	807	2106	1292	3221
+Gornja Radgona	z	z	24	38	57	95	55	131	89	140	53	129
+Gornji Grad	33	78	15	65	10	40	67	z	72	267	89	184
+Gornji Petrovci	z	z	z	z	z	z	-	-	0	0	z	z
+Grad	-	-	-	-	z	z	z	z	z	z	z	z
+Grosuplje	725	887	575	682	756	968	z	1443	1426	1703	z	1605
+Hajdina	79	167	146	333	163	205	z	z	582	875	752	1367
+Hoce - Slivnica	3171	11110	3709	13262	1478	4050	589	1531	766	1664	1298	3319
+Hodos/Hodos	-	-	-	-	z	z	z	z	z	z	z	z
+Horjul	-	-	-	-	-	-	z	z	z	z	z	z
+Hrastnik	18	25	43	117	24	26	z	z	89	279	z	z
+Hrpelje - Kozina	892	1133	733	933	1583	2485	1585	2386	1946	2595	2355	2804
+Idrija	439	1105	186	432	486	1453	738	1948	888	2067	936	2127
+Ig	38	109	46	100	186	412	68	114	z	143	z	z
+Ilirska Bistrica	216	474	185	347	316	630	389	734	443	971	475	1180
+Ivancna Gorica	54	229	82	212	131	340	117	307	87	241	144	369
+Izola/Isola	1286	3334	3734	12993	6801	21683	9284	26562	11218	36611	16446	59688
+Jesenice	220	822	72	119	420	1061	534	1182	927	1790	1605	3076
+Jezersko	73	139	92	152	123	238	183	426	320	1031	644	1265
+Jursinci	z	z	z	z	z	z	-	-	z	z	-	-
+Kamnik	1581	4727	2186	5731	2279	4658	2128	4660	2508	5442	3768	8747
+Kanal	34	169	55	275	49	156	54	140	104	240	214	535
+Kidricevo	-	-	z	z	z	z	z	z	z	z	z	z
+Kobarid	639	1281	217	433	981	2098	2931	6753	6248	15842	7907	19805
+Kobilje	-	-	-	-	-	-	-	-	-	-	-	-
+Kocevje	347	965	91	138	686	1525	721	1476	965	2059	1156	2369
+Komen	193	506	135	338	160	384	284	844	455	897	605	1210
+Komenda	24	144	23	44	31	85	z	60	26	96	z	z
+Koper/Capodistria	3199	7715	2748	7875	3818	15257	6178	18447	6533	19264	8738	22294
+Kostanjevica na Krki	49	78	23	27	22	40	93	200	119	235	223	380
+Kostel	z	z	10	30	440	985	z	z	494	1045	305	z
+Kozje	z	z	z	z	z	z	z	z	0	0	z	z
+Kranj	3650	6979	2827	6365	4438	7567	6032	9338	6832	10791	6513	10626
+Kranjska Gora	21811	79228	23871	88344	19219	51068	14079	27982	20293	39633	26058	64548
+Krizevci	z	z	z	z	z	z	z	z	z	z	z	z
+Krsko	200	722	228	610	608	1871	600	2953	630	1828	856	2388
+Kungota	5	5	91	312	113	246	116	202	239	701	281	810
+Kuzma	-	-	-	-	-	-	-	-	-	-	-	-
+Lasko	7431	22421	7415	22005	8125	21902	6494	21232	5714	20395	5752	20509
+Lenart	z	z	z	z	z	z	z	z	z	z	z	z
+Lendava/Lendva	2709	7658	2603	7347	2403	7798	3271	10927	3039	10461	3150	11804
+Litija	31	58	37	82	62	122	67	246	97	427	126	358
+Ljubljana	40036	74279	33213	70536	58090	111599	73786	150761	89826	189187	98521	187733
+Ljubno	134	264	243	428	224	374	275	505	442	1200	643	1740
+Ljutomer	1825	4513	1639	3913	1814	4044	1882	4562	1512	3751	1871	4585
+Log - Dragomer	-	-	-	-	-	-	-	-	-	-	0	0
+Logatec	452	1119	190	278	613	1616	760	1797	883	1952	991	1956
+Loska dolina	z	z	15	31	51	90	159	544	z	460	126	z
+Loski Potok	z	z	z	z	42	67	z	z	z	z	z	z
+Lovrenc na Pohorju	z	z	15	60	16	33	z	z	z	z	57	z
+Luce	84	165	50	81	35	63	218	363	536	1146	723	1585
+Lukovica	89	109	80	104	159	222	z	z	z	z	z	z
+Majsperk	-	-	-	-	-	-	-	-	-	-	-	-
+Makole	z	z	z	z	z	z	0	0	z	z	z	z
+Maribor	9126	21540	11657	28755	11502	26644	14443	33659	16199	35922	18988	46226
+Markovci	-	-	-	-	-	-	-	-	-	-	-	-
+Medvode	342	730	291	752	489	1001	835	1695	1257	2202	1925	3288
+Menges	z	z	176	295	179	319	z	z	z	z	z	z
+Metlika	74	110	55	138	200	289	494	963	1146	2577	1958	4290
+Mezica	z	z	z	z	203	879	z	z	z	z	z	z
+Miklavz na Dravskem polju	z	z	z	z	z	z	z	z	z	z	z	z
+Miren - Kostanjevica	87	252	107	158	205	410	326	798	175	567	143	412
+Mirna	z	z	z	z	z	z	-	-	-	-	z	z
+Mirna Pec	z	z	0	0	21	30	z	z	z	z	20	57
+Mislinja	2703	7850	2433	6184	294	692	z	z	z	z	62	128
+Mokronog - Trebelno	z	z	z	z	z	z	z	z	z	z	66	z
+Moravce	z	z	z	z	z	z	0	0	0	0	0	0
+Moravske Toplice	11630	38152	10816	33231	13309	40073	13433	42045	13271	44719	11501	42677
+Mozirje	1169	3471	913	2950	741	1934	168	389	267	658	877	1588
+Murska Sobota	956	2594	1412	2862	1802	3841	1951	4263	2064	4818	2111	3811
+Muta	z	z	z	z	z	z	z	z	z	z	z	91
+Naklo	450	1741	427	2206	595	1089	869	1537	742	1782	1224	2866
+Nazarje	z	z	152	365	243	691	z	z	z	z	z	z
+Nova Gorica	6516	11921	6249	12074	8115	16491	8322	17906	8905	16816	9199	16809
+Novo mesto	1872	4013	1452	3455	2966	6030	3632	8629	4264	8822	5088	10782
+Odranci	z	z	z	z	z	z	-	-	-	-	-	-
+Oplotnica	z	z	z	z	z	z	-	-	-	-	-	-
+Ormoz	118	511	39	188	62	111	160	216	218	502	330	829
+Osilnica	-	-	-	-	z	z	z	z	z	z	z	z
+Pesnica	32	83	60	188	50	89	79	153	70	178	171	444
+Piran/Pirano	15270	45577	19130	47564	33911	87568	51074	130032	60067	157447	67526	209949
+Pivka	27	68	38	75	65	139	197	432	212	427	449	713
+Podcetrtek	7674	23948	9345	26904	10702	28085	10128	28691	7350	24894	9515	30223
+Podlehnik	-	-	-	-	-	-	z	z	z	z	z	z
+Podvelka	z	z	z	z	-	-	-	-	-	-	-	-
+Poljcane	-	-	-	-	-	-	-	-	-	-	-	-
+Polzela	z	z	z	z	z	z	-	-	-	-	-	-
+Postojna	1385	2040	1478	1915	4097	5461	6017	8987	9599	13155	11078	16271
+Prebold	127	275	201	283	271	450	222	z	z	z	514	910
+Preddvor	371	887	316	715	267	573	287	850	394	1169	596	1352
+Prevalje	30	46	110	254	162	302	213	506	268	721	493	1336
+Ptuj	2976	8038	1612	3029	3270	8452	4021	10258	5665	12822	7750	16510
+Puconci	82	195	9	22	110	126	z	z	z	z	73	156
+Race - Fram	9	19	34	60	68	112	z	z	z	z	z	z
+Radece	-	-	-	-	z	z	z	24	12	25	30	z
+Radenci	4559	13283	3745	12104	3905	11771	3546	z	2835	z	2102	z
+Radlje ob Dravi	z	z	53	103	92	317	z	z	z	z	155	z
+Radovljica	1855	2829	1551	3071	3458	5378	5027	8858	7846	13557	12329	23517
+Ravne na Koroskem	131	409	342	715	301	792	206	z	z	z	z	z
+Razkrizje	z	z	z	z	z	z	z	z	z	z	z	z
+Recica ob Savinji	30	96	z	z	z	z	32	56	12	22	21	27
+Rence - Vogrsko	593	1145	652	1269	1000	1902	760	1931	749	1375	1110	1612
+Ribnica	70	390	21	42	70	179	76	375	122	530	170	673
+Ribnica na  Pohorju	716	2933	1574	5528	563	2004	281	570	74	164	341	514
+Rogaska Slatina	3925	20016	4653	17901	5215	22949	4655	27314	4110	26854	3732	21109
+Rogasovci	z	z	z	z	z	z	z	z	z	z	z	z
+Rogatec	z	z	14	18	76	222	z	236	z	z	z	z
+Ruse	285	815	558	909	385	696	z	z	z	z	z	z
+Selnica ob Dravi	z	z	z	z	z	z	z	z	z	z	z	z
+Semic	370	862	42	196	515	1123	z	z	462	z	426	966
+Sevnica	57	141	90	238	129	593	154	275	193	342	166	382
+Sezana	3161	3925	2623	3283	4644	6667	6106	8813	6033	8415	6538	8919
+Slovenj Gradec	1173	4707	1583	4289	265	815	227	1012	256	1195	368	1098
+Slovenska Bistrica	2407	7957	2713	7871	1112	2990	657	1297	1409	2745	1893	3393
+Slovenske Konjice	235	561	247	506	235	419	196	353	313	644	311	497
+Sodrazica	z	z	z	z	-	-	-	-	-	-	-	-
+Solcava	386	726	160	404	264	384	786	1511	1276	2207	1650	3319
+Sredisce ob Dravi	-	-	-	-	-	-	-	-	-	-	-	-
+Starse	z	z	z	z	z	z	z	z	z	z	z	z
+Straza	z	z	z	z	70	181	z	z	z	z	z	z
+Sveta Ana	z	z	z	z	z	z	z	z	z	z	z	z
+Sveta Trojica v Slov. goricah	-	-	z	z	z	z	0	0	z	z	0	z
+Sveti Andraz v Slov. goricah	z	z	z	z	z	z	-	-	-	-	-	-
+Sveti Jurij ob Scavnici	-	-	-	-	-	-	-	-	-	-	-	-
+Sveti Jurij v Slov. goricah	z	z	z	z	z	z	z	z	z	z	z	z
+Sveti Tomaz	-	-	-	-	-	-	-	-	-	-	-	-
+Salovci	z	z	z	z	z	z	z	z	z	z	9	z
+Sempeter - Vrtojba	z	z	z	z	653	1196	z	z	z	z	z	z
+Sencur	114	283	395	1022	534	1337	601	1293	893	1702	920	1907
+Sentilj	z	z	800	1083	890	1249	z	z	z	1271	z	z
+Sentjernej	10	28	148	470	1	30	21	61	z	z	20	77
+Sentjur	17	78	24	71	22	44	z	z	z	z	z	z
+Sentrupert	z	z	2	11	9	26	z	z	z	z	z	z
+Skocjan	z	z	30	30	153	242	218	511	277	647	188	475
+Skofja Loka	365	776	506	1336	550	1146	659	1362	750	1834	1341	2898
+Skofljica	78	147	100	163	32	56	z	z	0	0	z	z
+Smarje pri Jelsah	32	57	16	20	47	140	z	47	28	z	50	189
+Smarjeske Toplice	z	z	1013	5826	1242	7455	1479	8803	z	8467	z	8980
+Smartno ob Paki	-	-	z	z	z	z	z	z	z	z	z	z
+Smartno pri Litiji	z	z	z	z	z	z	-	-	-	-	-	-
+Sostanj	2461	8149	2595	8331	2665	8707	z	z	z	z	z	z
+Store	z	z	z	z	z	z	z	z	0	z	z	z
+Tabor	-	-	-	-	z	z	z	z	z	z	z	z
+Tisina	-	-	-	-	-	-	-	-	-	-	-	-
+Tolmin	578	1794	250	775	846	2215	1987	5145	4295	11786	6381	16706
+Trbovlje	34	104	60	171	323	985	53	z	z	z	z	439
+Trebnje	609	1195	398	740	646	1345	781	1398	1083	1811	1117	2057
+Trnovska vas	-	-	-	-	-	-	-	-	-	-	-	-
+Trzin	2	2	19	33	28	54	77	167	67	275	78	168
+Trzic	156	441	148	303	321	675	226	531	299	725	505	1107
+Turnisce	-	-	-	-	-	-	-	-	-	-	-	-
+Velenje	526	980	837	1488	742	1877	677	2029	1368	2712	2176	7058
+Velika Polana	-	-	-	-	-	-	-	-	-	-	-	-
+Velike Lasce	z	z	z	z	z	z	z	z	z	z	z	z
+Verzej	1901	5683	1940	5491	2058	5914	2570	8271	2445	9034	2924	10329
+Videm	20	20	83	97	165	221	z	z	328	455	754	1182
+Vipava	16	52	28	37	132	246	408	1508	763	1661	874	1674
+Vitanje	12	53	100	378	69	207	35	89	29	115	z	z
+Vodice	z	z	z	z	47	75	z	z	z	z	z	z
+Vojnik	47	64	30	43	32	55	z	48	16	26	54	105
+Vransko	8	15	76	152	85	158	121	215	139	231	255	368
+Vrhnika	397	578	260	422	474	857	655	920	645	1085	845	1180
+Vuzenica	z	z	z	z	z	z	z	z	0	0	z	z
+Zagorje ob Savi	49	85	97	239	141	321	z	z	z	z	z	z
+Zavrc	z	z	z	z	z	z	z	z	z	z	z	z
+Zrece	9306	36512	9783	37277	9550	29874	3615	11330	3759	12255	3792	15649
+Zalec	191	391	233	632	243	683	529	1220	759	1118	764	1320
+Zelezniki	190	591	401	1051	232	589	98	237	73	130	268	550
+Zetale	-	-	-	-	-	-	-	-	-	-	-	-
+Ziri	z	z	z	z	26	46	z	z	z	z	z	z
+Zirovnica	250	383	214	406	131	284	354	787	478	863	852	1681
+Zuzemberk	22	68	18	41	37	65	37	91	83	202	121	545
+												
+Vir: Statisticni urad Republike Slovenije. 												
+ 												
+Podatki zajemajo vse turisticne nastanitvene objekte, brez 												
+upostevanja praga, glej Metodolosko opozorilo.												
+												
+Povezane vsebine: 												
+ 												
+- (seznam HREF=http://www.stat.si/StatWeb/File/DocSysFile/7779 												
+target=_blank) Metodoloska pojasnila 												
+ 												
+- (seznam HREF=http://www.stat.si/StatWeb/File/DocSysFile/9950 												
+target=_blank) Metodolosko opozorilo - Nova podatkovna vira												
+												
+Podatki so teritorialno razvrsceni po uredbi o Standardni 												
+klasifikaciji teritorialnih enot ((seznam 												
+HREF=http://www.stat.si/StatWeb/glavnanavigacija/metode-in-klasifikac-												
+ije/klasifikacije TARGET=_blank) opis in pojasnila), raven SKTE 5. 												
+Podatki o spremembah posameznih obcin so dostopni na (seznam 												
+HREF=http://www.stat.si/StatWeb/glavnanavigacija/metode-in-klasifikac-												
+ije/klasifikacije/spremembe-obmocij-obcin TARGET=_blank) povezavi. V 												
+Seznamu obcin s spremembami obmocij obcin od leta 1995 dalje je 												
+opisana vrsta spremembe, naveden je datum, s katerim je opisana 												
+teritorialna sprememba upostevana pri teritorialnem razvrscanju enot 												
+za statisticne namene ter naveden Uradni list, v katerem so bile 												
+objavljene omenjene teritorialne opombe. V seznamu obcin je navedeno 												
+zadnje veljavno stanje imen obcin.												

@@ -608,6 +608,18 @@ def get_all_baskets(output_folder, min_items=2):
     return baskets
 
 
+def get_count_for_destination(destination, session=DBSession(bind=connection)):
+    return session.query(Record).filter(Record.destination == destination).count()
+
+
+def get_dict_count_for_destinations(session=DBSession(bind=connection)):
+    dict_destinations = {}
+    for d in get_destinations(session):
+        c = get_count_for_destination(d.destination, session)
+        dict_destinations[d.destination] = float(c)
+    return dict_destinations
+
+
 def get_count_for_destinations(destination1, destination2, session=DBSession(bind=connection)):
     return session.query(Pair).filter(Pair.destination1 == destination1, Pair.destination2 == destination2).count()
 

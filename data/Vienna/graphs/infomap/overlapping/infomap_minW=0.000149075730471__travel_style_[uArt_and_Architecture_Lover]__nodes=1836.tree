@@ -1,0 +1,82 @@
+# 'data/vienna/graphs/infomap/infomap_minW=0.000149075730471__travel_style_[uArt_and_Architecture_Lover]__nodes=1836.net /Users/karmen/Downloads/PatternAnalysisTD/data/vienna/graphs/infomap/overlapping -N 20 --undirected --weight-threshold 0 --overlapping --tree' -> 80 nodes partitioned in 0s from codelength 9.518988190 in one level to codelength 5.159263938 in 2 levels.
+# path flow name node:
+1:1 0.0798651 "Schonbrunn Palace" 59
+1:2 0.0778429 "Belvedere Palace Museum" 56
+1:3 0.0676608 "Kunsthistorisches Museum" 73
+1:4 0.0590504 "Historic Center of Vienna" 58
+1:5 0.0566987 "St. Stephen's Cathedral" 55
+1:6 0.0487893 "Imperial Palace (Hofburg)" 57
+1:7 0.0424754 "Albertina" 65
+1:8 0.036289 "Schonbrunner Gardens" 63
+1:9 0.0287043 "Natural History Museum (Naturhistorisches Museum)" 64
+1:10 0.0280447 "State Opera House" 53
+1:11 0.0272138 "St. Peter's Church" 68
+1:12 0.0255098 "MuseumsQuartier Wien" 61
+1:13 0.0249958 "Tiergarten Schoenbrunn - Zoo Vienna" 54
+1:14 0.0243971 "Prater" 27
+1:15 0.0236441 "Rathaus" 67
+1:16 0.0235928 "Leopold Museum" 62
+1:17 0.0205478 "Hundertwasserhaus" 17
+1:18 0.0202809 "Ringstrasse" 1
+1:19 0.0180613 "State Hall of the Austrian National Library" 74
+1:20 0.0175979 "Kunst Haus Wien - Museum Hundertwasser" 5
+1:21 0.0156051 "Imperial Treasury of Vienna" 52
+1:22 0.0147278 "Rathausplatz" 70
+1:23 0.0137135 "Augustinerkirche" 15
+1:24 0.013175 "Church of the Jesuits" 66
+1:25 0.0104436 "Haus der Musik" 23
+1:26 0.0094644 "Karlskirche" 7
+1:27 0.00940387 "Haus des Meeres - Aqua Terra Zoo" 8
+1:28 0.0092216 "Kapuziner Crypt (Kapuzinergruft)" 9
+1:29 0.00877304 "Secession Building (Secessionsgebaude)" 31
+1:30 0.00875801 "Kirche am Steinhof" 75
+1:31 0.00874458 "The Third Man Museum" 76
+1:32 0.0087153 "Volksgarten" 60
+1:33 0.00856019 "Schmetterlinghaus" 35
+1:34 0.00820075 "Imperial Carriage Museum Vienna" 14
+1:35 0.00820075 "Neue Burg" 16
+1:36 0.00573868 "Clock Museum (Uhrenmuseum)" 33
+1:37 0.00562692 "The Vienna Philharmonic" 71
+1:38 0.00543011 "Sisi Museum" 20
+1:39 0.00542812 "Vienna Naschmarkt" 25
+1:40 0.00506299 "Wien Mitte the Mall" 41
+1:41 0.00493141 "Museum of Modern Art Ludwig Foundation (MUMOK)" 51
+1:42 0.00446761 "St. Michael's Church" 21
+1:43 0.00395106 "Heeresgeschichtliches Museum" 13
+1:44 0.00389712 "Academy of Fine Arts (Akademie der bildenden Kunste)" 19
+1:45 0.00332156 "Am Hof" 39
+1:46 0.00330829 "Danube Tower" 24
+1:47 0.00330073 "Vienna Museum" 28
+1:48 0.00322824 "Stephansplatz" 2
+1:49 0.00281045 "Meinl am Graben" 29
+1:50 0.00275397 "Sigmund Freud Museum" 32
+1:51 0.00275397 "Vienna U-Bahn" 72
+1:52 0.00232482 "Musikverein" 11
+1:53 0.00218381 "Parliament Building" 12
+1:54 0.00111521 "Graben and Kohlmarkt" 6
+1:55 0.00109788 "Maria-Theresien-Platz" 4
+1:56 0.000602005 "Stadtpark" 18
+1:57 0.000602005 "Vienna Ring Tram" 40
+1:58 0.000576589 "Volksoper" 3
+1:59 0.000576589 "Orangery at Schoenbrunn Palace" 49
+1:60 0.0005413 "MAK - Austrian Museum of Applied Arts / Contemporary Art" 10
+1:61 0.0005413 "Volkstheater" 30
+1:62 0.000535642 "Theater an der Wien" 36
+2:1 0.0035911 "Haas Haus" 45
+2:2 0.00203754 "Minoritenplatz" 38
+2:3 0.00169289 "Mozart Statue" 26
+2:4 0.00158579 "Kirche am Hof" 44
+2:5 0.00136036 "Am Hof" 39
+2:6 0.00125037 "Theseus Temple" 42
+2:7 0.000956067 "The Gates of Violence Monument" 43
+2:8 0.000277075 "Bundeskanzleramt Oesterreich" 48
+3:1 0.0007911 "Central Cemetery (Zentralfriedhof)" 69
+3:2 0.000341903 "Mozart Haus" 50
+3:3 0.000341903 "Kirche am Steinhof" 75
+4:1 0.000507225 "Plague Column (Pestsaule)" 22
+4:2 0.000433984 "Karlskirche" 7
+5:1 0.000499838 "Capuchin Church (Kapuzinerkirche)" 34
+5:2 0.000427705 "Secession Building (Secessionsgebaude)" 31
+6:1 7.58107e-05 "Sammlung alter Musikinstrumente (Collection of Early Musical Instruments)" 37
+6:2 7.58107e-05 "Ephesos (Ephesus) Museum" 46
+6:3 7.58107e-05 "Hofjagd- und Ruestkammer" 47

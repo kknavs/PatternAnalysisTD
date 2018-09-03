@@ -1,0 +1,55 @@
+*Vertices 16
+1 "Stephansplatz"
+2 "Vienna Naschmarkt"
+3 "Twin City Liner"
+4 "State Opera House"
+5 "St. Stephen's Cathedral"
+6 "Belvedere Palace Museum"
+7 "Imperial Palace (Hofburg)"
+8 "Historic Center of Vienna"
+9 "Schonbrunn Palace"
+10 "MuseumsQuartier Wien"
+11 "Schonbrunner Gardens"
+12 "Albertina"
+13 "Rathaus"
+14 "Rathausplatz"
+15 "Kunsthistorisches Museum"
+16 "State Hall of the Austrian National Library"
+*Edges 37
+11 8 1
+11 16 1
+7 6 1
+7 4 1
+7 5 1
+7 1 1
+7 9 1
+7 13 1
+6 9 1
+6 5 1
+6 1 1
+6 4 1
+6 2 1
+6 13 2
+15 1 1
+15 12 1
+15 9 1
+15 10 1
+12 10 1
+12 9 1
+8 14 1
+8 16 1
+8 5 1
+4 5 1
+4 1 1
+4 9 1
+4 13 1
+5 1 1
+5 9 1
+5 14 2
+5 13 1
+1 9 1
+1 13 2
+10 9 1
+9 3 1
+9 13 1
+2 13 1

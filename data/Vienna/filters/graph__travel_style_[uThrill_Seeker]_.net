@@ -1,0 +1,404 @@
+*Vertices 60
+1 "Ringstrasse"
+2 "Stephansplatz"
+3 "Kunst Haus Wien - Museum Hundertwasser"
+4 "Karlskirche"
+5 "Haus des Meeres - Aqua Terra Zoo"
+6 "Kapuziner Crypt (Kapuzinergruft)"
+7 "Parliament Building"
+8 "Heeresgeschichtliches Museum"
+9 "Technisches Museum"
+10 "Christmas Market on Rathausplatz"
+11 "Vienna Pass"
+12 "Spittelberg Christmas Market"
+13 "Minoritenkirche"
+14 "Hundertwasserhaus"
+15 "Burggarten"
+16 "Stadtpark"
+17 "Strauss Monument"
+18 "Sisi Museum"
+19 "Plague Column (Pestsaule)"
+20 "Mariahilfer Strasse"
+21 "Danube Tower"
+22 "Votivkirche"
+23 "Soviet War Memorial"
+24 "Vienna Naschmarkt"
+25 "Mozart Statue"
+26 "Prater"
+27 "Jewish Museum Vienna (Judisches Museum der Stadt Wien)"
+28 "Volkstheater"
+29 "Secession Building (Secessionsgebaude)"
+30 "Wiener Eistraum"
+31 "Sigmund Freud Museum"
+32 "Capuchin Church (Kapuzinerkirche)"
+33 "Schmetterlinghaus"
+34 "Donner Brunnen"
+35 "Flea Market"
+36 "Federal Pathologic-Anatomical Museum"
+37 "Mozart Haus"
+38 "Museum of Modern Art Ludwig Foundation (MUMOK)"
+39 "State Opera House"
+40 "Tiergarten Schoenbrunn - Zoo Vienna"
+41 "St. Stephen's Cathedral"
+42 "Belvedere Palace Museum"
+43 "Imperial Palace (Hofburg)"
+44 "Historic Center of Vienna"
+45 "Schonbrunn Palace"
+46 "Volksgarten"
+47 "MuseumsQuartier Wien"
+48 "Leopold Museum"
+49 "Kahlenberg"
+50 "Schonbrunner Gardens"
+51 "Natural History Museum (Naturhistorisches Museum)"
+52 "Albertina"
+53 "Church of the Jesuits"
+54 "Rathaus"
+55 "St. Peter's Church"
+56 "Central Cemetery (Zentralfriedhof)"
+57 "Rathausplatz"
+58 "The Vienna Philharmonic"
+59 "Kunsthistorisches Museum"
+60 "State Hall of the Austrian National Library"
+*Edges 342
+43 26 1
+43 4 1
+43 44 3
+43 55 2
+43 2 2
+43 59 2
+43 53 1
+43 45 5
+43 7 2
+43 17 1
+43 13 1
+43 47 1
+43 46 1
+43 54 2
+43 1 2
+43 14 1
+43 39 4
+43 42 2
+43 16 2
+43 23 1
+43 41 3
+43 22 1
+43 57 1
+19 34 1
+19 4 1
+19 44 1
+19 32 1
+19 39 1
+19 60 1
+26 4 1
+26 44 2
+26 55 2
+26 2 3
+26 53 1
+26 7 2
+26 50 1
+26 13 1
+26 46 2
+26 54 3
+26 1 2
+26 14 2
+26 10 1
+26 45 3
+26 40 1
+26 42 2
+26 16 2
+26 52 1
+26 15 1
+26 41 3
+26 22 1
+26 11 1
+4 7 1
+4 45 1
+4 14 1
+4 16 1
+4 34 1
+4 44 1
+4 55 1
+4 32 1
+4 13 1
+4 41 2
+4 39 1
+4 46 1
+4 53 1
+4 54 1
+4 60 1
+44 55 3
+44 2 4
+44 59 5
+44 45 8
+44 7 2
+44 50 2
+44 17 1
+44 9 1
+44 47 1
+44 46 1
+44 54 5
+44 1 1
+44 60 1
+44 3 1
+44 34 1
+44 58 1
+44 39 6
+44 51 1
+44 8 1
+44 40 1
+44 37 1
+44 42 4
+44 16 2
+44 52 1
+44 38 1
+44 15 1
+44 32 1
+44 41 8
+44 22 3
+44 57 1
+44 23 1
+44 48 1
+55 7 2
+55 42 1
+55 59 1
+55 14 1
+55 16 2
+55 13 1
+55 41 3
+55 2 1
+55 22 1
+55 45 3
+55 46 2
+55 53 1
+55 54 2
+55 15 1
+30 45 1
+2 59 1
+2 45 4
+2 7 2
+2 50 2
+2 17 1
+2 47 1
+2 46 1
+2 54 4
+2 1 3
+2 39 3
+2 42 4
+2 16 2
+2 52 1
+2 15 1
+2 41 6
+2 22 2
+2 57 1
+2 23 1
+59 50 1
+59 42 4
+59 37 2
+59 28 1
+59 52 1
+59 39 3
+59 41 2
+59 22 1
+59 45 3
+59 24 1
+59 54 2
+59 1 1
+59 29 1
+12 50 1
+12 54 1
+53 7 1
+53 45 1
+53 14 1
+53 16 1
+53 13 1
+53 41 1
+53 46 1
+53 54 1
+24 37 1
+24 42 2
+24 52 1
+24 56 1
+24 51 1
+24 29 1
+45 31 1
+45 7 3
+45 50 3
+45 17 1
+45 9 1
+45 13 1
+45 47 1
+45 46 2
+45 54 5
+45 1 3
+45 27 1
+45 14 1
+45 3 1
+45 33 1
+45 36 1
+45 39 4
+45 51 1
+45 8 1
+45 21 1
+45 40 2
+45 37 2
+45 42 8
+45 16 3
+45 52 1
+45 15 1
+45 41 7
+45 22 3
+45 57 1
+45 23 1
+29 52 1
+29 42 1
+29 37 1
+7 57 1
+7 17 1
+7 13 1
+7 46 2
+7 54 3
+7 1 1
+7 14 1
+7 39 1
+7 16 3
+7 23 1
+7 42 1
+7 41 3
+7 22 2
+7 15 1
+50 37 1
+50 49 1
+50 42 1
+50 15 1
+50 52 1
+50 39 1
+50 41 2
+50 22 1
+50 51 1
+50 54 1
+50 1 1
+50 9 1
+49 54 1
+17 16 1
+17 23 1
+17 39 1
+17 41 1
+17 22 1
+17 42 1
+17 57 1
+17 54 1
+17 1 1
+9 51 1
+9 41 1
+28 1 1
+18 37 1
+18 25 1
+18 40 1
+18 56 1
+13 14 1
+13 16 1
+13 41 1
+13 46 1
+13 54 1
+47 42 1
+47 3 1
+47 38 1
+47 39 1
+47 48 1
+47 1 1
+25 37 1
+25 40 1
+25 56 1
+35 41 1
+46 14 1
+46 16 2
+46 41 2
+46 22 1
+46 8 1
+46 54 2
+46 5 1
+46 20 1
+46 15 1
+23 16 1
+23 39 1
+23 41 1
+23 22 1
+23 42 1
+23 57 1
+23 54 1
+23 1 1
+31 27 1
+31 8 1
+54 1 1
+54 14 1
+54 33 1
+54 39 2
+54 42 3
+54 16 3
+54 15 1
+54 41 4
+54 22 2
+54 57 1
+54 58 1
+1 42 2
+1 16 1
+1 52 1
+1 39 2
+1 41 1
+1 57 1
+1 22 1
+1 10 1
+60 34 1
+60 52 1
+60 32 1
+60 39 1
+60 6 1
+27 8 1
+14 42 1
+14 16 1
+14 11 1
+14 41 2
+3 48 1
+3 38 1
+34 32 1
+34 39 1
+33 42 1
+56 37 1
+56 51 1
+56 40 1
+39 37 1
+39 42 5
+39 16 1
+39 32 1
+39 41 3
+39 22 1
+39 57 1
+39 58 1
+51 41 1
+8 5 1
+8 20 1
+58 41 1
+40 37 1
+40 42 1
+40 52 1
+20 5 1
+37 42 3
+37 52 1
+37 41 1
+42 16 1
+42 52 1
+42 41 4
+42 22 2
+42 57 1
+42 11 1
+16 57 1
+16 15 1
+16 41 3
+16 22 2
+52 6 1
+38 48 1
+15 41 1
+15 22 2
+41 22 2
+41 57 1
+22 57 1

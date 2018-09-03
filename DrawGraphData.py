@@ -5,12 +5,13 @@ import matplotlib.pyplot as plt
 import networkx as nx
 from FilterGraph import generate_graph, get_all_available_filters
 from DrawGraph import draw_labels, relabel_destination, draw_graph_for_destinations, known_locations_bled, \
-    known_locations_ljubljana
+    known_locations_ljubljana, change_nodes_position, maxWeight
 import pandas as pd
 from Database import get_baskets_grouped_by_users_date, get_records_for_user_with_fid,\
-    get_count_for_attributte_name_value, get_count_for_attribute_name_value_contains, \
-    get_count_for_attributte_name_value_all, get_destinations, fetchall_records, fetchall_records_users
+    get_count_for_attributte_name_value, get_count_for_attribute_name_value_contains, get_dict_count_for_destinations, \
+    get_count_for_attributte_name_value_all, get_destinations, fetchall_records, folder
 import numpy as np
+import io
 
 
 def plot_degree_histogram(G, neighbours=False):
@@ -72,6 +73,7 @@ def plot_weighted_degree_distribution(G):
     x_labels = []
     x_values = []
     for i, nd in enumerate(sorted(G.degree(weight='weight'))):
+        # if i > 150: # Vienna
         n, d = nd
         degree_sequence.append(d)
         x_values.append(i)
@@ -138,7 +140,6 @@ def print_count_for_filters():
                 print v, get_count_for_attributte_name_value(f.name, v)
                 if 'travel_style' in f.name:
                     print "In: "+v, get_count_for_attribute_name_value_contains(f.name, v)
-
 
 
 def draw_histogram_unique_for_user_hometown_country(countries):
@@ -281,9 +282,72 @@ def draw_records_grouped_by_month():
     plt.show()
 
 
+def get_n_biggest_values(dictionary, n):
+    biggest_entries = sorted(
+        dictionary.items(), key=lambda t: t[1], reverse=True)[:n]
+    d = [(key, value) for key, value in biggest_entries]
+    print d
+    return d
+
+
+def plot_destinations_frequency(from_statistics=False):
+    G = nx.Graph()
+    dict_count = {}
+    for d in get_destinations():
+        G.add_node(d.destination)
+        dict_count[d.destination]=0
+    if from_statistics:
+        arrivals = True
+        for txt in ["/2018.txt", "/2017.txt"]:
+            with io.open(folder+txt, "r", encoding='utf-8') as data:
+                loaddata = False
+                while True:
+                    line = data.readline()
+                    if loaddata:
+                        arr = line.split("\t")
+                        if len(arr) > 0:
+                            if arr[0] in G.nodes():
+                                if arrivals:
+                                    start = 1
+                                else:
+                                    start = 2
+                                for i in range(start, len(arr), 2):
+                                    nv = arr[i].strip()
+                                    if nv != "z" and nv != "-":
+                                        print arr[i]
+                                        dict_count[arr[0]] += float(nv)
+                    if line.startswith("SLOVENIJA"):
+                        loaddata = True
+                    if not line:
+                        break
+        maxw = 0
+        for k,v in dict_count.iteritems():
+            if v > maxw:
+                maxw = v
+        nodesize = [1000*dict_count[n]/maxw for n in G.nodes()]
+    else:
+        dict_count = get_dict_count_for_destinations()
+        nodesize = [100*dict_count[n]/maxWeight for n in G.nodes()]
+    nodelist = G.nodes()
+    pos = nx.spring_layout(G)  # spring, shell, circular positions for all nodes
+    change_nodes_position(pos)
+    plt.clf()
+    nx.draw_networkx_nodes(G, pos=pos,  node_size=nodesize, nodelist=nodelist, node_color='orange')
+    #draw_labels(G, pos)
+    sub_G = nx.Graph()
+    for k,v in get_n_biggest_values(dict_count, 20):
+        sub_G.add_node(k)
+    #change_nodes_position(pos)
+    if from_statistics:
+        nx.draw_networkx_labels(sub_G, pos, font_size=9, alpha=0.7)
+    else:
+        draw_labels(sub_G, pos, font_size=9)
+    plt.show()
+
+
 G = generate_graph()
 
-plot_degree_histogram(G, neighbours=True)
+#plot_degree_histogram(G, neighbours=True)
 #plot_weighted_degree_distribution(G)
 #print_adjacency_matrix(G, True)
 #print_baskets_time_info()
@@ -310,4 +374,5 @@ countries = [
 #draw_histogram_for_user_hometown_country(countries)
 #draw_histogram_unique_for_user_hometown_country(countries)
 # draw_all_records()
-# draw_records_grouped_by_month()
+#draw_records_grouped_by_month()
+plot_destinations_frequency()

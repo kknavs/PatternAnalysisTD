@@ -84,9 +84,11 @@ def draw_graph2(save, consider_locations=True):
     if not save:
         if selectedData == DataType.SLO:
             minW_array = [i * multi for i in [60]]
+            minW_array = [0]
         else:
             minW_array = [i * multi for i in [100]]
-        minW_array = [0]#[i * multi for i in [60]]
+            minW_array = [1000]
+        #[i * multi for i in [60]]
         midW_array = [get_avg_weight_nonzero()]#[i * multi for i in [150]]
         maxW_array = [maxWeight/2]
     for maxW in maxW_array:
@@ -104,17 +106,26 @@ def draw_graph2(save, consider_locations=True):
                 d = nx.degree(G)
                 #node_size=[v * 100 for v in d.values()]
                 d = nx.degree(G)
-                d = [(d[node]+1) * 10 for node in G.nodes()]
+                if selectedData == DataType.SLO:
+                    d = [(d[node]+1) * 10 for node in G.nodes()]
+                else:
+                    d = [(d[node]+1) * 10 for node in G.nodes()]
                 pos = nx.shell_layout(G)  # spring, shell, circular positions for all nodes
                 if consider_locations:
                     change_nodes_position(pos)
                 # nodes
                 nx.draw_networkx_nodes(G, pos, alpha=0.6, node_color='orange', node_size=d)
                 # edges
-                nx.draw_networkx_edges(G, pos, edge_color='b', edgelist=elarge,
-                                       width=2)
-                nx.draw_networkx_edges(G, pos, edgelist=emedium,
-                                       width=2, alpha=0.7, edge_color='c', style='dashed')
+                if selectedData == DataType.SLO:
+                    nx.draw_networkx_edges(G, pos, edge_color='b', edgelist=elarge,
+                                           width=2)
+                    nx.draw_networkx_edges(G, pos, edgelist=emedium,
+                                           width=2, alpha=0.7, edge_color='c', style='dashed')
+                else:
+                    nx.draw_networkx_edges(G, pos, edge_color='b', edgelist=elarge,
+                                           width=1)
+                    nx.draw_networkx_edges(G, pos, edgelist=emedium,
+                                           width=1, alpha=0.7, edge_color='c', style='dashed')
                 nx.draw_networkx_edges(G, pos, edgelist=esmall,
                                        width=1, alpha=0.2, edge_color='gray', style='dashed')
                 # labels
@@ -638,7 +649,7 @@ if selectedData == DataType.SLO:
 # 175 mW
 #print get_count_for_destinations(u"British Museum", u"London Underground")  # 13  325 (no fids?, username)
 #print get_count_for_destinations(u"British Museum", u"The London Eye")  # 10  386 (no fids?, username)
-draw_graph2(False, consider_locations=True)
+draw_graph2(False, consider_locations=False)
 #draw_graph_asyn_lpa(False)
 #draw_graph_girvan_newman(False)
 #draw_graph_k_clique(False)
