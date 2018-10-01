@@ -214,5 +214,6 @@ $RECYCLE.BIN/
 *.csv
 *.xlsx
 
-# ... but still include csv in countries
+# ... but still include csv in countries and test
 !countries/*.csv
+!data/test/*.csv

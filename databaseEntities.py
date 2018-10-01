@@ -13,20 +13,17 @@ class DataType:
     SLO = 1
     LONDON = 2
     VIENNA = 3
+    TEST = 4
 
 
-selectedData = DataType.SLO
+selectedData = DataType.TEST
 
-#folder = 'data/161020' #London PatternAnalysisTD_161020 17.15  term. 15:02
-# 2018-02-24 20:27:01.528000 2018-02-25 22:02:47.971000
-# slo: PatternAnalysisTD_161124 from 4.5h to 1h (2018-02-17 12:56:11.098000)
-# with add_pair_and_update_link: 2018-02-18 22:37:33.578000 2018-02-18 23:30:09.372000
 
-folders = ['161124', '161020', 'vienna']
+folders = ['161124', '161020', 'vienna', 'test']
 folder = 'data/' + folders[selectedData-1]
 
 # postgres
-ConnString = 'postgresql+psycopg2://postgres:postgres123@127.0.0.1:5432/PatternAnalysisTD_'+folder.replace('data/', '')+'_fid'
+ConnString = 'postgresql+psycopg2://postgres:postgres123@127.0.0.1:5432/PatternAnalysisTD_'+folder.replace('data/', '')
 # mac: install postgres - https://gist.github.com/lxneng/741932
 # pg_ctl -D /usr/local/var/postgres start
 # postgresql+psycopg2://user:password@host:port/dbname[?key=value&key=value...]

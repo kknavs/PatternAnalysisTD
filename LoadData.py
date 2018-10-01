@@ -106,11 +106,11 @@ def read_lines_csv(n_lines=None):
 
 # destinations = read_destinations()
 prepareCsv = False
-reloadRecords = False
-reloadFids = False
-reloadData = False
-reloadDestinations = False
-reloadGeoMappings = False
+reloadRecords = True
+reloadFids = True
+reloadData = True
+reloadDestinations = True
+reloadGeoMappings = True
 
 print folder
 
@@ -118,11 +118,6 @@ print folder
 # 2018-02-22 23:45:06.222000
 #2018-02-23 01:24:38.106000ferent column fieldnames. TODO: rename
 
-# vienna (10000) 2018-03-17 19:49:01.662970 2018-03-17 19:50:03.459556
-
-# SAWarning: An exception has occurred during handling of a previous exception.  The previous exception is:
-# <class 'sqlalchemy.exc.StatementError'> (exceptions.MemoryError)
-# SAWarning: Session's state has been changed on a non-active transaction - this state will be discarded.
 
 if prepareCsv:
     print "***Prepare csv***"
@@ -165,26 +160,16 @@ if reloadDestinations:
     for d in get_destinations():
         print d
 
-if reloadGeoMappings and selectedData == DataType.SLO:
-    #read_geolocation_mappings()
+if reloadGeoMappings and (selectedData == DataType.SLO or selectedData == DataType.TEST):
+    read_geolocation_mappings()
     #prepare_geo_location_mappings()
     #write_geolocation_mappings()
-    generate_geo_location_mappings(insert=False)
-    #add_geolocation_mapping("N.Ireland", "United Kingdom")
-    #add_geolocation_mapping("Norfolk, England", "United Kingdom")
-    #add_geolocation_mapping("Manchester, England", "United Kingdom")
-    #add_geolocation_mapping("Roma,Italia", "Italy")
+    generate_geo_location_mappings(insert=True)
 
-import FilterGraph
 
 print start
 print pydatetime.datetime.now()
 
-#filters_arr = [{"subject_type": ["attractions"]}]
-#          {"subject_type": ["hotels"]},
-#          {"subject_type": ["restaurants"]}]
-#for filters in filters_arr:
-#    generate_graph(filters=filters, refresh=True, check_both_nodes=True)
 # https://stackoverflow.com/questions/14509269/best-method-of-saving-data
 # http://zetcode.com/db/sqlitepythontutorial/
 # https://docs.python.org/2/library/sqlite3.html

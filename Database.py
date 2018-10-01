@@ -92,12 +92,16 @@ def add_records_from_csv(csvreader, n_lines, selectedData):
                                     pydatetime.datetime.strptime(row['review_date'], '%B %d, %Y'), "",
                                     row['subject_lat'].decode('utf-8').strip(),
                                     row['subject_lng'].decode('utf-8').strip())
+                elif selectedData == DataType.TEST:
+                    record = Record(csvreader.line_num, row['user_id'].decode('utf-8'),
+                                    row['place_name'.encode('utf-8')].decode('utf-8'),
+                                    pydatetime.datetime.strptime(row['review_date'], '%B %d, %Y'), "",
+                                    row['subject_lat'].decode('utf-8').strip(),
+                                    row['subject_lng'].decode('utf-8').strip())
                 elif selectedData == DataType.LONDON:
                     record = Record(csvreader.line_num, row['user_profile_url'].decode('utf-8'),
                                     row['subject_title'].decode('utf-8'),
                                     pydatetime.datetime.strptime(row['review_date'], '%B %d, %Y'))
-                    #                row['user_profile_url'].decode('utf-8'))
-                    #                #  ali user_profile_url? najbolje, da kar oboje pobereš
                 else:  # place_name, place_details, lat, lng, username,
                     # review_date, uid, place_rate, review_rate, travel_style, age, gender
                     record = Record(csvreader.line_num, row[' uid'].decode('utf-8').strip(),
@@ -141,6 +145,10 @@ def add_destinations_from_csv(csvreader, selectedData):
                     destination = Destination(row['mesto2'].decode('utf-8'),
                                               float(row['Lat'.encode('utf-8')].decode('utf-8').replace(',', '.')),
                                               float(row['Long'.encode('utf-8')].decode('utf-8').replace(',', '.')))
+                elif selectedData == DataType.TEST:
+                    destination = Destination(row['place_name'].decode('utf-8'),
+                                          float(row['subject_lat'.encode('utf-8')].decode('utf-8').replace(',', '.')),
+                                          float(row['subject_lng'.encode('utf-8')].decode('utf-8').replace(',', '.')))
                 elif selectedData == DataType.LONDON:
                     lat = float(row['subject_lat'.encode('utf-8')].decode('utf-8').replace('.', ''))
                     if lat < 10:  # errors in data
@@ -427,7 +435,7 @@ def generate_geo_location_mappings(insert=True):
     with session_scope() as session:
         print "Locations with no country"
         print str(len(fetchall_geolocation_mappings_with_no_country(session)))
-        c = 1000  # request per day https://console.cloud.google.com/iam-admin/quotas?project=analysistd-206520&hl=sl
+        c = 2000  # request per day https://console.cloud.google.com/iam-admin/quotas?project=analysistd-206520&hl=sl
         ctmp =0
         for loc in fetchall_geolocation_mappings_with_no_country(session):
             if loc.user_hometown is None:
@@ -479,7 +487,7 @@ def generate_geo_location_mappings(insert=True):
         # vsi po državah: 5771
         # po US 4135
         # 243
-    #return
+
     with session_scope() as session:
         ctmp =0
         for record in fetchall_records(session):
@@ -521,9 +529,6 @@ def generate_geo_location_mappings(insert=True):
             if not insert:
                 a = get_attributte_single_by_name_for_record_id('user_hometown_country', record.id)
                 if not a.value and user_hometown:
-                #    print country
-                #    print user_hometown
-                #    print a
                     a.value = country
             else:
                 # always new

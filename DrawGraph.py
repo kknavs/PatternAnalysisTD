@@ -410,6 +410,10 @@ def draw_infomap_graph(G, minW, count_nodes, filters=None, save=False, consider_
     if recursion_count > 0:
         txt_name = ("/infomap/infomap_minW="+str(float(minW)/maxWeight)+"_"+get_fname(filters,season) +
                     "_nodes=" + str(count_nodes)+"_rec="+str(recursion_count)+".net").replace(" ", "_")
+    markov_time = 0.75
+    if with_markov_time:
+        txt_name = ("/infomap/infomap_minW="+str(float(minW)/maxWeight)+"_"+get_fname(filters,season) +
+                    "_nodes=" + str(count_nodes)+"_markov="+str(markov_time)+".net").replace(" ", "_")
     with open(outputFolder+txt_name, str('w')) as f:
         # Pajek format (more info in FilterGraph)
         newline = str("\n")  # linux
@@ -449,10 +453,10 @@ def draw_infomap_graph(G, minW, count_nodes, filters=None, save=False, consider_
     if with_markov_time:
         subprocess.check_call([runp,
                                outputFolder+txt_name,
-                               out_path + mode, "-N 20", "--undirected", "--weight-threshold "+str(avg),"--overlapping", "--bftree", "--markov-time 0.75"])
+                               out_path + mode, "-N 20", "--undirected", "--weight-threshold "+str(avg),"--overlapping", "--bftree", "--markov-time "+str(markov_time)])
         subprocess.check_call([runp,
                                outputFolder+txt_name,
-                               out_path+ mode, "-N 20", "--undirected", "--weight-threshold "+str(avg), "--overlapping",  "--tree", "--markov-time 0.75"])
+                               out_path+ mode, "-N 20", "--undirected", "--weight-threshold "+str(avg), "--overlapping",  "--tree", "--markov-time "+str(markov_time)])
     else:
         subprocess.check_call([runp,
                                outputFolder+txt_name,
@@ -601,14 +605,14 @@ def draw_infomap_graph(G, minW, count_nodes, filters=None, save=False, consider_
                       recursion_count+1)
 
 
-def load_infomap_graph(filters=None, save=True, consider_locations=True, season=Season.ALL, with_markov_time=False):
+def load_infomap_graph(filters=None, save=True, consider_locations=True, season=Season.ALL, with_markov_time=True):
 
     # add all nodes
     #for d in get_destinations():
     #    G.AddNode(d.id)
     G = nx.Graph()
     if selectedData == DataType.SLO:
-        minW_array = [500/float(maxWeight)]#40, 300[i * multi for i in [1, 10, 20, 40, 60, 100, 120, 150, 180, 200, 270, 300]]
+        minW_array = [1]#[500/float(maxWeight)]#40, 300[i * multi for i in [1, 10, 20, 40, 60, 100, 120, 150, 180, 200, 270, 300]]
     else:
         minW_array = [1]
     if with_markov_time:
@@ -631,7 +635,7 @@ def load_infomap_graph(filters=None, save=True, consider_locations=True, season=
 
             # filter based on minW and maxW
             for destination1, destination2, nw in g_tmp.edges(data=True):
-                if minW < nw['weight'] < maxW:
+                if minW <= nw['weight'] < maxW:
                     count_nodes += nw['weight']*2
                     G.add_edge(destination1, destination2, weight=float(nw['weight'])/maxWeight)
             if len(G.nodes()) == 0:
@@ -651,17 +655,26 @@ filters_arr = [#{" age": ["13-17", "18-24"]},
                #{" travel_style": ["Nightlife Seeker"]},
                #{" travel_style": ["History Buff"]},
                #{" travel_style": ["Backpacker"]}
-    {" travel_style": ["Peace and Quiet Seeker"]},
-   # {" travel_style": ["Thrill Seeker"]},
-   # {" travel_style": ["Nature Lover"]},
-   # {" travel_style": ["Luxury Traveler"]},
-   # {" travel_style": ["Art and Architecture Lover"]},
-   # {" travel_style": ["Shopping Fanatic"]},
+    #{" travel_style": ["Peace and Quiet Seeker"]},
+    #{" travel_style": ["Thrill Seeker"]},
+    #{" travel_style": ["Nature Lover"]},
+    #{" travel_style": ["Luxury Traveler"]},
+    #{" travel_style": ["Art and Architecture Lover"]},
+    #{" travel_style": ["Shopping Fanatic"]},
     #{" travel_style": ["Nightlife Seeker"]},
+    #{" travel_style": ["60+ Traveler"]},
+    #{" travel_style": ["Family Vacationer"]},
+    #{" travel_style": ["Backpacker"]},
+    #{" travel_style": ["Peace and Quiet Seeker"]},
+    #{" travel_style": ["Luxury Traveler"], " age": ["65+"]},
+    #{" travel_style": ["Urban Explorer"]},
+    {" travel_style": ["Thrifty Traveler"]},
+    {" travel_style": ["Foodie"]},
                ]
 
 #for f in filters_arr:
 #    load_infomap_graph(filters=f, save=True)
+#load_infomap_graph(with_markov_time=False)
 
 
 def draw_graph_for_destination(destination, save=True, filters=None, season=Season.ALL, known_locations=None):
@@ -1075,7 +1088,7 @@ def draw_step_graph(G, groups, pos=None, louvain=False, step=0, save=False):
     else:
         plt.show()
 
-draw_louvain(save=False)
+#draw_louvain(save=False)
 
 import random
 from math import log
@@ -1343,6 +1356,6 @@ for n1,n2 in [(1, 2), (0, 1), (2, 3), (0, 3),
 #G = generate_graph()
 #min_w = 150# 20#10 ali 20 #372
 #G = filter_graph_by_weight(G, min_weight=min_w)
-#draw_steps(G)
+draw_steps(G, True)
 
 

@@ -105,9 +105,9 @@ def print_adjacency_matrix(G, print_latex = False):
     df = nx.to_pandas_adjacency(G, nodelist=nodelist )
     # Return the graph adjacency matrix as a Pandas DataFrame.
     if print_latex:
-        pages = 2
+        pages = 4
         start = 0
-        step = len(nodelist)/pages
+        step = int(len(nodelist)/pages) + (len(nodelist) % pages > 0)
         while True:
             #for nodelist_tmp in [nodelist[start:len(nodelist)/2], nodelist[len(nodelist)/2::]]:
             nodelist_tmp = nodelist[start:start+step]
@@ -332,10 +332,18 @@ def plot_destinations_frequency(from_statistics=False):
     pos = nx.spring_layout(G)  # spring, shell, circular positions for all nodes
     change_nodes_position(pos)
     plt.clf()
-    nx.draw_networkx_nodes(G, pos=pos,  node_size=nodesize, nodelist=nodelist, node_color='orange')
+    if from_statistics:
+        node_color = 'orange'
+    else:
+        node_color = 'c'
+    nx.draw_networkx_nodes(G, pos=pos,  node_size=nodesize, nodelist=nodelist, node_color=node_color)
     #draw_labels(G, pos)
     sub_G = nx.Graph()
-    for k,v in get_n_biggest_values(dict_count, 20):
+    if from_statistics:
+        nc = 10
+    else:
+        nc = 20
+    for k,v in get_n_biggest_values(dict_count, nc):
         sub_G.add_node(k)
     #change_nodes_position(pos)
     if from_statistics:
@@ -375,4 +383,4 @@ countries = [
 #draw_histogram_unique_for_user_hometown_country(countries)
 # draw_all_records()
 #draw_records_grouped_by_month()
-plot_destinations_frequency()
+#plot_destinations_frequency()
