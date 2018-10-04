@@ -114,15 +114,12 @@ reloadGeoMappings = True
 
 print folder
 
-# slo and eng - dif
-# 2018-02-22 23:45:06.222000
-#2018-02-23 01:24:38.106000ferent column fieldnames. TODO: rename
+# TODO: add support for different column fieldnames.
 
 
 if prepareCsv:
     print "***Prepare csv***"
     prepare_csv()
-    #exit()
 
 start = pydatetime.datetime.now()
 
@@ -130,7 +127,7 @@ start = pydatetime.datetime.now()
 if reloadRecords:
     print "***Reload records***"
     #delete_all_tables()
-    records = read_lines_csv() #20000
+    records = read_lines_csv()  # can be read to certain line row
     # add_records(records) we insert all rows at once
 
 if reloadFids:
@@ -161,10 +158,10 @@ if reloadDestinations:
         print d
 
 if reloadGeoMappings and (selectedData == DataType.SLO or selectedData == DataType.TEST):
-    read_geolocation_mappings()
+    #read_geolocation_mappings()
     #prepare_geo_location_mappings()
     #write_geolocation_mappings()
-    generate_geo_location_mappings(insert=True)
+    generate_geo_location_mappings()
 
 
 print start

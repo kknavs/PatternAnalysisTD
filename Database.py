@@ -67,7 +67,7 @@ def add_records_from_csv(csvreader, n_lines, selectedData):
     countErrors =0
     #locale.setlocale(locale.LC_ALL, 'eng_gbr')  # January 15, 2015
     # ValueError:  # if not running on windows
-    if selectedData == DataType.SLO:
+    if selectedData == DataType.SLO or selectedData == DataType.TEST:
         # ['user_id', 'Dodeljena občina', 'review_date', 'Lat', 'Long']  too many ignore_columns to write
         attribute_names = ['subject_type', 'user_travel_style', 'user_age', 'gender', 'age', 'user_hometown']
         # cIgnore = 5
