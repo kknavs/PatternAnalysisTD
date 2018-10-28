@@ -1,0 +1,88 @@
+*Vertices 17
+1 "Ringstrasse"
+2 "Stephansplatz"
+3 "Sisi Museum"
+4 "The Strudelshow"
+5 "Prater"
+6 "Palais Auersperg"
+7 "Mozart Haus"
+8 "State Opera House"
+9 "St. Stephen's Cathedral"
+10 "Belvedere Palace Museum"
+11 "Imperial Palace (Hofburg)"
+12 "Historic Center of Vienna"
+13 "Schonbrunn Palace"
+14 "Schonbrunner Gardens"
+15 "Albertina"
+16 "Church of the Jesuits"
+17 "Kunsthistorisches Museum"
+*Edges 69
+7 14 1
+7 11 1
+7 15 1
+7 12 1
+7 8 1
+7 9 1
+7 17 1
+7 16 1
+7 1 1
+14 11 1
+14 4 1
+14 15 1
+14 6 1
+14 12 1
+14 8 1
+14 9 1
+14 17 1
+14 16 1
+14 1 1
+11 4 1
+11 15 1
+11 6 1
+11 12 1
+11 8 1
+11 9 1
+11 17 1
+11 16 1
+11 1 1
+10 2 1
+10 3 1
+10 13 1
+10 5 1
+10 9 1
+17 4 1
+17 15 1
+17 12 1
+17 9 1
+17 8 1
+17 16 1
+17 1 1
+3 2 1
+3 13 1
+3 9 1
+4 15 1
+4 12 1
+4 9 1
+4 8 1
+15 12 1
+15 8 1
+15 9 1
+15 16 1
+15 1 1
+6 12 1
+6 8 1
+6 9 1
+12 8 1
+12 9 1
+12 16 1
+12 1 1
+8 13 1
+8 9 1
+8 16 1
+8 1 1
+9 2 1
+9 13 1
+9 16 1
+9 1 1
+2 13 1
+16 1 1
